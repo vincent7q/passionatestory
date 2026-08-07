@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0, 1, 2 complete — next is **Phase 3, Entities & combat** |
-| **Next task** | **T22** — entity factory and object pool |
-| **Suite** | 🟢 green — **122 tests** |
+| **Phase** | ✅ Phases 0-3 complete — next is **Phase 4, the ten-second window** |
+| **Next task** | **T31** — `DAZED` state and the star timer ⚠️ the heart of the game |
+| **Suite** | 🟢 green — **216 tests** |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -111,13 +111,22 @@ response but not yet seen on screen:**
 - **T21** — depth sorting on screen. The ordering logic is tested, but the walkable strip
   (`STRIP` in `main.js`) is a placeholder until Phase 6 gives each section real values.
 
-What *is* proved: 122 unit tests; every file passes `node --check`; and every module —
-`index.html`, `main.js`, `physics.js`, `camera.js`, `assets.js`, `input.js` and `/shared/*` — serves
-200 from a running server.
+- **Phase 3 combat feel.** Every rule is unit-tested, but frame data is a first guess. Expect
+  `ATTACKS` in `combat.js` and `AI` in `entities/enemy.js` to want retuning once someone plays it —
+  both are data tables for exactly that reason.
 
-**Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z attacks,
-backtick toggles the debug overlay. Confirm Felix draws and moves, that walking "into" the screen
-changes his draw order against the ground stripes, then delete this section.
+What *is* proved: 216 unit tests; every file passes `node --check`; and every module serves 200 from
+a running server, including all of `entities/` and `/shared/*`.
+
+**Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z light,
+X heavy, Shift guards, backtick toggles the debug overlay. Three enemies are spawned ahead of you.
+Worth confirming specifically:
+
+1. Felix draws, and walking "into" the screen changes his draw order against the enemies.
+2. An attack **misses** an enemy standing on a different depth line — that is the 2.5D system.
+3. A defeated enemy sits down with stars orbiting rather than vanishing.
+
+Then delete this section.
 
 ---
 
@@ -165,15 +174,15 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T21 — y-sorted renderer *(draw order tested)*
 
 ### Phase 3 — Entities & combat
-- [ ] T22 — entity factory + pool
-- [ ] T23 — player movement
-- [ ] T24 — attack chains
-- [ ] T25 — enemy AI state machine
-- [ ] T26 — damage, knockback, knockdown
-- [ ] T27 — guard and parry
-- [ ] T28 — grabs and throws
-- [ ] T29 — weapons
-- [ ] T30 — items and 錢
+- [x] T22 — entity factory + pool
+- [x] T23 — player movement
+- [x] T24 — attack chains
+- [x] T25 — enemy AI state machine
+- [x] T26 — damage, knockback, knockdown
+- [x] T27 — guard and parry
+- [x] T28 — grabs and throws
+- [x] T29 — weapons
+- [x] T30 — items and 錢
 
 ### Phase 4 — The ten-second window ⚠️ the heart of the game
 - [ ] T31 — `DAZED` state, star timer
@@ -291,6 +300,36 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 3 complete (T22–T30)
+Suite green at **216 tests**. Entities, combat, enemy AI, items and weapons are in and wired into
+`main.js` — there are now three enemies you can actually fight.
+
+**Two architectural findings, both recorded in `SPEC.md`:**
+
+1. **`game/` modules cannot import `shared/` relatively** — new `SPEC.md` §2.3. `game/` is served at
+   `/` while `shared/` is served at `/shared/`, so the two trees sit at *different depths* on disk
+   and in the browser. `../../shared/x.js` resolves to `/shared/x.js` in the browser but
+   `game/shared/x.js` on disk. Either Node or the browser breaks, and the failure is asymmetric and
+   silent — every test passes while the game 404s, or the reverse. **Only `main.js` imports
+   `shared/`, absolutely; everything else takes the data as a parameter.** Enforced by
+   `test/game/imports.test.js`.
+2. **`combat.js` was added** — not in `docs/PRD.md` §15. `physics.js` decides whether two things
+   *touched*; `combat.js` decides what that touch **means**. Putting damage rules in `physics.js`
+   would have broken its "collision math only" boundary. `entities/entity.js` and `debug.js` are
+   likewise new. `SPEC.md` §2 now lists all three with reasons.
+
+`applyDamage` returns `struckWhileDown` rather than letting the caller infer it — by the time the
+caller looks again the state has already changed. That flag is what Phase 4's T36 charges the
+heaviest penalty in the game against.
+
+Two AI rules worth not regressing: an enemy will not attack from a different depth line (it closes
+first, because `canHit` would miss anyway and it looks broken), and `DAZED` is terminal as far as
+the AI is concerned — an AI that dragged a dazed opponent back into `CHASE` would silently destroy
+the ten-second window.
+
+**Next: T31**, and Phase 4 is the one that matters. The stars must *visibly slow* across the window
+— that deceleration is the only countdown the player ever gets.
 
 ### 2026-08-07 — Phase 2 complete (T14–T21)
 Suite green at **122 tests**. The engine core is in and wired into `main.js`, so the game is now a

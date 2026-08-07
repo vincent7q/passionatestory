@@ -45,14 +45,22 @@ shared/         characters.js  scoring.js  validation.js   ← imported by BOTH 
 game/
   index.html    css/style.css
   js/           main.js  renderer.js  input.js  assets.js  physics.js
-                camera.js  net.js  utils.js
-    entities/   player.js  enemy.js  boss.js  item.js  projectile.js  ally.js
+                camera.js  combat.js  debug.js  net.js  utils.js
+    entities/   entity.js  player.js  enemy.js  boss.js  item.js  projectile.js  ally.js
     stages/     stage.js  city.js  forest.js  castle.js
     ui/         hud.js  menu.js  dialog.js  nameEntry.js  evaluation.js  reveal.js
 server/         index.js  db.js  routes/  migrations/
 dashboard/      index.html  dashboard.js
 test/           shared/  server/  game/
 ```
+
+Three files here are not in `docs/PRD.md` §15 and were added during implementation:
+
+- **`combat.js`** — damage resolution, attack chains, guard/parry, grabs. `physics.js` decides
+  whether two things *touched*; this decides what that touch **means**. Putting damage rules in
+  `physics.js` would have broken its "collision math only" boundary.
+- **`entities/entity.js`** — the factory, pool, and shared state enums.
+- **`debug.js`** — the frame-time overlay, which exists from Phase 0 because it is how C6 is verified.
 
 ### 2.1 The `shared/` contract — the most important rule in the codebase
 
@@ -64,6 +72,31 @@ test/           shared/  server/  game/
 - Every value in here is data or a pure function. No I/O, no state, no side effects.
 
 Anything that needs Node or the DOM goes in a wrapper on the respective side.
+
+### 2.3 Only `main.js` may import `shared/`
+
+**The disk layout and the served URL layout disagree, and no relative specifier satisfies both.**
+
+`game/js/entities/player.js` is served at `/js/entities/player.js`. From there:
+
+| Specifier | Resolves in the browser | Resolves on disk (Node) |
+|---|---|---|
+| `../../shared/characters.js` | `/shared/characters.js` ✅ | `game/shared/characters.js` ❌ |
+| `../../../shared/characters.js` | above the document root ❌ | `shared/characters.js` ✅ |
+
+Because `game/` is served at `/` while `shared/` is served at `/shared/`, the two trees sit at
+different depths in the two environments. A module that imports `shared/` relatively therefore works
+in exactly one of them — and the failure is asymmetric and nasty: every Node test passes while the
+game 404s in the browser, or vice versa.
+
+**The rule:**
+
+- **`main.js` alone** imports `shared/`, using the absolute `/shared/…` form. It is the browser-only
+  entry point and is never imported by a test.
+- **Every other module under `game/js/` takes the data as a parameter.** `createPlayer(def, at)`
+  receives a `CHARACTERS` entry; it does not look one up.
+
+This keeps deep modules pure and testable in Node, which is what `SPEC.md` §12 asks for anyway.
 
 ### 2.2 Module boundaries that must not leak
 
