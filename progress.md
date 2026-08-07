@@ -127,7 +127,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T5 — debug frame-time overlay *(fps math tested; overlay visual pending)*
 
 ### Phase 1 — `shared/` ← where correctness lives
-- [ ] T6 — `shared/characters.js`
+- [x] T6 — `shared/characters.js`
 - [ ] T7 — scoring constants
 - [ ] T8 — `computeMoney`
 - [ ] T9 — `computeJudgment` (the hidden column)
