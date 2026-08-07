@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+#frame {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+/*
+ * Size is set in JS (renderer.fitCanvas) to an integer multiple of 480x270.
+ * pixelated is what stops the browser interpolating the upscale.
+ */
+#screen {
+  image-rendering: pixelated;
+  display: block;
+}

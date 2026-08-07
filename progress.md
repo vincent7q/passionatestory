@@ -57,8 +57,8 @@ HTTP. Always run through the server.
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
 | **Phase** | Phase 0 — Foundation |
-| **Next task** | **T3** — canvas page, integer upscaling |
-| **Suite** | 🟢 green — 4 tests |
+| **Next task** | **T5** — debug frame-time overlay |
+| **Suite** | 🟢 green — 17 tests |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 ### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
@@ -84,6 +84,23 @@ not let it block Phase 0–7.
 Everything through Phase 7 runs fine on Node 20 — `node --test`, Fastify 5, and plain ES modules all
 work. Only the native binding is affected.
 
+### ⏳ Outstanding visual verification
+
+Rendering tasks are verified by looking at them (`SPEC.md` §12). The Chrome extension was not
+connected during the session that wrote T3–T5, so **the following has been proved by test and HTTP
+response but not yet seen on screen:**
+
+- **T3** — the canvas actually rendering, and staying crisp while the window resizes through
+  integer scale steps.
+- **T4/T5** — the loop holding 60 FPS with the debug overlay.
+
+What *is* proved: `computeScale` is unit-tested across fractional, tight-axis, and tiny-viewport
+cases; every file passes `node --check`; and `index.html`, `main.js`, `utils.js`, `renderer.js` and
+`style.css` all serve 200 from a running server.
+
+**Next person: open <http://localhost:8080>, confirm you see the placeholder screen and a rising
+step counter, resize the window, then delete this section.**
+
 ---
 
 ## The two things that must not break
@@ -105,8 +122,8 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 ### Phase 0 — Foundation
 - [x] T1 — test skeleton *(`better-sqlite3` deferred to T56 — see environment note)*
 - [x] T2 — Fastify server, static serving, `/healthz`
-- [ ] T3 — canvas page, integer upscaling `[no-test]`
-- [ ] T4 — fixed-timestep loop
+- [x] T3 — canvas page, integer upscaling *(scale math tested; visual check pending — see below)*
+- [x] T4 — fixed-timestep loop
 - [ ] T5 — debug frame-time overlay `[no-test]`
 
 ### Phase 1 — `shared/` ← where correctness lives

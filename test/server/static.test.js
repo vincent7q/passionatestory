@@ -3,8 +3,17 @@ import assert from 'node:assert/strict';
 import { buildServer } from '../../server/index.js';
 
 // Content-serving assertions live with the tasks that create the content:
-//   T3 adds the game/index.html check, T7 adds the /shared/scoring.js check.
-// This file covers the server itself.
+//   T7 adds the /shared/scoring.js check.
+
+test('serves the game at the site root', async () => {
+  const app = await buildServer();
+  const res = await app.inject({ method: 'GET', url: '/index.html' });
+  assert.equal(res.statusCode, 200);
+  assert.match(res.body, /<canvas[^>]+id="screen"/);
+  assert.match(res.body, /width="480"/);
+  assert.match(res.body, /height="270"/);
+  await app.close();
+});
 
 test('GET /healthz returns ok', async () => {
   const app = await buildServer();
