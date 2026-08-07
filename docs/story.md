@@ -13,8 +13,8 @@ This game has two, and the gap between them is the whole thing.
 
 ### What the candidate believes
 
-After class, 林小雨 is walking with him when a black van pulls up. Three men in black drag her in.
-He is knocked flat. The van is gone before he can stand.
+After class, 林小雨 CLORIS is walking with him when a black van pulls up. Three men in black drag her
+in. He is knocked flat. The van is gone before he can stand.
 
 He chases it across the city, up a mountain, and into a fortified estate, fighting through
 everything in his way to get her back. He is genuinely afraid. He is genuinely in love. He does not
@@ -69,8 +69,12 @@ onto their feet?
 Anyone can be polite at dinner. That tells you nothing. The Lins want to know who you are when you
 think the stakes are real, and the only way to find out is to convince you that they are.
 
-During play, this shows up as a gold `+3 禮` that pops occasionally with no explanation. Players will
-assume it's a minor bonus. It is the entire test.
+During play, this shows up as a bare gold **`+3`** with a small seal icon and **no label**, popping
+occasionally with no explanation. Players will assume it's a minor bonus. It is the entire test.
+
+**The character 禮 must not appear on screen before the evaluation form** — not in the HUD, not on
+this award, not in the pause menu, not in a tooltip. It is written throughout this document because
+this document is for the people building the game. It is never written for the player.
 
 ---
 
@@ -84,7 +88,7 @@ nobody looks at it properly because it is shaped exactly like a video game.
 | 力 **POWER** — the green bar | 有本事嗎? Can he handle himself. Worth **40**. |
 | 錢 **MONEY** — the counter | 有錢嗎? What he's worth. Worth **20**. |
 | the clock, counting to 18:00 | Dinner. He is being scored on punctuality for a meal he doesn't know he's invited to. |
-| 氣 SPIRIT | Just a meter. Not a criterion. Grandma doesn't care. |
+| 氣 SPIRIT | Just a meter. Not a criterion. Her father doesn't care. |
 
 Those are the two questions every family asks about a suitor, sitting in the corner of the screen in
 a 48-point pixel font, and neither the candidate nor the player ever wonders why a *rescue* has a
@@ -105,7 +109,7 @@ The column he never sees is worth forty, and it is the one that separates him fr
 
 The money is the sharpest part. Every coin he collected dropped off a man on the Lin payroll. It was
 their money the entire time, he has been diligently gathering it all night, and it counted in his
-favour. Grandma's note on that line reads 「這些是我們的錢。」 *(That's our money.)*
+favour. The note beside that line on the form reads 「這些是我們的錢。」 *(That's our money.)*
 
 ---
 
@@ -122,16 +126,19 @@ delivery rider. Men who happen to be standing where he needs to be.
 **The clues, still deniable:** one of them says 「不好意思」 while swinging. Another glances at
 something in his hand before engaging. They go down easily and they go down *carefully*.
 
-**Boss — 水果店老闆娘 (the Fruit Shop Owner).**
+**Boss — 水果店老闆娘 (the Fruit Shop Owner) — 小雨's aunt.**
 
-She is not part of the test. She is a real woman with a real fruit stall, and a lunatic is sprinting
-through it. She blocks him, and she fights, because that is her livelihood on the ground.
+**She was not told.** She is family, and nobody briefed her, because nobody thought to. She really
+does run that stall, it really is her livelihood, and there is a lunatic sprinting through her
+melons. She blocks him and she fights for the ordinary reason.
 
-He thinks she's with them. She isn't.
+She has never met him. 小雨 has never brought anyone home — that is the entire premise of tonight.
+
+He thinks she's with them. She is, and she has no idea.
 
 **The melon is the test.** She defends her stall with it, and it can be destroyed. He is desperate,
-he is out of time, the van is getting away — and the correct move is to be careful with a stranger's
-fruit. The family is watching to see whether he can do that.
+he is out of time, the van is getting away — and the correct move is to be careful with the fruit of
+a woman he has never seen before. The family is watching to see whether he can do that.
 
 This is the sharpest 禮 test in the game and it lands eleven minutes before he has any idea he's
 being tested.
@@ -190,41 +197,49 @@ He kicks the last door down mid-roll, braced for the boss.
 
 The music stops.
 
-It is a **dining room.** A long table, set for eight, mid-meal. Everyone turns to look at him.
+It is a **dining room.** A round table, set for eight, mid-meal. Everyone turns to look at him.
 
 小雨 is at the table with a bowl in front of her, on her phone. Not restrained. Not frightened.
 Mildly annoyed that he's late.
 
-At the head of the table, a very small ninety-one-year-old woman puts down her chopsticks and says:
+At the head of the table, a man in his fifties sets down his chopsticks, looks at him for a moment,
+and says:
 
 **「我等你很久了。」** *(I have been waiting a long time for you.)*
 
-Which is a villain's line and a host's line, and he has already decided which one it is.
+Which is a villain's line, and a host's line, and a father's line, and he has already decided which
+one it is.
 
 He attacks.
 
 ---
 
-## Final boss — 奶奶 CLORIS 克洛麗絲
+## Final boss — VINCENT 林建國
 
-He believes he is fighting the mastermind. He is fighting a grandmother at her own dinner table, and
-she is going to win on points.
+He believes he is fighting the mastermind. He is fighting 小雨's father at that man's own dinner
+table, and he is going to lose this on points.
 
-Ninety-one. Four foot nine. Undefeated since 1958. She fights seated for the entire first phase and
-does not raise her voice once.
+Fifty-four. **Undefeated at this table since 1994** — the year he sat where the candidate is sitting
+now and scored **71**. He is the only person in the room who has been through this from the other
+side, which is why he is the one who decides.
+
+He fights the entire first phase **seated**. He does not put down his chopsticks and he does not
+raise his voice once.
 
 **The rest of the family keeps eating.** Dishes are passed around the fight. An aunt asks someone to
 move so she can reach the fish. Nobody is alarmed, because nobody here is in any danger, and the
 candidate reads their calm as the arrogance of professionals.
 
-Her opening moves are questions — 「你幾歲?」「有房子嗎?」— which he hears as taunting and which are
+His opening moves are questions — 「你幾歲?」「有房子嗎?」— which he hears as taunting and which are
 just the questions. 「吃飽了嗎?」 is an unblockable grab that force-feeds him: it restores his 力 and
 quietly takes a bite out of a column he does not know exists.
 
-At 40% she stands up for the first time. The music drops out entirely. The rest of the family
-quietly puts down their chopsticks to watch.
+At 40% he stands up from the table for the first time. The music drops out entirely. The rest of the
+family quietly puts down their chopsticks to watch, because they have all seen a man stand up from a
+table before and they know what it means.
 
-The way through is to bow. She respects manners more than strength and always has.
+The way through is to bow. He respects manners more than strength — and he knows exactly what he is
+watching for, because he learned it in this room in 1994, from the other side of the table.
 
 ---
 
@@ -237,10 +252,14 @@ Nobody runs. Nobody calls for help.
 **1.** 小雨 puts her phone down and says: 「你來得好慢。」 *(You took ages.)*
 
 **2.** The men he defeated tonight file in behind him. All of them. They dust themselves off, line up,
-and **bow** — including the three from the van, and the fruit shop owner, and Second Uncle, still
-carrying the tea set and extremely pleased with himself.
+and **bow** — including the three from the van, and Second Uncle, still carrying the tea set and
+extremely pleased with himself.
 
-**3.** Grandma slides a form across the table. His name is on it. It is mostly already filled in.
+Then the fruit shop owner bows, walks past him, and sits down at the table. She is an aunt. She is
+still angry about the melon.
+
+**3.** 林建國 slides a form across the table. The candidate's name is on it. It is mostly already
+filled in.
 
 **4.** Three lines on it. The first two he has been staring at all night without once wondering why
 they were there — **力** and **錢**. He has maxed them both and he is, briefly, quite pleased.
@@ -252,10 +271,12 @@ the clock running. The fruit stall he did or did not wreck.
 
 「力氣跟錢,誰都有。我看的是別的。」
 
-**5.** The man sitting beside Grandma is 小雨's father. He scored **71** in 1994. He has been at this
-table all evening watching. When the candidate looks at him, he shrugs.
+**5.** Under his own total there is a second line, already printed. **林建國 (1994) — 71.**
 
-**6.** Grandma turns the page.
+The man he has just spent four minutes trying to hit sat this test thirty-two years ago and beat it.
+When the candidate looks up at him, he shrugs.
+
+**6.** 林建國 turns the page.
 
 The file does not start tonight. It starts the day they met.
 
@@ -276,10 +297,10 @@ Three men in black kick the door in. Real ones.
 The candidate does not move. He has just learned that nothing tonight was real, and he cannot tell
 anymore, and he is not going to be made a fool of twice.
 
-The family destroys all three in about four seconds without leaving the table. An aunt does it
-one-handed while asking whether anyone wants more soup. 小雨 does not look up.
+The family destroys all three in about four seconds without leaving the table. The fruit shop owner
+does one of them one-handed while asking whether anyone wants more soup. 小雨 does not look up.
 
-Grandma writes something on the form. Then, to the candidate:
+林建國 writes something on the form. Then, to the candidate:
 
 **「那個是真的。」** *(That one was real.)*
 
@@ -287,8 +308,10 @@ Grandma writes something on the form. Then, to the candidate:
 
 ## Ending
 
-She slides a plate of cut fruit toward him without making eye contact. It is the highest honour
+He slides a plate of cut fruit across the table without making eye contact. It is the highest honour
 available in this game.
+
+It is from the aunt's stall. If the candidate was careful with the melon, it is the melon.
 
 Across the table, 小雨 mouths 「你贏了」 *(you won)*.
 
@@ -321,7 +344,7 @@ not being where the attack landed. Filmed part of the chase on his phone, which 
 *File note:* 「他問了三次她好不好。沒問過自己好不好。」 *(He asked three times if she was all right.
 Never asked about himself.)*
 
-**VINCENT 文森特** — 27. *Power.*
+**HILMAN 希爾曼** — 27. *Power.*
 The adult. Treats the rescue as a professional operation — brings equipment, draws a map, works the
 problem. Slow, enormous, devastating.
 
@@ -352,10 +375,11 @@ The comedy dies if any of these slip. They are not stylistic preferences.
 Two other concepts were considered. Kept in case anything is worth grafting on later.
 
 **A —「這是誤會啊!」** — Three boys destroy a city rescuing a girl from her own surprise birthday
-party. Player knows from second ten; the heroes never work it out. Cloris was the event coordinator,
-eight months of planning, rage meter labelled 「預算」. Ended on 「損失估計:NT$4,820,000」.
+party. Player knows from second ten; the heroes never work it out. The final boss was the event
+coordinator, eight months of planning, rage meter labelled 「預算」. Ended on 「損失估計:NT$4,820,000」.
 *Its property-damage counter is the idea worth stealing.*
 
 **C —「英雄太多了」** — You run to save a girl; everyone who sees you running joins in; by sunset
 4,000 people are rescuing her and the rumour has mutated until the crowd believes she *is* a wolf.
-Cloris was a museum night guard — the only reasonable person in the game, framed as a raid boss.
+The final boss was a museum night guard — the only reasonable person in the game, framed as a raid
+boss.

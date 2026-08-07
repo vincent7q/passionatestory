@@ -52,7 +52,7 @@ If a mashing player can top the leaderboard, the design has failed.
 | **Stage 2** | 森林「山路」 — 17:45. The mountain road. |
 | **Stage 3** | 城堡「城堡」 — 18:00. The estate. |
 | **Dining room** | The door comes down. It is a dinner, mid-meal. He misreads it and attacks. |
-| **Final boss** | 奶奶 Cloris, two phases, while the family keeps eating. |
+| **Final boss** | 林建國, her father, two phases, while the family keeps eating. |
 | **The reveal** | Six escalating beats. See §8. |
 | **Stinger** | Real kidnappers. He can no longer tell. 「那個是真的。」 |
 | **Ending** | Cut fruit. 「你被批准了。下週日再來。」 |
@@ -88,7 +88,7 @@ regret.
 - **空中連踢 Aerial Barrage** (25 氣) — jump into rapid mid-air kicks
 - **分身 Shadow Clone** (40 氣) — two afterimages attack for 5s
 
-### VINCENT 文森特 — 27, *Power*
+### HILMAN 希爾曼 — 27, *Power*
 The adult. Treats the rescue as a professional operation — brings equipment, draws a map, works the
 problem.
 
@@ -172,8 +172,8 @@ which is both mechanically ordinary and exactly how the family sees it. Scored o
 
 **錢 MONEY (0–20) — visible.** The counter. Scored on total collected.
 
-*Every coin dropped off a man on the Lin payroll. It was always their money. Grandma's note on this
-line reads 「這些是我們的錢。」*
+*Every coin dropped off a man on the Lin payroll. It was always their money. The note beside this
+line on the form reads 「這些是我們的錢。」*
 
 **禮 JUDGMENT (0–40, clamped) — never named, never explained, never totalled on screen:**
 
@@ -182,7 +182,7 @@ line reads 「這些是我們的錢。」*
 | Help a defeated opponent up | +3 each |
 | Spare the fruit stall (stage 1 boss) | +8 |
 | Accept all three cups from Second Uncle | +8 |
-| Bow to Grandma on the correct beat | +6 |
+| Bow to 林建國 on the correct beat | +6 |
 | Never strike a dazed or downed opponent | +5 |
 | Never strike the toddler | +4 |
 | Reach the estate without destroying the market stalls | +6 |
@@ -215,7 +215,7 @@ The candidate reads this as a classic beat-'em-up beat: show a man respect and h
 truth is that they are staff who were briefed to respond well to decency, and they were never on a
 side.
 
-- **Every opponent you help up is recorded permanently for the run.** This roster is what Grandma's
+- **Every opponent you help up is recorded permanently for the run.** This roster is what 林建國's
   summon checks against in §7
 - **One** is equipped as an active ally at a time, callable once per fight (Q). Swap at checkpoints;
   this changes who fights beside you, never who is on the roster
@@ -249,10 +249,11 @@ the player not to smash them. Reaching the boss with the row intact is worth +6.
 | 代購黃牛 Scalper | 35 | Ranged — throws fruit. Retreats when closed on |
 | 外送員 Delivery Rider | 40 | Fast, hit-and-run. *Is the man who delivers the candidate's food every week* |
 
-**Boss — 水果店老闆娘 (Fruit Shop Owner), 300 HP**
+**Boss — 水果店老闆娘 (Fruit Shop Owner) — 小雨's aunt, 300 HP**
 
-**She is not part of the test.** She is a real woman with a real stall and a lunatic is sprinting
-through it. He thinks she's with them. She isn't.
+**She was not told.** She is family and nobody briefed her, because nobody thought to. The stall is
+real and it is her livelihood, and there is a lunatic sprinting through her melons. She has never met
+him — 小雨 has never brought anyone home. He thinks she's with them. She is, and she has no idea.
 
 - Fights with the melon — overhead swings, a rolling bowl, a two-handed shove
 - **The melon has its own 40 HP** and any connecting hit damages it
@@ -260,8 +261,11 @@ through it. He thinks she's with them. She isn't.
 - Destroying it: she sits down in the wreckage of her stall. No penalty is stated. The file records it
 - Beat her without touching it and she points up the road — the direction the van went
 
-Maximum time pressure, and the correct play is care with a stranger's property. The sharpest 禮 test
-in the game, eleven minutes before he knows there is one.
+Maximum time pressure, and the correct play is care with the property of a woman he has never seen
+before. The sharpest 禮 test in the game, eleven minutes before he knows there is one.
+
+**She returns twice.** She bows and takes a seat at the dinner table in §8, still angry about the
+melon; and if the melon survived, it is the fruit on the plate in the ending.
 
 ### 6.2 Stage 2 — 森林「山路」 / *The Mountain Road*
 
@@ -336,29 +340,32 @@ portraits that break if you throw someone into them
 
 He kicks the door down mid-roll, braced for the boss. The music stops.
 
-A long table, set for eight, mid-meal. Everyone turns to look at him. 小雨 is at the table with a
+A round table, set for eight, mid-meal. Everyone turns to look at him. 小雨 is at the table with a
 bowl in front of her, on her phone, not restrained and mildly annoyed that he's late.
 
-A very small ninety-one-year-old woman puts down her chopsticks:
+At the head of the table a man in his fifties sets down his chopsticks:
 
 **「我等你很久了。」** *(I have been waiting a long time for you.)*
 
-A villain's line and a host's line. He has already decided which. He attacks.
+A villain's line, a host's line, and a father's line. He has already decided which. He attacks.
 
-### 奶奶 CLORIS 克洛麗絲 — 1000 HP (600 / 400)
+### 林建國 VINCENT — 1000 HP (600 / 400)
 
-**Arena:** circular, around the round table. She sits at the centre. The lazy Susan rotates
-continuously as a moving hazard. He circles her for the entire fight and cannot leave.
+小雨's father. Fifty-four. Undefeated at this table since 1994 — the year he sat where the candidate
+is sitting and scored **71**. He knows exactly what is being measured, because he was measured on it.
+
+**Arena:** circular, around the round table. He does not leave his seat. The lazy Susan rotates
+continuously as a moving hazard. The candidate circles him for the entire fight and cannot leave.
 
 **The family keeps eating.** Dishes are passed around the fight. An aunt asks someone to move so she
 can reach the fish. Nobody is alarmed — nobody here is in danger — and the candidate reads their calm
 as professional arrogance.
 
-**Phase 1 —「面談」(100%–40%).** She does not stand.
+**Phase 1 —「面談」(100%–40%).** He does not stand, and he does not put down his chopsticks.
 
 | Move | Effect |
 |---|---|
-| 拐杖 Walking Stick | 3-hit reaching combo, deceptive range |
+| 公筷 Serving Chopsticks | 3-hit reaching combo, deceptive range. He is serving, not striking |
 | 筷子 Chopsticks | Precise ranged pokes, interrupts combos |
 | 「你幾歲?」 | Ranged pressure, 15 damage |
 | 「有房子嗎?」 | Screen-wide, guard-breaking, 25 damage |
@@ -368,17 +375,20 @@ as professional arrogance.
 That last row is the payoff for every ten-second decision he made. A candidate with a full roster
 fights Phase 1 almost alone.
 
-**Phase 2 —「站起來」(40%–0%).** She stands for the first time. The music drops out entirely. The rest
-of the family quietly puts down their chopsticks to watch.
+**Phase 2 —「站起來」(40%–0%).** He stands up from the table for the first time. The music drops out
+entirely. The rest of the family quietly puts down their chopsticks to watch, because they have all
+seen a man stand up from a table before and they know what it means.
 
 | Move | Effect |
 |---|---|
 | 掃堂腿 Sweep | Low, fast, must be jumped |
-| 連環拐 Cane Rush | Eight-hit advancing chain across the arena |
-| 轉盤 Lazy Susan | She spins the table to full speed — the hazard becomes an attack |
+| 夾菜 The Serving | Eight-hit advancing chain across the arena. Every hit puts food in the candidate's bowl |
+| 轉盤 Lazy Susan | He spins the table to full speed — the hazard becomes an attack |
 | 一句話 One Word | Charges 2s, then one line removing 40 力. Must be parried, not blocked |
 
-**Weakness:** a timed bow (**E**) staggers her 3 seconds and is the only reliable Phase 2 opening.
+**Weakness:** a timed bow (**E**) staggers him 3 seconds and is the only reliable Phase 2 opening. He
+respects manners more than strength, and he learned that in this room in 1994, from the other side of
+the table.
 
 ---
 
@@ -391,11 +401,11 @@ next begins.
 |---|---|
 | 1 | He wins. Nothing happens next. Nobody runs, nobody calls for help. Hold on this. |
 | 2 | 小雨 puts her phone down: 「你來得好慢。」 *(You took ages.)* |
-| 3 | Everyone he defeated tonight files in behind him, dusts themselves off, lines up, and **bows** — the three from the van, the fruit shop owner, Second Uncle still holding the tea set |
-| 4 | Grandma slides a form across the table. His name on it. Mostly already filled in |
-| 5 | **Two columns.** He recognises the first. He has never seen the second. It is 禮, and it has all the weight in it |
-| 6 | The man beside Grandma is 小雨's father. **71**, in 1994. He has been at this table all evening. He shrugs |
-| 7 | Grandma turns the page. The file does not start tonight — it starts the day they met. Photos, dated, annotated. The delivery rider from stage 1 waves |
+| 3 | Everyone he defeated tonight files in behind him, dusts themselves off, lines up, and **bows** — the three from the van, Second Uncle still holding the tea set. Then the fruit shop owner bows, walks past him, and sits down at the table. She is an aunt, and she is still angry about the melon |
+| 4 | 林建國 slides a form across the table. The candidate's name on it. Mostly already filled in |
+| 5 | **Three lines.** He recognises the first two — he has been staring at them all night. He has never seen the third. It is 禮, and it has all the weight in it |
+| 6 | Under his own total: **林建國 (1994) — 71.** The man he has just spent four minutes trying to hit sat this test thirty-two years ago and beat it. He shrugs |
+| 7 | 林建國 turns the page. The file does not start tonight — it starts the day they met. Photos, dated, annotated. The delivery rider from stage 1 waves |
 
 **File entries shown in beat 7** — two, no more:
 
@@ -407,7 +417,7 @@ next begins.
 
 ### 8.1 The evaluation form
 
-The score screen, in Grandma's handwriting. **The first two lines are the HUD he has been staring at
+The score screen, in 林建國's handwriting. **The first two lines are the HUD he has been staring at
 all night.** They animate in first, and they are good. He should have a second to feel pleased.
 
 Then the third line writes itself in, and it is worth more than either.
@@ -426,10 +436,10 @@ Then the third line writes itself in, and it is worth more than either.
         林建國 (1994)        71
 ```
 
-**Pace it in that order.** 力 and 錢 land as a victory. 禮 lands as the floor going out. The
-父親's 71 sits underneath, two points above, and does not need a comment.
+**Pace it in that order.** 力 and 錢 land as a victory. 禮 lands as the floor going out. His own 71
+sits underneath, two points above, and does not need a comment.
 
-Grandma, as it resolves: 「力氣跟錢,誰都有。我看的是別的。」
+林建國, as it resolves: 「力氣跟錢,誰都有。我看的是別的。」
 
 ### 8.2 Stinger
 
@@ -438,10 +448,10 @@ Three men in black kick the door in. Real ones.
 He does not move. He has just learned nothing tonight was real and he is not going to be made a fool
 of twice.
 
-The family destroys all three in about four seconds without leaving the table. An aunt does it
-one-handed while asking whether anyone wants more soup. 小雨 does not look up.
+The family destroys all three in about four seconds without leaving the table. The fruit shop owner
+does one of them one-handed while asking whether anyone wants more soup. 小雨 does not look up.
 
-Grandma writes something on the form. **「那個是真的。」** *(That one was real.)*
+林建國 writes something on the form. **「那個是真的。」** *(That one was real.)*
 
 ---
 
@@ -520,7 +530,7 @@ rig; audio synthesized via Web Audio. Everything sits behind `game/js/assets.js`
 can replace it without touching game logic.
 
 **Music:** title · stage 1 (urgent city funk) · stage 2 (sparse, guqin over drums) · stage 3 (strings,
-tense) · boss (driving) · **Grandma phase 2 (everything drops out but a single drum)** · the reveal
+tense) · boss (driving) · **林建國 phase 2 (everything drops out but a single drum)** · the reveal
 (warm, and it should hurt a little) · 「那個是真的。」 (one sting).
 
 ---
@@ -555,7 +565,7 @@ See `CLAUDE.md` for the `shared/` contract and rendering details.
 **Displayed grade** is 力 + 錢 + 禮 out of 100, presented as §8.1.
 
 **Leaderboard value** is `grade × difficulty multiplier`, so a flawless Hard run scores 135 and
-Grandma has to start a second form.
+林建國 has to start a second form.
 
 林建國's **71** was scored on Normal in 1994 and sits permanently on the board.
 

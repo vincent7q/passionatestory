@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 熱血物語：見家長 — a browser beat-'em-up in the style of River City Girls, built around a twist.
 
-**What the player experiences:** his girlfriend 林小雨 is dragged into a black van. He chases it
-across a city, up a mountain, and into a fortified estate to get her back.
+**What the player experiences:** his girlfriend 林小雨 CLORIS is dragged into a black van. He chases
+it across a city, up a mountain, and into a fortified estate to get her back.
 
 **What is actually happening:** every opponent is on the Lin family payroll. The estate is a house
 with dinner going cold on the table. 小雨 has survived three real kidnappings, so the family stages
@@ -18,6 +18,12 @@ when he believes the stakes are real. He is not rescuing her. He is meeting her 
 anything narrative. The PRD governs mechanics; read the relevant section before inventing values.
 
 `docs/1.jpg` and `docs/2.jpg` are reference screenshots defining the HUD layout — match them.
+
+`docs/images/*.png` are character design references; **the filename is the character id**
+(`felix`, `lucian`, `hilman`, `rain` → 林小雨 CLORIS, `vincent` → 林建國, her father). They are
+head-and-shoulders portraits only — use them for face, hair, glasses, and palette. Body
+proportions and costume are still undefined, and there is no reference yet for 二叔 or the
+fruit shop owner.
 
 ### Spoiler discipline — the most breakable thing in this project
 
@@ -47,14 +53,14 @@ Three criteria, two visible, and `shared/scoring.js` must track them separately:
   rather than standing alone because being on time is a courtesy.
 
 力 and 錢 are worth 60 between them and a determined player maxes both — **they are the criteria that
-don't decide it.** A masher lands around 56–60 and cannot reach 71, the score 小雨's father got in
-1994, which sits permanently on the leaderboard.
+don't decide it.** A masher lands around 56–60 and cannot reach 71, the score 小雨's father 林建國 got
+when he sat the same test in 1994. It sits permanently on the leaderboard, and he is the final boss.
 
 **"A mashing player cannot beat 71" is a hard success criterion.** If it fails, the design fails.
 
 Help a defeated opponent up within the **10-second window** (stars orbit their head and visibly slow)
 and they switch sides — permanently on your roster, one equipped as an active ally, each teaching a
-technique. Grandma's Phase 1 summon checks that roster: anyone you helped refuses to fight you.
+technique. 林建國's Phase 1 summon checks that roster: anyone you helped refuses to fight you.
 
 Also superseded from the PRD's original draft: it planned **localStorage** for high scores. Replaced
 by the SQLite backend below.
@@ -199,6 +205,8 @@ tamper-proof.
 
 - Identifiers and code comments in English; player-facing strings carry both Chinese and English
   where the PRD gives both (e.g. `城市 / City`).
-- Character ids are lowercase: `felix`, `lucian`, `vincent`. Difficulty: `easy`, `normal`, `hard`.
+- Character ids are lowercase: `felix`, `lucian`, `hilman` — the three candidates. Note `vincent` is
+  **not** a candidate id: 林建國 VINCENT is 小雨's father and the final boss. Difficulty: `easy`,
+  `normal`, `hard`.
 - Tuning constants (character stats, scoring weights, enemy HP) belong in `shared/` or a stage's
   data file — never inline in behaviour code, since they get playtested and revised.
