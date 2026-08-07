@@ -19,6 +19,12 @@ import {
 import { createRoster, callAlly, canCallAlly, getActive } from './entities/ally.js';
 import { drawHud, drawAward, drawAllyPrompt, drawDamageNumber, msBeforeDinner }
   from './ui/hud.js';
+import {
+  createStageState, updateStage, gateBounds, sectionAt, layerOffsets,
+  applyRain, createProp, damageProp, settleStallAward, clearStage, bossReady,
+} from './stages/stage.js';
+import { CITY, ENEMIES, MONEY_DROP, waveSpawns } from './stages/city.js';
+import { createFruitShopOwner, resolveFruitShopFight } from './entities/boss.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
@@ -52,23 +58,41 @@ window.addEventListener('resize', () => fitCanvas(canvas));
 for (const id of CANDIDATES) buildCharacter(id, CHARACTERS[id].palette);
 buildCharacter('enemy', { hair: '#2B2B33', skin: '#E8B48E', shirt: '#4A5A6B', accent: '#C9CED6' });
 
-// Real per-section values arrive with the stages in Phase 6.
-const STRIP = { yMin: 172, yMax: 250 };
-const BOUNDS = { xMin: 0, xMax: 1600 };
+const STAGE = CITY;
+const STRIP = STAGE.strip;
 
 const input = bindKeyboard(createInput(), window);
 const world = createWorld();
 
 const player = addEntity(world, createPlayer(CHARACTERS.felix, { x: 60, y: 210 }));
 
-function spawnEnemy(x, y) {
+function randDepth() {
+  return STRIP.yMin + Math.random() * (STRIP.yMax - STRIP.yMin);
+}
+
+function spawnEnemy(type, x) {
+  const def = ENEMIES[type];
   return spawn(world, Kind.ENEMY, {
-    charId: 'enemy', team: Team.HOUSE,
-    x, y, z: 0, w: 16, depth: 8, h: FRAME_H,
-    power: 30, powerMax: 30, facing: -1,
+    enemyType: type, charId: 'enemy', team: Team.HOUSE,
+    x, y: randDepth(), z: 0, w: 16, depth: 8, h: FRAME_H,
+    power: def.hp, powerMax: def.hp, facing: -1,
+    speed: def.speed, money: MONEY_DROP[type] ?? 0,
   });
 }
-for (const [x, y] of [[260, 190], [340, 230], [430, 205]]) spawnEnemy(x, y);
+
+/**
+ * Breakable market stalls. There are a lot of them and NOTHING tells the
+ * player to spare them — no prompt, no warning, no penalty message.
+ */
+const props = [];
+for (const section of STAGE.sections) {
+  for (let i = 0; i < (section.props ?? 0); i += 1) {
+    const from = section.from * STAGE.length;
+    const span = (section.to - section.from) * STAGE.length;
+    props.push(createProp(`${section.id}_${i}`,
+      { x: from + 80 + (span - 160) * (i / Math.max(1, section.props - 1)), y: STRIP.yMin - 6 }));
+  }
+}
 
 const game = {
   state: States.PLAYING,
@@ -76,6 +100,10 @@ const game = {
   steps: 0,
   world,
   camera: createCamera(),
+  stage: STAGE,
+  stageState: createStageState(STAGE),
+  props,
+  boss: null,
   roster: createRoster(),
   run: emptyRun(),
   prompt: null,           // the entity the E prompt is currently offering
@@ -135,7 +163,12 @@ function resolveHits() {
       }
 
       // Zero 力 sits them down. Nobody dies; nobody stays down.
-      if (result.dazed && !wasDazed) beginDaze(target);
+      if (result.dazed && !wasDazed) {
+        beginDaze(target);
+        // Every coin dropped off a man on the Lin payroll. It was always their
+        // money, and it counts in his favour.
+        if (target.money) game.run.money.collected += target.money;
+      }
 
       // One connection per swing, or a three-frame active window would deal
       // damage three times.
@@ -145,9 +178,54 @@ function resolveHits() {
   }
 }
 
+function liveOpponents() {
+  return activeEntities(world).filter(
+    (e) => e.team === Team.HOUSE && e.state !== State.DAZED && e.kind !== Kind.ITEM).length;
+}
+
+/** Spawn the current wave once, ahead of the player. */
+function spawnCurrentWave() {
+  const state = game.stageState;
+  if (state.spawnedThisWave.length > 0) return;
+
+  const section = STAGE.sections[state.sectionIndex];
+  const spawns = waveSpawns(section, state.waveIndex);
+  if (spawns.length === 0) return;
+
+  spawns.forEach((s, i) => {
+    const e = spawnEnemy(s.type, player.x + 180 + i * 46);
+    if (e) state.spawnedThisWave.push(e.id);
+  });
+}
+
+/**
+ * Attacks that land on a market stall. Nothing warns the player, nothing pops
+ * when one breaks, and the intact row is quietly worth +6 at the boss.
+ */
+function resolvePropHits() {
+  if (!player.attacking) return;
+  const data = ATTACKS[player.attackType] ?? ATTACKS.light;
+  for (const prop of game.props) {
+    if (prop.broken) continue;
+    if (player.hitThisSwing?.has(prop.id)) continue;
+    if (!canHit(player, prop)) continue;
+
+    damageProp(prop, data.damage, game.stageState, game.run);
+    player.hitThisSwing ??= new Set();
+    player.hitThisSwing.add(prop.id);
+  }
+}
+
 function update() {
+  const section = sectionAt(STAGE, player.x);
+  const state = game.stageState;
+
   updatePlayer(player, readIntent());
   if (!player.attacking) player.hitThisSwing = null;
+
+  // Rain. Outside cover 力 bleeds; an awning or a 手帕 stops it, and nothing
+  // on screen says so.
+  applyRain(section, player, section.covers ?? []);
 
   for (const e of activeEntities(world)) {
     if (e.kind === Kind.ENEMY) {
@@ -155,10 +233,30 @@ function update() {
       if (!e.attacking) e.hitThisSwing = null;
     }
     integrate(e, STRIP);
-    e.x = Math.min(Math.max(e.x, BOUNDS.xMin), BOUNDS.xMax);
   }
 
   resolveHits();
+  resolvePropHits();
+
+  spawnCurrentWave();
+  updateStage(STAGE, state, liveOpponents());
+
+  // The camera is pinned to the same gate as the player, so it cannot scroll
+  // ahead of a fight the player is not allowed to leave.
+  game.bounds = gateBounds(STAGE, state, game.camera);
+  player.x = Math.min(Math.max(player.x, game.bounds.xMin), game.bounds.xMax);
+
+  // The boss arena. She was not told, and she has never met him.
+  if (bossReady(STAGE, state, player.x) && !game.boss) {
+    settleStallAward(state, game.run);
+    game.boss = spawn(world, Kind.BOSS, createFruitShopOwner({
+      x: STAGE.length - 90, y: (STRIP.yMin + STRIP.yMax) / 2,
+    }));
+  }
+  if (game.boss && game.boss.power <= 0 && !state.bossDefeated) {
+    resolveFruitShopFight(game.boss, game.run);
+    clearStage(STAGE, state, game.run, 1);
+  }
 
   // THE TEN-SECOND WINDOW. Stars orbit and visibly slow; that deceleration is
   // the only countdown the player gets. On expiry they stand, dust themselves
@@ -215,7 +313,7 @@ function update() {
     }
   }
 
-  game.camera = nextCamera(game.camera, player, BOUNDS);
+  game.camera = nextCamera(game.camera, player, game.bounds);
   game.steps += 1;
   endFrame(input);
 }
@@ -256,17 +354,72 @@ function drawEntity(c, e, sx, sy) {
   }
 }
 
-function render() {
-  clear(ctx, '#181824');
+/** Parallax background. layer.x = -camera.x * factor. */
+function renderBackground() {
+  const p = STAGE.palette;
+  clear(ctx, p.sky);
 
-  ctx.fillStyle = '#23233A';
-  ctx.fillRect(0, STRIP.yMin - 24, WIDTH, HEIGHT);
-  ctx.fillStyle = '#2E2E4A';
-  for (let gx = -Math.floor(game.camera.x % 64); gx < WIDTH; gx += 64) {
-    ctx.fillRect(gx, STRIP.yMin - 24, 2, HEIGHT);
+  const offsets = layerOffsets(STAGE, game.camera.x);
+  const by = (id) => offsets.find((l) => l.id === id).x;
+
+  // Tower blocks, 0.2× — barely move, so they read as far away.
+  ctx.fillStyle = p.towers;
+  for (let i = -1; i < 14; i += 1) {
+    const x = Math.round((by('towers') % 96) + i * 96);
+    ctx.fillRect(x, 40 + (i % 3) * 14, 62, 130);
   }
 
+  // Shopfronts and signage, 0.5×.
+  ctx.fillStyle = p.shopfronts;
+  for (let i = -1; i < 18; i += 1) {
+    const x = Math.round((by('shopfronts') % 78) + i * 78);
+    ctx.fillRect(x, 106, 66, 66);
+  }
+  ctx.fillStyle = p.neon;
+  for (let i = -1; i < 18; i += 1) {
+    const x = Math.round((by('shopfronts') % 78) + i * 78);
+    ctx.fillRect(x + 8, 118, 3, 26);
+  }
+
+  // Pavement, 1.0× — the plane the player actually stands on.
+  ctx.fillStyle = p.ground;
+  ctx.fillRect(0, STRIP.yMin - 26, WIDTH, HEIGHT);
+  ctx.fillStyle = p.wet;
+  for (let gx = -Math.floor(game.camera.x % 64); gx < WIDTH; gx += 64) {
+    ctx.fillRect(gx, STRIP.yMin - 26, 2, HEIGHT);
+  }
+}
+
+function renderProps() {
+  for (const prop of game.props) {
+    const sx = Math.round(prop.x - game.camera.x);
+    if (sx < -40 || sx > WIDTH + 40) continue;
+    const sy = Math.round(prop.y);
+    if (prop.broken) {
+      ctx.fillStyle = '#3A3244';
+      ctx.fillRect(sx - 9, sy - 4, 18, 4);
+    } else {
+      ctx.fillStyle = '#6B4A3A';
+      ctx.fillRect(sx - 9, sy - 18, 18, 18);
+      ctx.fillStyle = '#C8794A';
+      ctx.fillRect(sx - 9, sy - 20, 18, 3);
+    }
+  }
+}
+
+function render() {
+  renderBackground();
+  renderProps();
+
   drawSorted(ctx, activeEntities(world), game.camera, drawEntity);
+
+  // Foreground awnings, 1.2× — they outrun the world and sell the depth.
+  const awn = layerOffsets(STAGE, game.camera.x).find((l) => l.id === 'awnings').x;
+  ctx.fillStyle = '#241C2E';
+  for (let i = -1; i < 12; i += 1) {
+    const x = Math.round((awn % 128) + i * 128);
+    ctx.fillRect(x, 0, 54, 26);
+  }
 
   for (const d of game.damageNumbers) {
     drawDamageNumber(ctx, Math.round(d.x - game.camera.x),

@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-5 complete — next is **Phase 6, Stage 1 城市「追」** |
-| **Next task** | **T42** — `stages/stage.js` base |
-| **Suite** | 🟢 green — **285 tests** |
+| **Phase** | ✅ Phases 0-6 complete — next is **Phase 7, the evaluation form** |
+| **Next task** | **T51** — run accumulator |
+| **Suite** | 🟢 green — **344 tests** |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -125,13 +125,18 @@ response but not yet seen on screen:**
   rounds to an empty bar), but whether it *matches* `docs/1.jpg` / `docs/2.jpg` is a comparison only
   an eye can make.
 
-What *is* proved: 285 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
-confirms `main.js` imports everything it references; and every module serves 200 from a running
-server, including all of `entities/`, `ui/` and `/shared/*`.
+- **Phase 6 — stage pacing.** Section lengths, wave sizes and `gateWidth` are first guesses. Whether
+  the chase *feels* like a chase, and whether the market row presents a real temptation to smash,
+  can only be judged by playing it.
+
+What *is* proved: 344 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
+confirms `main.js` imports everything it references **and defines every constant it uses**; and every
+module serves 200 from a running server, including `stages/`, `entities/`, `ui/` and `/shared/*`.
 
 **Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z light,
-X heavy, Shift guards, **E helps up**, Q calls an ally, backtick toggles the debug overlay. Three
-enemies are spawned ahead of you. Worth confirming specifically:
+X heavy, Shift guards, **E helps up**, Q calls an ally, backtick toggles the debug overlay. Stage 1
+now runs properly: four sections, gated waves, rain, breakable stalls, and the boss. Worth confirming
+specifically:
 
 1. Felix draws, and walking "into" the screen changes his draw order against the enemies.
 2. An attack **misses** an enemy standing on a different depth line — that is the 2.5D system.
@@ -143,6 +148,12 @@ enemies are spawned ahead of you. Worth confirming specifically:
 6. The HUD reads like `docs/1.jpg` / `docs/2.jpg`: 力 green bar with `n/max`, 氣 orange beneath,
    `Lv.N` and the EXP sliver far left, 錢 top right — and **the clock centred, large, and bare.**
    It starts at 17:20 and must never carry a label.
+7. The four parallax layers separate convincingly — towers barely move, awnings overhead race past.
+8. The camera **pins** while a wave is alive and releases when it is cleared. Without that the
+   player outruns every fight and the restraint decisions never arise.
+9. 力 bleeds in the covered arcade when out from under an awning, and stops under one.
+10. Market stalls break when hit, with **no warning and no penalty message** — that silence is the
+    point.
 
 Then delete this section.
 
@@ -218,15 +229,15 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] **T41 — ⚠️ C2 spoiler test** — brought forward from Phase 5
 
 ### Phase 6 — Stage 1 城市「追」
-- [ ] T42 — `stages/stage.js` base
-- [ ] T43 — parallax
-- [ ] T44 — `stages/city.js` sections
-- [ ] T45 — enemy roster
-- [ ] T46 — rain hazard
-- [ ] T47 — breakable market stalls
-- [ ] T48 — boss 水果店老闆娘
-- [ ] T49 — the melon (40 HP)
-- [ ] T50 — stage clear
+- [x] T42 — `stages/stage.js` base
+- [x] T43 — parallax
+- [x] T44 — `stages/city.js` sections
+- [x] T45 — enemy roster
+- [x] T46 — rain hazard
+- [x] T47 — breakable market stalls
+- [x] T48 — boss 水果店老闆娘
+- [x] T49 — the melon (40 HP)
+- [x] T50 — stage clear
 
 ### Phase 7 — Evaluation form, end to end
 - [ ] T51 — run accumulator
@@ -318,6 +329,39 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 6 complete (T42–T50)
+Suite green at **344 tests**. Stage 1 城市「追」 runs end to end: four sections, gated waves, rain,
+breakable stalls, parallax, and 水果店老闆娘 with her melon.
+
+**The melon has its own test file.** It is the sharpest restraint test in the game and it lands
+eleven minutes before the candidate knows there is one. The rule that needed pinning down: the award
+is forfeited the moment the melon is **touched**, not only when it is destroyed — a player who chips
+it and stops has still not been careful with a stranger's livelihood. Sparing it makes her point up
+the road; destroying it makes her sit down in the wreckage, and **no penalty is stated on screen**.
+
+**Another real bug, and the detector missed it.** `main.js` kept referencing a module-level `BOUNDS`
+after I deleted its definition — a runtime `ReferenceError` that `node --check` accepts as valid
+syntax. The T40-era detector only checked *exported* names, so a local constant slipped straight
+through.
+
+`undefined-refs.test.js` now also asserts `main.js` **defines every SCREAMING_CASE constant it
+references**. Scoping it to that convention means there is no scope analysis to get wrong. Verified
+by reintroducing the bug and watching it fail.
+
+That is two runtime-only bugs in two phases, both in `main.js`, both invisible to the suite because
+`main.js` touches `document` and cannot be imported in Node. **That file is the project's blind
+spot** — treat changes to it with more suspicion than the rest.
+
+Two rules the stage tests pin down:
+
+- **The gate holds while a wave is alive.** Without it the player outruns every fight and the
+  restraint decisions the whole game is built on never arise.
+- **Money is scored as a fraction of what was actually on offer**, accumulated per stage cleared, so
+  a player who stops at stage 1 is not marked against three stages' worth of coins.
+
+**Next: T51**, and Phase 7 proves the hidden system end to end on this one stage before stage 2
+exists — `docs/PRD.md` §17.
 
 ### 2026-08-07 — Phase 5 complete (T37–T40)
 Suite green at **285 tests**. The real HUD is in: 力 and 錢 now sit on screen for the whole game,

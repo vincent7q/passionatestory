@@ -58,6 +58,42 @@ function localBindings(src) {
   return bound;
 }
 
+/** Strip comments and string literals so prose is not mistaken for code. */
+function codeOnly(src) {
+  return src
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/\/\/.*$/gm, ' ')
+    .replace(/'[^']*'|"[^"]*"|`[^`]*`/g, ' ');
+}
+
+/**
+ * The exported-name check below misses LOCAL constants. This caught a real one:
+ * main.js kept referencing a module-level `BOUNDS` after its definition was
+ * deleted — a runtime ReferenceError that `node --check` accepts as valid
+ * syntax and that no test could reach.
+ *
+ * Scoped to SCREAMING_CASE, which is module-level constants by convention, so
+ * there is no scope analysis to get wrong.
+ */
+test('main.js defines every constant it references', () => {
+  const src = readFileSync('game/js/main.js', 'utf8');
+  const bound = localBindings(src);
+  const code = codeOnly(src);
+
+  const missing = new Set();
+  for (const [, name] of code.matchAll(/\b([A-Z][A-Z0-9_]{2,})\b/g)) {
+    if (bound.has(name)) continue;
+    // Property access (obj.CONST) and object keys are not free references.
+    if (new RegExp(`[.\\w]\\s*\\.\\s*${name}\\b`).test(code)) continue;
+    if (new RegExp(`\\b${name}\\s*:`).test(code)) continue;
+    if (typeof globalThis[name] !== 'undefined') continue;
+    missing.add(name);
+  }
+
+  assert.deepEqual([...missing], [],
+    `main.js references undefined constants: ${[...missing].join(', ')}`);
+});
+
 test('main.js imports everything it references', () => {
   const src = readFileSync('game/js/main.js', 'utf8');
   const exported = collectExports();
