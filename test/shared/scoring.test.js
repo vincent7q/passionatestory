@@ -4,7 +4,7 @@ import {
   POWER_MAX, MONEY_MAX, JUDGMENT_MAX, GRADE_MAX, FATHER_SCORE,
   JUDGMENT, DIFFICULTY_MULTIPLIER,
   computeMoney, computeJudgment, computePower, computeGrade,
-  leaderboardValue, punctualityPoints, emptyRun,
+  leaderboardValue, emptyRun, arrivalTier, ARRIVAL, VERY_LATE_AFTER_MS,
 } from '../../shared/scoring.js';
 
 // ── T7: constants ────────────────────────────────────────────────────────────
@@ -74,29 +74,35 @@ test('judgment clamps at 40 however saintly the run', () => {
   assert.equal(computeJudgment(saint), JUDGMENT_MAX);
 });
 
-// Awards deliberately over-supply the cap so different play styles each reach
-// 40 by their own route. If the total available ever drops to exactly 40, one
-// bad break would make a full score impossible.
-test('awards over-supply the 40 cap', () => {
+/**
+ * THE THESIS, as arithmetic. Every set-piece played perfectly totals 37 — short
+ * of the cap — so a full hidden column is unreachable without helping at least
+ * one person up. You cannot be graded perfect on courtesy alone.
+ */
+test('the set-pieces alone cannot fill the column', () => {
   const available = JUDGMENT.SPARE_FRUIT_STALL + JUDGMENT.ACCEPT_ALL_CUPS
     + JUDGMENT.BOW_ON_CORRECT_BEAT + JUDGMENT.NEVER_STRIKE_DOWNED
-    + JUDGMENT.NEVER_STRIKE_TODDLER + JUDGMENT.MARKET_STALLS_INTACT
-    + JUDGMENT.PUNCTUAL_MAX;
-  assert.ok(available > JUDGMENT_MAX, `set-pieces alone give ${available}`);
+    + JUDGMENT.NEVER_STRIKE_TODDLER + JUDGMENT.MARKET_STALLS_INTACT;
+  assert.equal(available, 37);
+  assert.ok(available < JUDGMENT_MAX, 'kindness has to make up the difference');
 });
 
-test('three different routes each reach a full 40', () => {
+test('help-ups alone can fill it, so mercy is a complete route on its own', () => {
+  assert.equal(computeJudgment(judgmentRun({ helpUps: 14 })), JUDGMENT_MAX);
+});
+
+test('several routes reach a full 40, and each needs some kindness', () => {
   const mercy = judgmentRun({ helpUps: 14, neverStruckDowned: true });
-  const setPieces = judgmentRun({
+  const setPiecesPlusOne = judgmentRun({
+    helpUps: 1,
     spareFruitStall: true, acceptedAllCups: true, bowedOnBeat: true,
     neverStruckDowned: true, neverStruckToddler: true, marketStallsIntact: true,
-    arrivalMsBefore1800: 5 * 60 * 1000,
   });
   const mixed = judgmentRun({
-    helpUps: 5, spareFruitStall: true, marketStallsIntact: true,
-    neverStruckDowned: true, arrivalMsBefore1800: 4 * 60 * 1000,
+    helpUps: 7, spareFruitStall: true, marketStallsIntact: true, neverStruckDowned: true,
   });
-  for (const [label, run] of [['mercy', mercy], ['set-pieces', setPieces], ['mixed', mixed]]) {
+  for (const [label, run] of [['mercy', mercy], ['set-pieces+1', setPiecesPlusOne],
+                              ['mixed', mixed]]) {
     assert.equal(computeJudgment(run), JUDGMENT_MAX, `${label} should reach the cap`);
   }
 });
@@ -112,14 +118,23 @@ test('striking a downed opponent costs more than helping one up earns', () => {
   assert.equal(computeJudgment(judgmentRun({ helpUps: 4, strikesOnDowned: 3 })), 0);
 });
 
-// Punctuality lives inside 禮 because being on time IS a courtesy — and it means
-// the clock, the most prominent thing on screen, quietly feeds the hidden column.
-test('punctuality scales with margin and never goes negative when late', () => {
-  assert.equal(punctualityPoints(-60_000), 0, 'late earns nothing, but costs nothing here');
-  assert.equal(punctualityPoints(0), 0);
-  assert.ok(punctualityPoints(60_000) > 0);
-  assert.ok(punctualityPoints(600_000) > punctualityPoints(60_000));
-  assert.equal(punctualityPoints(99_999_999), JUDGMENT.PUNCTUAL_MAX, 'caps out');
+/**
+ * Arrival is NOT scored. A countdown makes a player race, and a player who
+ * races will not stop to help anyone up — which is the one thing being
+ * measured. Lateness lands as dialogue at the table instead.
+ */
+test('arrival time does not affect the score at all', () => {
+  const early = judgmentRun({ helpUps: 2, arrivalMsBefore1800: 600_000 });
+  const late = judgmentRun({ helpUps: 2, arrivalMsBefore1800: -600_000 });
+  assert.equal(computeJudgment(early), computeJudgment(late));
+});
+
+test('arrival tiers drive the ending, not the grade', () => {
+  assert.equal(arrivalTier(60_000), ARRIVAL.ON_TIME);
+  assert.equal(arrivalTier(0), ARRIVAL.ON_TIME);
+  assert.equal(arrivalTier(-60_000), ARRIVAL.LATE);
+  assert.equal(arrivalTier(-VERY_LATE_AFTER_MS), ARRIVAL.VERY_LATE);
+  assert.equal(arrivalTier(-99_999_999), ARRIVAL.VERY_LATE);
 });
 
 // ── T10: computePower ────────────────────────────────────────────────────────

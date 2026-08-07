@@ -5,7 +5,7 @@ import {
   clockMinutes, formatClock, msBeforeDinner,
   barSegments, barIsLow, formatMoney, damageStyle, expFraction,
 } from '../../game/js/ui/hud.js';
-import { computeJudgment, emptyRun, JUDGMENT } from '../../shared/scoring.js';
+import { computeJudgment, emptyRun, arrivalTier, ARRIVAL } from '../../shared/scoring.js';
 
 /**
  * The pixels are not testable without a canvas and faking that would prove
@@ -60,20 +60,28 @@ test('margin before dinner is positive when early, negative when late', () => {
   assert.ok(msBeforeDinner(25 * 60_000) < 0);
 });
 
-test('arriving early scores punctuality; arriving late scores none', () => {
+/**
+ * Arrival decides which ending he walks into, and nothing else. It is not
+ * scored — a countdown would make the player race, and a player who races does
+ * not stop to help anyone up.
+ */
+test('the clock chooses the ending and never touches the grade', () => {
   const early = emptyRun();
+  early.judgment.helpUps = 3;
   early.judgment.arrivalMsBefore1800 = msBeforeDinner(14 * 60_000);
-  assert.ok(computeJudgment(early) > 0);
 
   const late = emptyRun();
-  late.judgment.arrivalMsBefore1800 = msBeforeDinner(30 * 60_000);
-  assert.equal(computeJudgment(late), 0, 'late earns nothing, and is not punished twice');
+  late.judgment.helpUps = 3;
+  late.judgment.arrivalMsBefore1800 = msBeforeDinner(40 * 60_000);
+
+  assert.equal(computeJudgment(early), computeJudgment(late), 'same play, same score');
+  assert.equal(arrivalTier(early.judgment.arrivalMsBefore1800), ARRIVAL.ON_TIME);
+  assert.equal(arrivalTier(late.judgment.arrivalMsBefore1800), ARRIVAL.VERY_LATE);
 });
 
-test('a very early arrival caps the punctuality award', () => {
-  const run = emptyRun();
-  run.judgment.arrivalMsBefore1800 = msBeforeDinner(0);
-  assert.equal(computeJudgment(run), JUDGMENT.PUNCTUAL_MAX);
+test('a twenty-minute run arrives exactly on time', () => {
+  assert.equal(arrivalTier(msBeforeDinner(20 * 60_000)), ARRIVAL.ON_TIME);
+  assert.equal(arrivalTier(msBeforeDinner(21 * 60_000)), ARRIVAL.LATE);
 });
 
 // ── T37: bars ────────────────────────────────────────────────────────────────

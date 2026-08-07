@@ -35,7 +35,6 @@ export const JUDGMENT = {
   NEVER_STRIKE_DOWNED: +5,     // whole run
   NEVER_STRIKE_TODDLER: +4,    // whole run
   MARKET_STALLS_INTACT: +6,    // stage 1
-  PUNCTUAL_MAX: +8,            // scales with margin before 18:00
   STRIKE_DOWNED: -4,           // each — the heaviest penalty in the game
 
   /**
@@ -46,8 +45,36 @@ export const JUDGMENT = {
   FORCE_FED: -30,
 };
 
-/** Full marks at this much margin before 18:00. */
-export const PUNCTUAL_TARGET_MS = 5 * 60 * 1000;
+/**
+ * Arrival time is NOT scored.
+ *
+ * It used to be worth +8 inside the hidden column, which turned the clock into
+ * a countdown and made the run stressful — and a countdown is the wrong feeling
+ * for a game whose whole point is that stopping to help someone is always
+ * correct. A player racing a timer will not stop.
+ *
+ * Instead, lateness lands as DIALOGUE at the table. It costs him nothing on the
+ * form and everything in the room.
+ *
+ * Removing it also closed a real hole: a player who never struck a downed
+ * opponent and arrived on time used to clear 71 (77) without ever helping
+ * anyone up. Without the punctuality points he scores 69, and **a full 40 now
+ * requires at least one act of kindness** — the set-pieces alone total 37.
+ */
+export const ARRIVAL = {
+  ON_TIME: 'on_time',
+  LATE: 'late',
+  VERY_LATE: 'very_late',
+};
+
+/** In-game minutes past 18:00 at which "late" becomes "very late". */
+export const VERY_LATE_AFTER_MS = 4 * 60 * 1000;
+
+export function arrivalTier(msBefore1800) {
+  if (msBefore1800 >= 0) return ARRIVAL.ON_TIME;
+  if (-msBefore1800 < VERY_LATE_AFTER_MS) return ARRIVAL.LATE;
+  return ARRIVAL.VERY_LATE;
+}
 
 /**
  * The ten-second window — the mechanic the whole game is built around.
@@ -60,19 +87,6 @@ export const PUNCTUAL_TARGET_MS = 5 * 60 * 1000;
  * here so both the game and any future server-side replay agree on it.
  */
 export const DAZE_WINDOW_MS = 10_000;
-
-/**
- * Being on time is a courtesy, so punctuality lives inside 禮 rather than
- * standing alone — which means the clock, the most prominent thing on screen,
- * is quietly feeding the hidden column all game.
- *
- * Arriving late earns nothing but is not punished here; the lost award is the
- * cost.
- */
-export function punctualityPoints(msBefore1800) {
-  if (!(msBefore1800 > 0)) return 0;
-  return clamp01(msBefore1800 / PUNCTUAL_TARGET_MS) * JUDGMENT.PUNCTUAL_MAX;
-}
 
 export function computeJudgment(run) {
   const j = run?.judgment ?? {};
@@ -89,7 +103,8 @@ export function computeJudgment(run) {
   if (j.neverStruckToddler) total += JUDGMENT.NEVER_STRIKE_TODDLER;
   if (j.marketStallsIntact) total += JUDGMENT.MARKET_STALLS_INTACT;
 
-  total += punctualityPoints(j.arrivalMsBefore1800 ?? 0);
+  // arrivalMsBefore1800 is still recorded — it drives which ending he gets —
+  // but it is deliberately NOT scored. See the ARRIVAL note above.
 
   return Math.round(clamp(total, 0, JUDGMENT_MAX));
 }

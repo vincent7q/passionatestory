@@ -87,7 +87,7 @@ nobody looks at it properly because it is shaped exactly like a video game.
 |---|---|
 | 力 **POWER** — the green bar | 有本事嗎? Can he handle himself. Worth **40**. |
 | 錢 **MONEY** — the counter | 有錢嗎? What he's worth. Worth **20**. |
-| the clock, counting to 18:00 | Dinner. He is being scored on punctuality for a meal he doesn't know he's invited to. |
+| the clock, counting to 18:00 | Dinner. Not a timer, and not scored — but it decides what he walks into. |
 | 氣 SPIRIT | Just a meter. Not a criterion. Her father doesn't care. |
 
 Those are the two questions every family asks about a suitor, sitting in the corner of the screen in
@@ -303,6 +303,40 @@ does one of them one-handed while asking whether anyone wants more soup. 小雨 
 林建國 writes something on the form. Then, to the candidate:
 
 **「那個是真的。」** *(That one was real.)*
+
+---
+
+## If he is late
+
+**Arrival is not scored.** There is no countdown and no timer, deliberately: a player racing a clock
+does not stop to help anyone up, and stopping to help someone up is the entire game. The clock is
+just a clock.
+
+It decides what he walks into instead — which costs him nothing on the form and everything in the
+room.
+
+**Late.** Eight people are seated and nobody has touched anything. The food is cold.
+
+> 林建國: 「菜都涼了。」 *(The food has gone cold.)*
+> 林建國: 「你比我慢。」 *(You were slower than I was.)*
+> 小雨: 「你連準時都做不到。」 *(You can't even manage being on time.)*
+
+**Very late.** The table is cleared. Someone is washing up. The fruit has already been cut, and
+nobody is eating it.
+
+> 林建國: 「我們吃完了。」 *(We have finished.)*
+> 林建國: 「一九九四年,我沒讓她等。」 *(In 1994, I did not keep her waiting.)*
+> 小雨: 「我朋友問我為什麼還在等。」 *(My friends asked me why I was still waiting.)*
+> 小雨: 「下次…算了。」 *(Next time… never mind.)*
+
+No Sunday. Just 「再說吧。」 *(We'll see.)* — left open, so that he runs it again.
+
+**Who is allowed to be unkind.** 林建國 and the family never are; content rule 1 holds absolutely,
+and his cruellest lines are simply *facts* — he is the man who scored 71, and he can compare.
+**小雨 is the exception**, and she is less an exception than outside the rule: she is not staff, she
+is not performing hospitality, she is his girlfriend and she has been sitting there. She is the
+reason he ran, so hers is the disappointment that stings — and the one that makes a player want to
+run it again.
 
 ---
 

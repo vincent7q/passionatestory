@@ -284,13 +284,17 @@ export const JUDGMENT = {
   NEVER_STRIKE_DOWNED:    +5,   // whole run, conditional
   NEVER_STRIKE_TODDLER:   +4,   // whole run, conditional
   MARKET_STALLS_INTACT:   +6,   // stage 1
-  PUNCTUAL_MAX:           +8,   // scales with margin before 18:00
   STRIKE_DOWNED:          -4,   // each
+  FORCE_FED:             -30,   // each 「吃飽了嗎?」 — he reads it as a heal
 };
 ```
 
-Punctuality lives **inside** 禮 rather than standing alone, because being on time is a courtesy —
-and it means the clock, the most prominent thing on screen, is quietly feeding the hidden column.
+**Arrival is not scored.** `arrivalTier(msBefore1800)` returns `on_time` / `late` / `very_late`,
+which chooses the ending (`game/js/ui/ending.js`) and nothing else. A countdown would make the
+player race, and a player who races does not stop to help anyone up.
+
+**The set-pieces total 37, short of the 40 cap on purpose.** A full hidden column requires at least
+one help-up, so nobody can be graded perfect on courtesy alone.
 
 ### 7.2 The run payload
 

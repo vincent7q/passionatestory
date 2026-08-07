@@ -107,7 +107,15 @@ test('C1 boundary: the ceiling for a player who strikes the downed is 60', () =>
   assert.ok(g.total < FATHER_SCORE);
 });
 
-test('C1 boundary: restraint without generosity clears 71 — a known design edge', () => {
+/**
+ * This case used to clear 71 at 77 and was recorded as an open design question.
+ * Removing the punctuality award closed it: the same player now scores 69.
+ *
+ * He wrecks the fruit stall, flattens the market row, refuses all three of
+ * 二叔 BAN's cups and never bows. He simply stops attacking when someone falls.
+ * That is worth something — 9 — and it is not worth 71.
+ */
+test('C1 boundary: restraint without generosity no longer clears 71', () => {
   const r = masherRun();
   r.durationMs = 14 * 60 * 1000;
   r.power = { damageDealt: 1e9, longestCombo: 99, powerRemaining: 150, powerMax: 150,
@@ -119,10 +127,32 @@ test('C1 boundary: restraint without generosity clears 71 — a known design edg
   });
 
   const g = computeGrade(r);
-  assert.equal(g.judgment, 17);
-  assert.equal(g.total, 77);
-  assert.ok(g.total > FATHER_SCORE,
-    'documented deliberately: if this should not clear 71, the AWARDS need retuning');
+  assert.equal(g.judgment, 9);
+  assert.equal(g.total, 69);
+  assert.ok(g.total < FATHER_SCORE, 'never helping anyone up must not reach 71');
+});
+
+/**
+ * The property that closed it, stated directly: the set-piece awards no longer
+ * total 40 on their own. A full hidden column REQUIRES at least one act of
+ * kindness, which is the entire thesis of the game.
+ */
+test('C1: a full 40 is unreachable without helping at least one person up', () => {
+  const r = masherRun();
+  r.durationMs = 14 * 60 * 1000;
+  r.power = { damageDealt: 1e9, longestCombo: 99, powerRemaining: 150, powerMax: 150,
+              sectionTimesMs: [], bossTimesMs: [] };
+  Object.assign(r.judgment, {
+    helpUps: 0, strikesOnDowned: 0,
+    spareFruitStall: true, acceptedAllCups: true, bowedOnBeat: true,
+    neverStruckDowned: true, neverStruckToddler: true, marketStallsIntact: true,
+    arrivalMsBefore1800: 600_000,
+  });
+
+  const g = computeGrade(r);
+  assert.equal(g.judgment, 37, 'every set-piece, perfectly, and still short of the cap');
+  assert.ok(g.judgment < 40);
+  assert.ok(g.total > FATHER_SCORE, 'a perfect set-piece run still beats 71 — as intended');
 });
 
 // A player who maxes both visible criteria and nothing else should still fall

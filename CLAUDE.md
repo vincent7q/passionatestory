@@ -37,8 +37,8 @@ not "improve" this by relabelling anything.
 - **The character 禮 must not appear anywhere before the evaluation form** — not in the HUD, the
   pause menu, a tutorial, or a tooltip. Restraint awards pop as a bare gold `+3` with a seal icon and
   no label. Internal identifiers may use `li`/`REI`; player-facing strings may not.
-- **The clock counting toward 18:00 is dinner, not a rescue timer.** Never label it. It is quietly
-  feeding 禮.
+- **The clock counting toward 18:00 is dinner, not a rescue timer.** Never label it. It is **not
+  scored** — it decides which ending he walks into, and nothing else.
 - Nothing in the game explains the scoring. The pause menu has no scoring page.
 
 ### Scoring
@@ -49,8 +49,10 @@ Three criteria, two visible, and `shared/scoring.js` must track them separately:
   remaining at the end.
 - **錢 MONEY (0–20) — visible.** The counter. Total collected.
 - **禮 JUDGMENT (0–40, clamped) — hidden.** Restraint: helping defeated opponents up, sparing a
-  bystander's fruit stall, never hitting someone who is down, and **punctuality**, which lives here
-  rather than standing alone because being on time is a courtesy.
+  bystander's fruit stall, accepting 二叔 BAN's tea, bowing, and never hitting someone who is down.
+  **The set-pieces total 37, short of the cap on purpose** — a full column needs at least one
+  help-up, so nobody is graded perfect on courtesy alone. Arrival time is **not** scored; it picks
+  the ending.
 
 力 and 錢 are worth 60 between them and a determined player maxes both — **they are the criteria that
 don't decide it.** A masher lands around 56–60 and cannot reach 71, the score 小雨's father 林建國 got

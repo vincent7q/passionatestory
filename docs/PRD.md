@@ -186,14 +186,17 @@ line on the form reads 「這些是我們的錢。」*
 | Never strike a dazed or downed opponent | +5 |
 | Never strike the toddler | +4 |
 | Reach the estate without destroying the market stalls | +6 |
-| **Reach the dining room before 18:00** | up to +8, scaling with margin |
 | Strike a downed opponent | **−4 each** |
+| Be force-fed by 「吃飽了嗎?」 | **−30 each** |
 
-Punctuality lives inside 禮 rather than standing alone, because being on time *is* a courtesy — and
-it means the clock, the most prominent element on screen, is secretly feeding the hidden column.
+**Arrival is NOT scored.** It was worth +8 in an earlier draft, which turned the clock into a
+countdown and made the run stressful — and a countdown is exactly the wrong feeling for a game whose
+thesis is that stopping to help someone is always correct. A player racing a timer does not stop.
+Lateness lands as dialogue at the table instead; see `docs/story.md`, *If he is late*.
 
-Awards deliberately over-supply the 40 cap, so a mercy run, a restraint run, and a
-perfect-set-pieces run each reach a full score by different routes. Clamp to `[0, 40]`.
+**The set-pieces total 37, deliberately short of the 40 cap.** A full hidden column is therefore
+unreachable without helping at least one person up. You cannot be graded perfect on courtesy alone —
+which is the whole thesis, stated as arithmetic. Clamp to `[0, 40]`.
 
 ### Grade = 力 + 錢 + 禮, out of 100
 

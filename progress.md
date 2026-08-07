@@ -57,50 +57,36 @@ HTTP. Always run through the server.
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
 | **Phase** | ✅ Phases 0-10 complete — next is **Phase 11, the reveal** |
-| **Next task** | **T79** — `ui/reveal.js` ⚠️ see the punctuality decision below first |
-| **Suite** | 🟢 green — **508 tests** |
+| **Next task** | **T79** — `ui/reveal.js`. `ui/ending.js` already holds the dialogue |
+| **Suite** | 🟢 green — **511 tests** |
 | **Blocked on** | Nothing. The `better-sqlite3` blocker is resolved — see below. |
 
-**C1 is satisfied and measured.** With the formula as committed:
+### ✅ RESOLVED 2026-08-07 — the timer is gone, and the 71 hole closed with it
 
-| Run | 力 | 錢 | 禮 | Total |
-|---|---|---|---|---|
-| Masher — maximal violence, zero restraint | 36 | 20 | **0** | **56** |
-| 林建國, 1994 | — | — | — | **71** |
-| Restraint — helps people up, spares the melon, bows | 29 | 20 | **40** | **89** |
+**Vincent's call: no countdown. It was too stressful.** Arrival is no longer scored at all.
+Lateness lands as *dialogue at the table* instead — see `docs/story.md`, *If he is late*.
 
-71 sits cleanly between them, so the hidden column is what decides it. If a
-tuning change moves that band, `test/shared/scoring.masher.test.js` fails —
-**retune `POWER_TUNING`, never the test.**
-
-### ⚠️ Open design question — a player can clear 71 without ever helping anyone up
-
-Phase 7's end-to-end test surfaced this. All four cases are now pinned as tests in
-`test/shared/scoring.masher.test.js`:
+That change also closed the open design question from Phase 7, without touching any other number.
+The full landscape now:
 
 | Player | 力 | 錢 | 禮 | Total | vs 71 |
 |---|---|---|---|---|---|
-| Masher — hits the downed, arrives late | 40 | 20 | 0 | **60** | ✅ short |
-| Masher — hits the downed, arrives on time | 40 | 20 | 0 | **60** | ✅ short |
-| **Violent but never hits the downed, on time** | 40 | 20 | 17 | **77** | ⚠️ **clears it** |
-| Perfect set-pieces, never helps anyone up | 40 | 20 | 40 | **100** | by design |
+| Masher — hits the downed | 40 | 20 | 0 | **60** | short |
+| Violent but never hits the downed | 40 | 20 | 9 | **69** | short *(was 77 — the hole)* |
+| Perfect set-pieces, **never helps anyone up** | 40 | 20 | 37 | **97** | clears, not perfect |
+| Set-pieces + a single help-up | 40 | 20 | 40 | **100** | — |
+| Mercy run, 14 help-ups | 40 | 20 | 40 | **100** | — |
 
-**C1 as specified holds.** A masher tops out at 60, because striking the downed
-wipes out even the punctuality he earned — eleven short.
+**The property that made it work:** the set-piece awards now total **37**, deliberately short of the
+40 cap. A full hidden column is therefore unreachable without helping at least one person up —
+nobody can be graded perfect on courtesy alone. That is the thesis of the whole game, stated as
+arithmetic, and it is pinned by a test.
 
-The third row is the question. That player wrecks the fruit stall, flattens the
-market row, refuses all three of 二叔 BAN's cups and never bows — but he stops
-attacking when someone falls, and he is on time. That earns `NEVER_STRIKE_DOWNED`
-(+5), `NEVER_STRIKE_TODDLER` (+4) and punctuality (+8) = 17, which clears 71.
+Why the timer had to go, in one line: **a player racing a clock does not stop to help anyone up**,
+and stopping to help someone up is the entire game.
 
-Arguably fine: not hitting a man who is down **is** restraint, and it is the
-behaviour the family is measuring. Arguably wrong: he never once helped anyone
-up, and 林建國 would not approve that man.
-
-**This is a design call, not a bug.** If it should not clear 71, retune the
-whole-run conditionals down (`NEVER_STRIKE_DOWNED` and `NEVER_STRIKE_TODDLER`
-are the levers) — the test documents the current numbers so any change is
-visible.
+If a tuning change moves any of this, `test/shared/scoring.masher.test.js` fails —
+**retune the constants, never the test.**
 
 ### ✅ Resolved — `better-sqlite3` is installed and working
 
@@ -373,6 +359,30 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — design change: the timer is gone (Vincent's call)
+Suite green at **511 tests**. This lands ahead of Phase 11 because it changes the ending.
+
+**Arrival is no longer scored.** `JUDGMENT.PUNCTUAL_MAX` and `punctualityPoints()` are deleted from
+`shared/scoring.js`. `arrivalTier()` replaces them: it returns `on_time` / `late` / `very_late` and
+chooses which ending he walks into, and nothing else.
+
+`game/js/ui/ending.js` is new and holds all three endings' dialogue. **Phase 11 renders it; the
+content is written and does not need inventing.**
+
+**On who is allowed to be unkind** — this was the one point I pushed back on and it is worth keeping
+straight, because it is easy to undo by accident:
+
+- **林建國 and the family are never rude.** Content rule 1 holds absolutely. His cruellest lines are
+  *facts* — 「你比我慢。」 and 「一九九四年,我沒讓她等。」 He is the man who scored 71, and he can
+  compare. That is worse than an insult and it breaks nothing.
+- **小雨 is the exception**, and less an exception than outside the rule. She is not staff and not
+  performing hospitality; she is his girlfriend and she has been sitting there. 「你連準時都做不到。」
+  is hers. She is the reason he ran, so hers is the disappointment that stings — and the one that
+  makes a player run it again.
+
+Do not move those lines to 林建國. The moment the family is openly rude, the joke the whole game
+rests on stops working.
 
 ### 2026-08-07 — Phase 10 complete (T71–T78)
 Suite green at **508 tests**. Stage 3 城堡 and 林建國 are in. All three stages now run.
