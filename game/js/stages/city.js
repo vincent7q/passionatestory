@@ -52,21 +52,23 @@ export const CITY = {
   gateWidth: 480,
   strip: { yMin: 172, yMax: 250 },
 
+  /**
+   * Each layer carries its own draw data so the renderer stays generic across
+   * all three stages — `band` is {y, h, w, gap}, and `accent` is an optional
+   * second pass for signage, lanterns and the like.
+   */
   layers: [
-    { id: 'towers', factor: 0.2 },
-    { id: 'shopfronts', factor: 0.5 },
-    { id: 'pavement', factor: 1.0 },
-    { id: 'awnings', factor: 1.2 },
+    { id: 'towers', factor: 0.2, colour: '#2A3247', band: { y: 40, h: 130, w: 62, gap: 96 },
+      stagger: 14 },
+    { id: 'shopfronts', factor: 0.5, colour: '#3C3350', band: { y: 106, h: 66, w: 66, gap: 78 },
+      accent: { colour: '#E8547C', dx: 8, dy: 12, w: 3, h: 26 } },
+    { id: 'pavement', factor: 1.0, ground: true, colour: '#2E2E3E',
+      accent: { colour: '#4A5C7A', w: 2, gap: 64 } },
+    { id: 'awnings', factor: 1.2, foreground: true, colour: '#241C2E',
+      band: { y: 0, h: 26, w: 54, gap: 128 } },
   ],
 
-  palette: {
-    sky: '#1B2233',
-    towers: '#2A3247',
-    shopfronts: '#3C3350',
-    ground: '#2E2E3E',
-    neon: '#E8547C',
-    wet: '#4A5C7A',
-  },
+  palette: { sky: '#1B2233' },
 
   sections: [
     {
@@ -123,6 +125,11 @@ export const CITY = {
 
   /** Total 錢 available across the stage, for the money criterion. */
   moneyAvailable: 2400,
+
+  // Attached so main.js can drive any stage without per-stage imports.
+  get enemies() { return ENEMIES; },
+  get moneyDrop() { return MONEY_DROP; },
+  get spawnsFor() { return waveSpawns; },
 };
 
 /** Money dropped per enemy type. Every coin is off a man on the Lin payroll. */

@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-8 complete — next is **Phase 9, Stage 2 森林「山路」** |
-| **Next task** | **T65** — `stages/forest.js` |
-| **Suite** | 🟢 green — **415 tests** |
+| **Phase** | ✅ Phases 0-9 complete — next is **Phase 10, Stage 3 + 林建國** |
+| **Next task** | **T71** — `stages/castle.js` |
+| **Suite** | 🟢 green — **459 tests** |
 | **Blocked on** | Nothing. The `better-sqlite3` blocker is resolved — see below. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -118,11 +118,13 @@ installing the VS Build Tools — the caret deliberately stays inside 11.x.
 is verified working on Node 20 — all 415 tests, Fastify 5, the native binding — so `engines` is now
 `">=20"`, which reflects what is actually proved rather than what was assumed.
 
-### ⏳ Outstanding visual verification
+### ⏳ Outstanding visual verification — **scheduled for the office machine**
 
-Rendering tasks are verified by looking at them (`SPEC.md` §12). The Chrome extension was not
-connected during the session that wrote T3–T5, so **the following has been proved by test and HTTP
-response but not yet seen on screen:**
+The Chrome extension does not connect on this machine. **Vincent is testing it on the office machine
+on 2026-08-08.** Everything below is proved by test and by HTTP response, but has not been seen on
+screen. Work through the numbered checklist at the end of this section and delete it once done.
+
+Rendering tasks are verified by looking at them (`SPEC.md` §12), so these remain open:
 
 - **T3** — the canvas actually rendering, and staying crisp while the window resizes through
   integer scale steps.
@@ -191,6 +193,11 @@ specifically:
     is a real pause; then 禮 arrives with 「他沒看到這一欄」 beside it, and 林建國 (1994) — 71
     underneath. Mashing must not fast-forward past the pause.
 12. Name entry accepts three initials and returns to rest.
+13. **Stage 2 loads after stage 1** — the palette changes to dusk, the parallax becomes ridgeline
+    and pines, and the ferns overhead race past in the foreground.
+14. **二叔 BAN cannot be beaten by fighting.** Knock him to zero and he pours another cup and gets
+    straight back up. E accepts a cup; after three, E bows and he steps aside. This is the beat
+    where the player is supposed to work it out — watch whether it lands.
 
 Then delete this section.
 
@@ -295,12 +302,12 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T64 — `net.js` → tagged `v0.2-leaderboard`
 
 ### Phase 9 — Stage 2 森林「山路」
-- [ ] T65 — `stages/forest.js`
-- [ ] T66 — enemy roster
-- [ ] T67 — hazards
-- [ ] T68 — the clues
-- [ ] T69 — 二叔, unbeatable by fighting
-- [ ] T70 — the three cups, then bow
+- [x] T65 — `stages/forest.js`
+- [x] T66 — enemy roster
+- [x] T67 — hazards
+- [x] T68 — the clues
+- [x] T69 — 二叔, unbeatable by fighting
+- [x] T70 — the three cups, then bow
 
 ### Phase 10 — Stage 3 城堡 + final boss
 - [ ] T71 — `stages/castle.js`
@@ -366,6 +373,36 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 9 complete (T65–T70)
+Suite green at **459 tests**. Stage 2 森林「山路」 is in, and the game is now genuinely multi-stage.
+
+**二叔 BAN is the best-tested thing in the codebase and deserves to be.** He *cannot be beaten by
+fighting* — the test knocks him to zero five times in a row and asserts he refills completely and is
+still standing in the road. Three cups: accepting restores 氣 and adds cumulative heaviness,
+refusing costs 8 力 because you do not refuse an uncle, and accepting all three is +8. Then the way
+past is to bow. Bowing works even if you refused every cup — **rudeness costs points, not passage.**
+
+**Two structural changes were needed to fit a second stage:**
+
+1. **`stages/index.js`, a registry.** Each stage now carries its own `enemies`, `moneyDrop` and
+   `spawnsFor`, so `main.js` drives all three through one code path and imports no stage
+   individually. `stages-registry.test.js` asserts the shape — one boss section and it is last,
+   sections tiling 0→1 with no gaps, every enemy having a money-drop entry (an `undefined` there
+   would poison the counter silently).
+2. **The renderer became data-driven.** It was hardcoded to the city's palette keys and layer ids,
+   which the forest does not have. Layers now carry their own `colour`, `band` and `accent`, and a
+   test fails any layer missing its draw data — a layer without a `band` simply does not draw, with
+   no error.
+
+That second one is the kind of thing that would otherwise have surfaced twenty minutes into a
+playthrough, on reaching the mountain.
+
+The sensor-light clue is modelled rather than decorated: `litSensors` fires when the player is
+within `SENSOR_LEAD`, and the test asserts the light is **still ahead of him** when it comes on.
+That distinction — lights coming on *ahead*, as though someone is expecting him — is the whole clue.
+
+**Next: T71**, stage 3 and 林建國.
 
 ### 2026-08-07 — Phase 8 complete (T56–T64), tagged `v0.2-leaderboard`
 Suite green at **415 tests**. Backend, leaderboard, integrity and persistence are in.

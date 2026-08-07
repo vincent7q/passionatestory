@@ -16,15 +16,20 @@ import { applyDamage, ATTACKS } from './combat.js';
 import {
   beginDaze, advanceDaze, promptTarget, helpUp, recordStrike, starPositions,
 } from './daze.js';
-import { createRoster, callAlly, canCallAlly, getActive } from './entities/ally.js';
+import { createRoster, callAlly, canCallAlly, getActive, resetFight } from './entities/ally.js';
 import { drawHud, drawAward, drawAllyPrompt, drawDamageNumber, msBeforeDinner }
   from './ui/hud.js';
 import {
   createStageState, updateStage, gateBounds, sectionAt, layerOffsets,
   applyRain, createProp, damageProp, settleStallAward, clearStage, bossReady,
 } from './stages/stage.js';
-import { CITY, ENEMIES, MONEY_DROP, waveSpawns } from './stages/city.js';
-import { createFruitShopOwner, resolveFruitShopFight } from './entities/boss.js';
+import { STAGES, stageNumber, nextStage } from './stages/index.js';
+import { applyPond } from './stages/forest.js';
+import {
+  createFruitShopOwner, resolveFruitShopFight,
+  createSecondUncle, refillIfDowned, acceptCup, refuseCup, bowToUncle, uncleBlocksPath,
+  TeaBeat,
+} from './entities/boss.js';
 import {
   startRun, recordDamage, recordMoney, recordCombo, recordPower, tickRun, finalizeRun,
 } from './run.js';
@@ -68,40 +73,43 @@ window.addEventListener('resize', () => fitCanvas(canvas));
 for (const id of CANDIDATES) buildCharacter(id, CHARACTERS[id].palette);
 buildCharacter('enemy', { hair: '#2B2B33', skin: '#E8B48E', shirt: '#4A5A6B', accent: '#C9CED6' });
 
-const STAGE = CITY;
-const STRIP = STAGE.strip;
-
 const input = bindKeyboard(createInput(), window);
 const world = createWorld();
 
 const player = addEntity(world, createPlayer(CHARACTERS.felix, { x: 60, y: 210 }));
 
-function randDepth() {
-  return STRIP.yMin + Math.random() * (STRIP.yMax - STRIP.yMin);
+function randDepth(strip) {
+  return strip.yMin + Math.random() * (strip.yMax - strip.yMin);
 }
 
-function spawnEnemy(type, x) {
-  const def = ENEMIES[type];
+function spawnEnemy(stage, type, x) {
+  const def = stage.enemies[type];
+  if (!def) return undefined;
   return spawn(world, Kind.ENEMY, {
     enemyType: type, charId: 'enemy', team: Team.HOUSE,
-    x, y: randDepth(), z: 0, w: 16, depth: 8, h: FRAME_H,
+    x, y: randDepth(stage.strip), z: 0, w: 16, depth: 8, h: FRAME_H,
     power: def.hp, powerMax: def.hp, facing: -1,
-    speed: def.speed, money: MONEY_DROP[type] ?? 0,
+    speed: def.speed, money: stage.moneyDrop[type] ?? 0,
   });
 }
 
 /**
- * Breakable market stalls. There are a lot of them and NOTHING tells the
- * player to spare them — no prompt, no warning, no penalty message.
+ * Breakable props. In stage 1 these are market stalls — there are a lot of
+ * them and NOTHING tells the player to spare them.
  */
-const props = [];
-for (const section of STAGE.sections) {
-  for (let i = 0; i < (section.props ?? 0); i += 1) {
-    const from = section.from * STAGE.length;
-    const span = (section.to - section.from) * STAGE.length;
-    props.push(createProp(`${section.id}_${i}`,
-      { x: from + 80 + (span - 160) * (i / Math.max(1, section.props - 1)), y: STRIP.yMin - 6 }));
+function buildProps(stage) {
+  const out = [];
+  for (const section of stage.sections) {
+    for (let i = 0; i < (section.props ?? 0); i += 1) {
+      const from = section.from * stage.length;
+      const span = (section.to - section.from) * stage.length;
+      out.push(createProp(`${section.id}_${i}`, {
+        x: from + 80 + (span - 160) * (i / Math.max(1, section.props - 1)),
+        y: stage.strip.yMin - 6,
+      }));
+    }
   }
+  return out;
 }
 
 const game = {
@@ -110,9 +118,9 @@ const game = {
   steps: 0,
   world,
   camera: createCamera(),
-  stage: STAGE,
-  stageState: createStageState(STAGE),
-  props,
+  stage: STAGES[0],
+  stageState: createStageState(STAGES[0]),
+  props: buildProps(STAGES[0]),
   boss: null,
   roster: createRoster(),
   run: startRun(emptyRun(), { candidate: 'felix', difficulty: 'normal' }),
@@ -207,17 +215,51 @@ function liveOpponents() {
 
 /** Spawn the current wave once, ahead of the player. */
 function spawnCurrentWave() {
+  const stage = game.stage;
   const state = game.stageState;
   if (state.spawnedThisWave.length > 0) return;
 
-  const section = STAGE.sections[state.sectionIndex];
-  const spawns = waveSpawns(section, state.waveIndex);
+  const section = stage.sections[state.sectionIndex];
+  const spawns = stage.spawnsFor(section, state.waveIndex);
   if (spawns.length === 0) return;
 
   spawns.forEach((s, i) => {
-    const e = spawnEnemy(s.type, player.x + 180 + i * 46);
+    const e = spawnEnemy(stage, s.type, player.x + 180 + i * 46);
     if (e) state.spawnedThisWave.push(e.id);
   });
+}
+
+/** Create the boss this stage ends on. The two are nothing alike. */
+function spawnBossFor(stage) {
+  const at = { x: stage.length - 90, y: (stage.strip.yMin + stage.strip.yMax) / 2 };
+  if (stage.boss === 'second_uncle') return spawn(world, Kind.BOSS, createSecondUncle(at));
+  return spawn(world, Kind.BOSS, createFruitShopOwner(at));
+}
+
+/**
+ * 二叔 BAN cannot be beaten by fighting. Zero him and he pours another cup and
+ * stands back up, fully restored. The way past is to bow.
+ *
+ * E is the only button involved, and it never explains itself: it accepts a
+ * cup, and then later it bows.
+ */
+function updateTeaCeremony(uncle) {
+  refillIfDowned(uncle);
+
+  const pressedE = justPressed(input, Action.CONTEXT);
+  const nearEnough = Math.abs(player.x - uncle.x) < 46;
+  if (!pressedE || !nearEnough) return false;
+
+  if (uncle.tea.beat === TeaBeat.OFFERING) {
+    acceptCup(uncle, player, game.run);
+    return true;
+  }
+  if (uncle.tea.beat === TeaBeat.BOW_WINDOW) {
+    const r = bowToUncle(uncle);
+    if (r.passed) game.awards.push({ x: uncle.x, y: uncle.y, life: 60 });
+    return r.passed;
+  }
+  return false;
 }
 
 /**
@@ -238,53 +280,85 @@ function resolvePropHits() {
   }
 }
 
+/**
+ * Move to the next stage, or — once the last one is cleared — to the form.
+ * Stage 3 and 林建國 join this in Phase 10.
+ */
+function advanceStage() {
+  const next = nextStage(game.stage);
+
+  if (next) {
+    game.stage = next;
+    game.stageState = createStageState(next);
+    game.props = buildProps(next);
+    game.boss = null;
+    resetFight(game.roster);
+    player.x = 60;
+    player.y = (next.strip.yMin + next.strip.yMax) / 2;
+    game.camera = createCamera();
+    for (const e of activeEntities(world)) if (e !== player) despawn(world, e);
+    return;
+  }
+
+  game.evaluation = createEvaluation(computeGrade(game.run), {
+    candidateName: CHARACTERS[game.run.candidate].name.zh,
+  });
+  game.state = States.STAGE_CLEAR;
+}
+
 function update() {
-  const section = sectionAt(STAGE, player.x);
+  const stage = game.stage;
+  const section = sectionAt(stage, player.x);
   const state = game.stageState;
 
   updatePlayer(player, readIntent());
   if (!player.attacking) player.hitThisSwing = null;
 
   // Rain. Outside cover 力 bleeds; an awning or a 手帕 stops it, and nothing
-  // on screen says so.
+  // on screen says so. The koi pond costs a lot, all at once.
   applyRain(section, player, section.covers ?? []);
+  applyPond(section, player);
 
   for (const e of activeEntities(world)) {
     if (e.kind === Kind.ENEMY) {
       updateEnemy(e, player);
       if (!e.attacking) e.hitThisSwing = null;
     }
-    integrate(e, STRIP);
+    integrate(e, stage.strip);
   }
 
   resolveHits();
   resolvePropHits();
 
   spawnCurrentWave();
-  updateStage(STAGE, state, liveOpponents());
+  updateStage(stage, state, liveOpponents());
 
   // The camera is pinned to the same gate as the player, so it cannot scroll
   // ahead of a fight the player is not allowed to leave.
-  game.bounds = gateBounds(STAGE, state, game.camera);
+  game.bounds = gateBounds(stage, state, game.camera);
   player.x = Math.min(Math.max(player.x, game.bounds.xMin), game.bounds.xMax);
 
   // The boss arena. She was not told, and she has never met him.
-  if (bossReady(STAGE, state, player.x) && !game.boss) {
+  if (bossReady(stage, state, player.x) && !game.boss) {
     settleStallAward(state, game.run);
-    game.boss = spawn(world, Kind.BOSS, createFruitShopOwner({
-      x: STAGE.length - 90, y: (STRIP.yMin + STRIP.yMax) / 2,
-    }));
+    game.boss = spawnBossFor(stage);
   }
-  if (game.boss && game.boss.power <= 0 && !state.bossDefeated) {
-    resolveFruitShopFight(game.boss, game.run);
-    clearStage(STAGE, state, game.run, 1);
 
-    // The vertical slice ends here: stage 1 → the evaluation form. Stages 2
-    // and 3 slot in ahead of this in Phases 9 and 10.
-    game.evaluation = createEvaluation(computeGrade(game.run), {
-      candidateName: CHARACTERS[game.run.candidate].name.zh,
-    });
-    game.state = States.STAGE_CLEAR;
+  // Two bosses, nothing alike. She fights. He pours tea and cannot be beaten.
+  let bossDone = false;
+  if (game.boss && !state.bossDefeated) {
+    if (game.boss.bossId === 'second_uncle') {
+      updateTeaCeremony(game.boss);
+      bossDone = !uncleBlocksPath(game.boss);
+    } else if (game.boss.power <= 0) {
+      resolveFruitShopFight(game.boss, game.run);
+      bossDone = true;
+    }
+  }
+
+  if (bossDone) {
+    clearStage(stage, state, game.run, stageNumber(stage));
+    advanceStage();
   }
 
   // THE TEN-SECOND WINDOW. Stars orbit and visibly slow; that deceleration is
@@ -380,40 +454,52 @@ function drawEntity(c, e, sx, sy) {
   }
 }
 
-/** Parallax background. layer.x = -camera.x * factor. */
+/**
+ * Parallax background, driven entirely by the stage's layer data so all three
+ * stages share one code path. layer.x = -camera.x * factor.
+ */
+function drawLayer(layer, offsetX, strip) {
+  if (layer.ground) {
+    ctx.fillStyle = layer.colour;
+    ctx.fillRect(0, strip.yMin - 26, WIDTH, HEIGHT);
+    if (layer.accent) {
+      ctx.fillStyle = layer.accent.colour;
+      const gap = layer.accent.gap;
+      for (let gx = -Math.floor(game.camera.x % gap); gx < WIDTH; gx += gap) {
+        ctx.fillRect(gx, strip.yMin - 26, layer.accent.w, HEIGHT);
+      }
+    }
+    return;
+  }
+
+  const b = layer.band;
+  if (!b) return;
+
+  const tiles = Math.ceil(WIDTH / b.gap) + 2;
+  ctx.fillStyle = layer.colour;
+  for (let i = -1; i < tiles; i += 1) {
+    const x = Math.round((offsetX % b.gap) + i * b.gap);
+    ctx.fillRect(x, b.y + (layer.stagger ? (i % 3) * layer.stagger : 0), b.w, b.h);
+  }
+
+  if (layer.accent) {
+    ctx.fillStyle = layer.accent.colour;
+    for (let i = -1; i < tiles; i += 1) {
+      const x = Math.round((offsetX % b.gap) + i * b.gap);
+      ctx.fillRect(x + layer.accent.dx, b.y + layer.accent.dy, layer.accent.w, layer.accent.h);
+    }
+  }
+}
+
 function renderBackground() {
-  const p = STAGE.palette;
-  clear(ctx, p.sky);
+  const stage = game.stage;
+  clear(ctx, stage.palette.sky);
 
-  const offsets = layerOffsets(STAGE, game.camera.x);
-  const by = (id) => offsets.find((l) => l.id === id).x;
-
-  // Tower blocks, 0.2× — barely move, so they read as far away.
-  ctx.fillStyle = p.towers;
-  for (let i = -1; i < 14; i += 1) {
-    const x = Math.round((by('towers') % 96) + i * 96);
-    ctx.fillRect(x, 40 + (i % 3) * 14, 62, 130);
-  }
-
-  // Shopfronts and signage, 0.5×.
-  ctx.fillStyle = p.shopfronts;
-  for (let i = -1; i < 18; i += 1) {
-    const x = Math.round((by('shopfronts') % 78) + i * 78);
-    ctx.fillRect(x, 106, 66, 66);
-  }
-  ctx.fillStyle = p.neon;
-  for (let i = -1; i < 18; i += 1) {
-    const x = Math.round((by('shopfronts') % 78) + i * 78);
-    ctx.fillRect(x + 8, 118, 3, 26);
-  }
-
-  // Pavement, 1.0× — the plane the player actually stands on.
-  ctx.fillStyle = p.ground;
-  ctx.fillRect(0, STRIP.yMin - 26, WIDTH, HEIGHT);
-  ctx.fillStyle = p.wet;
-  for (let gx = -Math.floor(game.camera.x % 64); gx < WIDTH; gx += 64) {
-    ctx.fillRect(gx, STRIP.yMin - 26, 2, HEIGHT);
-  }
+  const offsets = layerOffsets(stage, game.camera.x);
+  stage.layers.forEach((layer, i) => {
+    if (layer.foreground) return;   // drawn after the entities
+    drawLayer(layer, offsets[i].x, stage.strip);
+  });
 }
 
 function renderProps() {
@@ -439,13 +525,12 @@ function render() {
 
   drawSorted(ctx, activeEntities(world), game.camera, drawEntity);
 
-  // Foreground awnings, 1.2× — they outrun the world and sell the depth.
-  const awn = layerOffsets(STAGE, game.camera.x).find((l) => l.id === 'awnings').x;
-  ctx.fillStyle = '#241C2E';
-  for (let i = -1; i < 12; i += 1) {
-    const x = Math.round((awn % 128) + i * 128);
-    ctx.fillRect(x, 0, 54, 26);
-  }
+  // Foreground layers above 1.0× — awnings, ferns. They outrun the world and
+  // are what actually sell the depth, so they draw over the entities.
+  const offsets = layerOffsets(game.stage, game.camera.x);
+  game.stage.layers.forEach((layer, i) => {
+    if (layer.foreground) drawLayer(layer, offsets[i].x, game.stage.strip);
+  });
 
   for (const d of game.damageNumbers) {
     drawDamageNumber(ctx, Math.round(d.x - game.camera.x),

@@ -91,6 +91,131 @@ export function melonSpared(boss) {
  * direction the van went. Destroy it and she sits down in the wreckage of her
  * stall. NO PENALTY IS STATED ON SCREEN. The file records it.
  */
+// ── Stage 2 — 二叔 BAN 班 ─────────────────────────────────────────────────────
+
+/**
+ * An enormous, beaming man sitting in the middle of the mountain road behind a
+ * folding table with a full tea service laid out.
+ *
+ * HE CANNOT BE BEATEN BY FIGHTING. Reduce him to zero and he pours another cup
+ * and stands back up, fully restored. He is not aggressive; he is HOSPITABLE,
+ * immovably so.
+ *
+ * Three cups. Each one accepted restores 氣 and makes the candidate heavier and
+ * slower. Each one refused costs 力, because you do not refuse an uncle. The
+ * third leaves him at his most sluggish — and the way through is to bow.
+ *
+ * This is where the player understands. A kidnapper does not do this. The
+ * candidate takes it as a bizarre obstacle and keeps running.
+ */
+export const SECOND_UNCLE = {
+  id: 'second_uncle',
+  name: { en: 'BAN', zh: '二叔 班' },
+  hp: 500,
+  cups: 3,
+};
+
+/** Refusing costs 力. You do not refuse an uncle. */
+export const REFUSE_POWER_COST = 8;
+/** Each cup accepted makes him heavier and slower. Cumulative. */
+export const HEAVINESS_PER_CUP = 1;
+export const SPIRIT_PER_CUP = 9999;   // "restores 氣 fully"
+
+export const TeaBeat = {
+  OFFERING: 'OFFERING',     // a cup is on the table, E accepts
+  POURING: 'POURING',       // he is pouring the next one
+  BOW_WINDOW: 'BOW_WINDOW', // three cups down; the way through is to bow
+  PASSED: 'PASSED',         // he steps aside, beaming
+};
+
+export function createSecondUncle(at = {}) {
+  return createEntity(Kind.BOSS, {
+    bossId: SECOND_UNCLE.id,
+    charId: 'second_uncle',
+    team: Team.HOUSE,
+    x: at.x ?? 0, y: at.y ?? 0, z: 0,
+    w: 24, depth: 12, h: FRAME_H,
+    power: SECOND_UNCLE.hp, powerMax: SECOND_UNCLE.hp,
+    facing: -1,
+    tea: { beat: TeaBeat.OFFERING, cupsOffered: 1, cupsAccepted: 0, cupsRefused: 0 },
+  });
+}
+
+/**
+ * He cannot be defeated. Reducing him to zero pours another cup and restores
+ * him completely.
+ *
+ * @returns {boolean} whether he just refilled
+ */
+export function refillIfDowned(uncle) {
+  if (uncle.power > 0) return false;
+  uncle.power = uncle.powerMax;
+  uncle.state = State.IDLE;
+  uncle.attacking = false;
+  return true;
+}
+
+/** Accept the cup on the table. */
+export function acceptCup(uncle, player, run) {
+  const tea = uncle.tea;
+  if (tea.beat !== TeaBeat.OFFERING) return { accepted: false };
+
+  tea.cupsAccepted += 1;
+
+  if (player) {
+    player.spirit = player.spiritMax;
+    player.heaviness = (player.heaviness ?? 0) + HEAVINESS_PER_CUP;
+  }
+
+  const done = tea.cupsAccepted + tea.cupsRefused >= SECOND_UNCLE.cups;
+  if (done) {
+    tea.beat = TeaBeat.BOW_WINDOW;
+    // Accepting ALL THREE is the award. Refusing even one forfeits it.
+    if (run) run.judgment.acceptedAllCups = tea.cupsAccepted === SECOND_UNCLE.cups;
+  } else {
+    tea.cupsOffered += 1;
+  }
+
+  return { accepted: true, cupsAccepted: tea.cupsAccepted, allDone: done };
+}
+
+/** Refuse, or ignore the prompt until it lapses. Costs 力 either way. */
+export function refuseCup(uncle, player, run) {
+  const tea = uncle.tea;
+  if (tea.beat !== TeaBeat.OFFERING) return { refused: false };
+
+  tea.cupsRefused += 1;
+  if (player) player.power = Math.max(0, player.power - REFUSE_POWER_COST);
+
+  const done = tea.cupsAccepted + tea.cupsRefused >= SECOND_UNCLE.cups;
+  if (done) {
+    tea.beat = TeaBeat.BOW_WINDOW;
+    if (run) run.judgment.acceptedAllCups = false;
+  } else {
+    tea.cupsOffered += 1;
+  }
+
+  return { refused: true, powerCost: REFUSE_POWER_COST, allDone: done };
+}
+
+/**
+ * Bow. The only way past him.
+ *
+ * He steps aside beaming and tells the candidate he's a good kid, then joins
+ * and teaches 鐵山靠 — a shoulder charge.
+ */
+export function bowToUncle(uncle) {
+  if (uncle.tea.beat !== TeaBeat.BOW_WINDOW) return { passed: false };
+  uncle.tea.beat = TeaBeat.PASSED;
+  uncle.state = State.ALLIED;
+  uncle.team = Team.PLAYER;
+  return { passed: true, teaches: 'iron_mountain', joins: true };
+}
+
+export function uncleBlocksPath(uncle) {
+  return uncle.tea.beat !== TeaBeat.PASSED;
+}
+
 export function resolveFruitShopFight(boss, run) {
   const spared = melonSpared(boss);
   if (run) run.judgment.spareFruitStall = spared;
