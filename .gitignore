@@ -1,0 +1,12 @@
+node_modules/
+
+# SQLite lives on a Docker volume in production, and in ./data locally.
+# Never commit player records.
+data/
+*.db
+*.db-shm
+*.db-wal
+
+.env
+.DS_Store
+Thumbs.db

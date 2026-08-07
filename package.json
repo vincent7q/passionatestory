@@ -1,0 +1,19 @@
+{
+  "name": "passionatestory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "熱血物語：見家長 — HTML5 side-scrolling beat-'em-up with SQLite leaderboard",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --watch server/index.js",
+    "start": "node server/index.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@fastify/static": "^10.1.3",
+    "fastify": "^5.1.0"
+  }
+}
