@@ -25,11 +25,14 @@ import {
 } from './stages/stage.js';
 import { STAGES, stageNumber, nextStage } from './stages/index.js';
 import { applyPond } from './stages/forest.js';
+import { applyRange } from './stages/castle.js';
 import {
   createFruitShopOwner, resolveFruitShopFight,
-  createSecondUncle, refillIfDowned, acceptCup, refuseCup, bowToUncle, uncleBlocksPath,
-  TeaBeat,
+  createSecondUncle, refillIfDowned, acceptCup, bowToUncle, uncleBlocksPath, TeaBeat,
+  createLinJianguo, advanceBoss, tickSummon, bowAtBoss, forceFeed, Phase, currentMove,
 } from './entities/boss.js';
+import { resolveSummon } from './entities/ally.js';
+import { isAttackable, strikeToddler } from './daze.js';
 import {
   startRun, recordDamage, recordMoney, recordCombo, recordPower, tickRun, finalizeRun,
 } from './run.js';
@@ -131,6 +134,8 @@ const game = {
   prompt: null,           // the entity the E prompt is currently offering
   awards: [],             // floating gold +3 pops, deliberately unlabelled
   damageNumbers: [],
+  gasp: 0,                // frames left of the room's reaction to hitting 小表妹
+  lastSummon: null,
   elapsedMs: 0,           // drives the clock, which is never labelled
   level: 1,
   exp: 0,
@@ -167,6 +172,19 @@ function resolveHits() {
       if (target.team === attacker.team) continue;
       if (attacker.hitThisSwing?.has(target.id)) continue;
       if (!canHit(attacker, target)) continue;
+
+      // 小表妹 cannot be attacked. The swing is refused outright, and the only
+      // feedback is an audible gasp from the whole room — the one time the
+      // family reacts to anything all evening. Nothing explains it.
+      if (!isAttackable(target)) {
+        if (attacker.team === Team.PLAYER) {
+          strikeToddler(game.run);
+          game.gasp = 90;
+        }
+        attacker.hitThisSwing ??= new Set();
+        attacker.hitThisSwing.add(target.id);
+        continue;
+      }
 
       const wasDazed = target.state === State.DAZED;
 
@@ -229,11 +247,72 @@ function spawnCurrentWave() {
   });
 }
 
-/** Create the boss this stage ends on. The two are nothing alike. */
+/** Create the boss this stage ends on. The three are nothing alike. */
 function spawnBossFor(stage) {
   const at = { x: stage.length - 90, y: (stage.strip.yMin + stage.strip.yMax) / 2 };
   if (stage.boss === 'second_uncle') return spawn(world, Kind.BOSS, createSecondUncle(at));
+  if (stage.boss === 'lin_jianguo') return spawn(world, Kind.BOSS, createLinJianguo(at));
   return spawn(world, Kind.BOSS, createFruitShopOwner(at));
+}
+
+/**
+ * 林建國. He fights the whole first phase seated and does not put down his
+ * chopsticks. At 40% he stands up from the table for the first time, and the
+ * way through from there is to bow.
+ *
+ * @returns {boolean} whether the fight is over
+ */
+function updateFinalBoss(boss) {
+  const wasActive = boss.attacking;
+  advanceBoss(boss);
+
+  // His moves resolve here rather than through the generic hit pass, because
+  // several of them are not ordinary attacks at all.
+  const move = currentMove(boss);
+  if (move && boss.attacking && !wasActive && player.invulnerable <= 0) {
+    const inReach = Math.abs(player.x - boss.x) < (move.reach ?? 40);
+
+    if (move.grab && inReach) {
+      // 「吃飽了嗎?」 — unblockable. He reads it as a heal. It is not.
+      forceFeed(boss, player, game.run);
+      game.damageNumbers.push({
+        x: player.x, y: player.y, amount: move.restores, life: 40, kind: 'heal',
+      });
+    } else if (move.screenWide || inReach) {
+      const result = applyDamage(player, move.damage, {
+        fromFacing: boss.facing,
+        // 一句話 must be parried, not blocked; guard-breakers ignore a guard.
+        ignoreGuard: move.guardBreaking || move.mustParry,
+      });
+      if (result.damage > 0) {
+        game.damageNumbers.push({
+          x: player.x, y: player.y, amount: result.damage, life: 40, kind: 'hit',
+        });
+      }
+    }
+  }
+
+  // 召集. Every twenty seconds he calls two relatives — and anyone the
+  // candidate helped up refuses to come. This is the payoff for every
+  // ten-second decision made across the entire run.
+  const available = activeEntities(world).filter(
+    (e) => e.team === Team.HOUSE && e.kind === Kind.ENEMY);
+  const summon = tickSummon(boss, game.roster, available, resolveSummon);
+  if (summon) {
+    for (const relative of summon.refused) despawn(world, relative);
+    game.lastSummon = summon;
+  }
+
+  // E bows. In phase 2 it staggers him for three seconds — the only reliable
+  // opening — and it is quietly worth +6.
+  if (justPressed(input, Action.CONTEXT) && boss.phase === Phase.STANDING
+      && Math.abs(player.x - boss.x) < 60) {
+    if (bowAtBoss(boss, game.run).staggered) {
+      game.awards.push({ x: boss.x, y: boss.y, life: 60 });
+    }
+  }
+
+  return boss.phase === Phase.DONE;
 }
 
 /**
@@ -318,6 +397,9 @@ function update() {
   // on screen says so. The koi pond costs a lot, all at once.
   applyRain(section, player, section.covers ?? []);
   applyPond(section, player);
+  applyRange(section, player);
+
+  if (game.gasp > 0) game.gasp -= 1;
 
   for (const e of activeEntities(world)) {
     if (e.kind === Kind.ENEMY) {
@@ -350,6 +432,8 @@ function update() {
     if (game.boss.bossId === 'second_uncle') {
       updateTeaCeremony(game.boss);
       bossDone = !uncleBlocksPath(game.boss);
+    } else if (game.boss.bossId === 'lin_jianguo') {
+      bossDone = updateFinalBoss(game.boss);
     } else if (game.boss.power <= 0) {
       resolveFruitShopFight(game.boss, game.run);
       bossDone = true;

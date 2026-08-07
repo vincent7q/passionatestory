@@ -151,6 +151,26 @@ export function recordStrike(run, damageResult) {
   return true;
 }
 
+/**
+ * 小表妹, the toddler. SHE CANNOT BE ATTACKED.
+ *
+ * She hits for 5 and cannot be hit back. Striking her is a heavy penalty and an
+ * audible gasp from the whole room — the only time the family reacts to
+ * anything all evening, and the only feedback the player ever gets that
+ * anything is being judged. Even then, nothing explains it.
+ *
+ * @returns {{blocked: boolean, penalised: boolean}}
+ */
+export function strikeToddler(run) {
+  if (run) run.judgment.neverStruckToddler = false;
+  return { blocked: true, penalised: true, gasp: true };
+}
+
+/** Whether an entity may be hit at all. The toddler never may. */
+export function isAttackable(entity) {
+  return entity.attackable !== false;
+}
+
 /** Star positions for rendering. Presentation only. */
 export function starPositions(e, radius = 9) {
   const out = [];

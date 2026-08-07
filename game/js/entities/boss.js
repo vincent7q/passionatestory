@@ -216,6 +216,236 @@ export function uncleBlocksPath(uncle) {
   return uncle.tea.beat !== TeaBeat.PASSED;
 }
 
+// ── Stage 3 — 林建國 VINCENT ──────────────────────────────────────────────────
+
+/**
+ * 小雨's father. Fifty-four. Undefeated at this table since 1994 — the year he
+ * sat where the candidate is sitting and scored 71.
+ *
+ * He is the only person in the room who has been through this from the other
+ * side, which is why he is the one who decides.
+ *
+ * The candidate believes he is fighting the mastermind. He is fighting a man at
+ * his own dinner table, and he is going to lose it on points.
+ */
+export const LIN_JIANGUO = {
+  id: 'lin_jianguo',
+  name: { en: 'VINCENT', zh: '林建國' },
+  hp: 1000,
+  phaseTwoAt: 0.4,
+  age: 54,
+  score1994: 71,
+};
+
+export const Phase = {
+  /** 「面談」 — he does not stand, and he does not put down his chopsticks. */
+  INTERVIEW: 'INTERVIEW',
+  /** 「站起來」 — he stands up from the table for the first time. */
+  STANDING: 'STANDING',
+  DONE: 'DONE',
+};
+
+/** Every 20s he calls two relatives. At 60 steps a second. */
+export const SUMMON_INTERVAL_STEPS = 20 * 60;
+export const SUMMON_COUNT = 2;
+
+/** A timed bow staggers him — the only reliable Phase 2 opening. */
+export const BOW_STAGGER_STEPS = 3 * 60;
+
+export const MOVES = {
+  // Phase 1「面談」. He is serving, not striking.
+  serving_chopsticks: { id: '公筷', damage: 10, startup: 8, active: 4, recovery: 16, reach: 30 },
+  chopsticks: { id: '筷子', damage: 6, startup: 5, active: 3, recovery: 10, ranged: true },
+  how_old: { id: '你幾歲?', damage: 15, ranged: true },
+  own_a_house: { id: '有房子嗎?', damage: 25, screenWide: true, guardBreaking: true },
+  eaten_enough: { id: '吃飽了嗎?', unblockable: true, grab: true, restores: 40 },
+
+  // Phase 2「站起來」.
+  sweep: { id: '掃堂腿', damage: 12, low: true, mustJump: true },
+  the_serving: { id: '夾菜', damage: 8, hits: 8, advancing: true },
+  lazy_susan: { id: '轉盤', damage: 14, hazardBecomesAttack: true },
+  one_word: { id: '一句話', damage: 40, chargeSteps: 120, mustParry: true },
+};
+
+export function createLinJianguo(at = {}) {
+  return createEntity(Kind.BOSS, {
+    bossId: LIN_JIANGUO.id,
+    charId: 'lin_jianguo',
+    team: Team.HOUSE,
+    x: at.x ?? 0, y: at.y ?? 0, z: 0,
+    w: 22, depth: 11, h: FRAME_H,
+    power: LIN_JIANGUO.hp, powerMax: LIN_JIANGUO.hp,
+    facing: -1,
+    phase: Phase.INTERVIEW,
+    seated: true,
+    summonTimer: SUMMON_INTERVAL_STEPS,
+    staggerSteps: 0,
+  });
+}
+
+export function healthFraction(boss) {
+  return boss.powerMax > 0 ? boss.power / boss.powerMax : 0;
+}
+
+/**
+ * At 40% he stands up from the table for the first time. The music drops out
+ * entirely, and the rest of the family quietly puts down their chopsticks to
+ * watch — because they have all seen a man stand up from a table before.
+ *
+ * @returns {boolean} whether he just stood
+ */
+export function updatePhase(boss) {
+  if (boss.phase !== Phase.INTERVIEW) return false;
+  if (healthFraction(boss) > LIN_JIANGUO.phaseTwoAt) return false;
+
+  boss.phase = Phase.STANDING;
+  boss.seated = false;
+
+  // Standing interrupts whatever he was doing. The music drops out entirely and
+  // the rest of the family puts down their chopsticks — a seated move carrying
+  // on through that moment would undercut it, and would also let a Phase 1 move
+  // land during Phase 2.
+  boss.moveId = null;
+  boss.moveFrame = 0;
+  boss.moveGap = MOVE_GAP_STEPS;
+  boss.attacking = false;
+  return true;
+}
+
+/**
+ * 「吃飽了嗎?」 — an unblockable grab that force-feeds him.
+ *
+ * It restores 力, which he reads as a heal, and quietly takes a bite out of the
+ * column he does not know exists. THE PLAYER MUST NOT BE TOLD.
+ */
+export function forceFeed(boss, player, run) {
+  const restored = MOVES.eaten_enough.restores;
+  if (player) player.power = Math.min(player.powerMax, player.power + restored);
+  if (run) run.judgment.forceFed = (run.judgment.forceFed ?? 0) + 1;
+  return { restored, hiddenCost: true };
+}
+
+/**
+ * 召集 Summon. Every twenty seconds he calls two relatives — AND ANYONE THE
+ * CANDIDATE HELPED UP REFUSES TO COME.
+ *
+ * This is the payoff for every ten-second decision made across the whole run.
+ * A candidate with a full roster fights Phase 1 almost alone.
+ *
+ * @param resolve a function taking (roster, candidates) — ally.resolveSummon
+ */
+export function tickSummon(boss, roster, available, resolve) {
+  boss.summonTimer -= 1;
+  if (boss.summonTimer > 0) return null;
+
+  boss.summonTimer = SUMMON_INTERVAL_STEPS;
+  const called = available.slice(0, SUMMON_COUNT);
+  return resolve(roster, called);
+}
+
+/**
+ * A timed bow. He respects manners more than strength — and he knows exactly
+ * what he is watching for, because he learned it in this room in 1994, from the
+ * other side of the table.
+ */
+export function bowAtBoss(boss, run) {
+  if (boss.phase !== Phase.STANDING) return { staggered: false };
+  if (boss.staggerSteps > 0) return { staggered: false };
+
+  boss.staggerSteps = BOW_STAGGER_STEPS;
+  if (run) run.judgment.bowedOnBeat = true;
+  return { staggered: true, steps: BOW_STAGGER_STEPS };
+}
+
+/** Which moves belong to which phase. */
+export const PHASE_MOVES = {
+  [Phase.INTERVIEW]: ['serving_chopsticks', 'chopsticks', 'how_old', 'own_a_house',
+                      'eaten_enough'],
+  [Phase.STANDING]: ['sweep', 'the_serving', 'lazy_susan', 'one_word'],
+};
+
+/** Steps between the end of one move and the start of the next. */
+export const MOVE_GAP_STEPS = 42;
+
+const moveTiming = (move) => ({
+  startup: move.chargeSteps ?? move.startup ?? 20,
+  active: move.active ?? (move.hits ? move.hits * 6 : 8),
+  recovery: move.recovery ?? 26,
+});
+
+/** Pick the next move for the current phase. `rng` is injectable for tests. */
+export function chooseMove(boss, rng = Math.random) {
+  const pool = PHASE_MOVES[boss.phase];
+  if (!pool || pool.length === 0) return null;
+  return pool[Math.floor(rng() * pool.length)];
+}
+
+/**
+ * Advance the boss's own attack clock one step.
+ *
+ * @returns {'idle'|'startup'|'active'|'recovery'} the current window, so the
+ *   caller knows when a move actually connects.
+ */
+export function tickMove(boss, rng = Math.random) {
+  // A staggered boss does nothing. That is what makes the bow the opening.
+  if (boss.staggerSteps > 0) {
+    boss.moveId = null;
+    boss.attacking = false;
+    return 'idle';
+  }
+
+  if (!boss.moveId) {
+    boss.moveGap = (boss.moveGap ?? MOVE_GAP_STEPS) - 1;
+    if (boss.moveGap > 0) {
+      boss.attacking = false;
+      return 'idle';
+    }
+    boss.moveId = chooseMove(boss, rng);
+    boss.moveFrame = 0;
+    boss.moveGap = MOVE_GAP_STEPS;
+    if (!boss.moveId) return 'idle';
+  }
+
+  const move = MOVES[boss.moveId];
+  const { startup, active, recovery } = moveTiming(move);
+  boss.moveFrame += 1;
+
+  if (boss.moveFrame <= startup) {
+    boss.attacking = false;
+    return 'startup';
+  }
+  if (boss.moveFrame <= startup + active) {
+    boss.attacking = true;
+    return 'active';
+  }
+  boss.attacking = false;
+  if (boss.moveFrame >= startup + active + recovery) {
+    boss.moveId = null;
+    boss.moveFrame = 0;
+  }
+  return 'recovery';
+}
+
+export function currentMove(boss) {
+  return boss.moveId ? MOVES[boss.moveId] : null;
+}
+
+export function advanceBoss(boss, rng = Math.random) {
+  if (boss.staggerSteps > 0) boss.staggerSteps -= 1;
+  updatePhase(boss);
+  if (boss.power <= 0) {
+    boss.phase = Phase.DONE;
+    boss.attacking = false;
+    return boss;
+  }
+  tickMove(boss, rng);
+  return boss;
+}
+
+export function bossOpen(boss) {
+  return boss.staggerSteps > 0;
+}
+
 export function resolveFruitShopFight(boss, run) {
   const spared = melonSpared(boss);
   if (run) run.judgment.spareFruitStall = spared;

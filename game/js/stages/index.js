@@ -9,9 +9,9 @@
 
 import { CITY } from './city.js';
 import { FOREST } from './forest.js';
+import { CASTLE } from './castle.js';
 
-/** castle.js joins this list in Phase 10. */
-export const STAGES = [CITY, FOREST];
+export const STAGES = [CITY, FOREST, CASTLE];
 
 export const stageNumber = (stage) => STAGES.indexOf(stage) + 1;
 

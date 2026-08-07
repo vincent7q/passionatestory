@@ -37,6 +37,13 @@ export const JUDGMENT = {
   MARKET_STALLS_INTACT: +6,    // stage 1
   PUNCTUAL_MAX: +8,            // scales with margin before 18:00
   STRIKE_DOWNED: -4,           // each — the heaviest penalty in the game
+
+  /**
+   * 「吃飽了嗎?」 — 林建國's unblockable grab. It force-feeds the candidate:
+   * restores his 力 and quietly takes a bite out of the column he does not know
+   * exists. He reads it as a heal. It is not.
+   */
+  FORCE_FED: -30,
 };
 
 /** Full marks at this much margin before 18:00. */
@@ -73,6 +80,7 @@ export function computeJudgment(run) {
 
   total += (j.helpUps ?? 0) * JUDGMENT.HELP_UP;
   total += (j.strikesOnDowned ?? 0) * JUDGMENT.STRIKE_DOWNED;
+  total += (j.forceFed ?? 0) * JUDGMENT.FORCE_FED;
 
   if (j.spareFruitStall) total += JUDGMENT.SPARE_FRUIT_STALL;
   if (j.acceptedAllCups) total += JUDGMENT.ACCEPT_ALL_CUPS;
@@ -164,7 +172,7 @@ export function emptyRun() {
     },
     money: { collected: 0, totalAvailable: 0 },
     judgment: {
-      helpUps: 0, strikesOnDowned: 0,
+      helpUps: 0, strikesOnDowned: 0, forceFed: 0,
       spareFruitStall: false, acceptedAllCups: false, bowedOnBeat: false,
       neverStruckDowned: false, neverStruckToddler: false, marketStallsIntact: false,
       arrivalMsBefore1800: 0,

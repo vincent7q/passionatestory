@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-9 complete — next is **Phase 10, Stage 3 + 林建國** |
-| **Next task** | **T71** — `stages/castle.js` |
-| **Suite** | 🟢 green — **459 tests** |
+| **Phase** | ✅ Phases 0-10 complete — next is **Phase 11, the reveal** |
+| **Next task** | **T79** — `ui/reveal.js` ⚠️ see the punctuality decision below first |
+| **Suite** | 🟢 green — **508 tests** |
 | **Blocked on** | Nothing. The `better-sqlite3` blocker is resolved — see below. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -310,14 +310,14 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T70 — the three cups, then bow
 
 ### Phase 10 — Stage 3 城堡 + final boss
-- [ ] T71 — `stages/castle.js`
-- [ ] T72 — enemy roster
-- [ ] T73 — the toddler (cannot be attacked)
-- [ ] T74 — blatant clues
-- [ ] T75 — dining room arena, lazy Susan
-- [ ] T76 — 林建國 Phase 1「面談」
-- [ ] T77 — 召集 Summon vs. the roster
-- [ ] T78 — Phase 2「站起來」
+- [x] T71 — `stages/castle.js`
+- [x] T72 — enemy roster
+- [x] T73 — the toddler (cannot be attacked)
+- [x] T74 — blatant clues
+- [x] T75 — dining room arena, lazy Susan
+- [x] T76 — 林建國 Phase 1「面談」
+- [x] T77 — 召集 Summon vs. the roster
+- [x] T78 — Phase 2「站起來」
 
 ### Phase 11 — The reveal
 - [ ] T79 — `ui/reveal.js` beats 1–7
@@ -373,6 +373,36 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 10 complete (T71–T78)
+Suite green at **508 tests**. Stage 3 城堡 and 林建國 are in. All three stages now run.
+
+**小表妹 cannot be attacked, and that is enforced in the hit resolver, not by giving her lots of
+health.** The swing is refused outright before any damage is computed. Striking her forfeits the
+award and triggers an audible gasp from the whole room — the only time the family reacts to
+anything all evening, and the only feedback the player ever gets that anything is being judged.
+Even then, nothing explains it.
+
+**「吃飽了嗎?」 needed a new scoring field.** It restores 40 力 — which the candidate reads as a heal —
+and quietly costs 30 in the hidden column. `JUDGMENT.FORCE_FED = -30` and `judgment.forceFed` are new
+in `shared/scoring.js`. **C1 was re-verified after the change:** the masher still tops out at 60. The
+grab has real bite — two of them drop a perfect restraint run from 100 to 81.
+
+**The final boss needed an actual move AI, not just a move table.** I nearly shipped him as a
+punching bag: `MOVES` existed as data with nothing driving it, and `forceFeed` was imported into
+`main.js` and never called. `chooseMove` / `tickMove` now run his attack clock, with `rng` injectable
+so move selection is deterministic in tests.
+
+**A test caught a real design flaw there.** A seated Phase 1 move already in flight carried on
+executing *after* he stood up — so 公筷 could land during Phase 2. Standing now interrupts everything,
+which is also better: the music drops out, the family puts down their chopsticks, and a move carrying
+on through that moment would undercut it.
+
+The 召集 Summon is wired to the real roster: relatives the candidate helped up are despawned rather
+than joining the fight.
+
+**Next: T79** — but read the punctuality decision above first; it changes `shared/scoring.js` and the
+ending, both of which land in Phase 11.
 
 ### 2026-08-07 — Phase 9 complete (T65–T70)
 Suite green at **459 tests**. Stage 2 森林「山路」 is in, and the game is now genuinely multi-stage.
