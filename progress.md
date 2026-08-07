@@ -128,12 +128,12 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 
 ### Phase 1 — `shared/` ← where correctness lives
 - [x] T6 — `shared/characters.js`
-- [ ] T7 — scoring constants
-- [ ] T8 — `computeMoney`
-- [ ] T9 — `computeJudgment` (the hidden column)
-- [ ] T10 — `computePower`
-- [ ] T11 — `computeGrade`, `leaderboardValue`
-- [ ] **T12 — ⚠️ C1 masher test**
+- [x] T7 — scoring constants
+- [x] T8 — `computeMoney`
+- [x] T9 — `computeJudgment` (the hidden column)
+- [x] T10 — `computePower`
+- [x] T11 — `computeGrade`, `leaderboardValue`
+- [x] **T12 — ⚠️ C1 masher test** — masher 56, restraint 89
 - [ ] T13 — `shared/validation.js`
 
 ### Phase 2 — Engine core
