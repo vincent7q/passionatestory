@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-4 complete (+T41) — next is **Phase 5, HUD** |
-| **Next task** | **T37** — 力 / 氣 bars (T41 already done) |
-| **Suite** | 🟢 green — **263 tests** |
+| **Phase** | ✅ Phases 0-5 complete — next is **Phase 6, Stage 1 城市「追」** |
+| **Next task** | **T42** — `stages/stage.js` base |
+| **Suite** | 🟢 green — **285 tests** |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -121,8 +121,13 @@ response but not yet seen on screen:**
   the slowing is not legible, the ten-second window has no signal and the game's central mechanic is
   invisible.
 
-What *is* proved: 263 unit tests; every file passes `node --check`; and every module serves 200 from
-a running server, including all of `entities/` and `/shared/*`.
+- **Phase 5 — HUD layout.** The formatting is tested (clock never reads 17:65, a 1-力 sliver never
+  rounds to an empty bar), but whether it *matches* `docs/1.jpg` / `docs/2.jpg` is a comparison only
+  an eye can make.
+
+What *is* proved: 285 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
+confirms `main.js` imports everything it references; and every module serves 200 from a running
+server, including all of `entities/`, `ui/` and `/shared/*`.
 
 **Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z light,
 X heavy, Shift guards, **E helps up**, Q calls an ally, backtick toggles the debug overlay. Three
@@ -135,6 +140,9 @@ enemies are spawned ahead of you. Worth confirming specifically:
    next to them. It must not explain itself.
 5. Pressing E pops a bare gold **`+3`** with a seal dot and **no label**, and the enemy gets up on
    your side.
+6. The HUD reads like `docs/1.jpg` / `docs/2.jpg`: 力 green bar with `n/max`, 氣 orange beneath,
+   `Lv.N` and the EXP sliver far left, 錢 top right — and **the clock centred, large, and bare.**
+   It starts at 17:20 and must never carry a label.
 
 Then delete this section.
 
@@ -203,10 +211,10 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T36 — strike-on-downed penalty
 
 ### Phase 5 — HUD
-- [ ] T37 — 力 / 氣 bars `[no-test]`
-- [ ] T38 — the clock (never labelled) `[no-test]`
-- [ ] T39 — 錢 counter `[no-test]`
-- [ ] T40 — damage numbers, bare gold `+3` `[no-test]`
+- [x] T37 — 力 / 氣 bars *(fill math tested)*
+- [x] T38 — the clock, never labelled *(formatting tested)*
+- [x] T39 — 錢 counter *(formatting tested)*
+- [x] T40 — damage numbers, bare gold `+3` *(styles tested)*
 - [x] **T41 — ⚠️ C2 spoiler test** — brought forward from Phase 5
 
 ### Phase 6 — Stage 1 城市「追」
@@ -310,6 +318,31 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 5 complete (T37–T40)
+Suite green at **285 tests**. The real HUD is in: 力 and 錢 now sit on screen for the whole game,
+undisguised, which is the joke.
+
+**The plan marked all four `[no-test]`. Three of them weren't.** The pixels need an eye, but the
+formatting and layout maths are pure and are where the mistakes that matter live — a clock reading
+`17:65`, a surviving 1-力 sliver rounding to an empty bar and telling the player he is already
+finished. Those now have tests; only the drawing is `[no-test]`.
+
+**A real bug slipped through and prompted a new guard.** `main.js` used `STEP_MS` without importing
+it. `node --check` accepts that — it is valid syntax — and no test imports `main.js`, because it
+touches `document` and cannot load in Node. So it would have failed only at runtime, in a browser
+nobody has been able to open.
+
+`test/game/undefined-refs.test.js` now closes that hole: it collects every name exported anywhere in
+`game/js` and `shared/`, and fails if `main.js` references one it never imported. I verified it
+catches the real bug by removing the import again and watching it fail. It also asserts every other
+game module actually loads under Node.
+
+`CLOCK_SCALE = 2` maps 17:20 → 18:00 (forty in-game minutes) onto a ~20 minute session. Raising it
+makes the candidate later, which quietly costs him punctuality he does not know he is being scored
+on.
+
+**Next: T42**, and Phase 6 builds stage 1 completely before stage 2 starts.
 
 ### 2026-08-07 — Phase 4 complete (T31–T36), plus T41 brought forward
 Suite green at **263 tests**. The ten-second window is in and wired: stars orbit and slow, a bare

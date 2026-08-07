@@ -1,5 +1,5 @@
 import { WIDTH, HEIGHT, fitCanvas, getContext, clear, drawSorted } from './renderer.js';
-import { stepCount } from './utils.js';
+import { stepCount, STEP_MS } from './utils.js';
 import { createFpsTracker, pushFrameTime, drawOverlay } from './debug.js';
 import {
   createInput, bindKeyboard, endFrame, isDown, justPressed, axis, Action,
@@ -16,7 +16,9 @@ import { applyDamage, ATTACKS } from './combat.js';
 import {
   beginDaze, advanceDaze, promptTarget, helpUp, recordStrike, starPositions,
 } from './daze.js';
-import { createRoster, callAlly, canCallAlly } from './entities/ally.js';
+import { createRoster, callAlly, canCallAlly, getActive } from './entities/ally.js';
+import { drawHud, drawAward, drawAllyPrompt, drawDamageNumber, msBeforeDinner }
+  from './ui/hud.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
@@ -78,6 +80,10 @@ const game = {
   run: emptyRun(),
   prompt: null,           // the entity the E prompt is currently offering
   awards: [],             // floating gold +3 pops, deliberately unlabelled
+  damageNumbers: [],
+  elapsedMs: 0,           // drives the clock, which is never labelled
+  level: 1,
+  exp: 0,
   debug: { visible: false, tracker: createFpsTracker(), stepsThisFrame: 0 },
 };
 
@@ -119,6 +125,14 @@ function resolveHits() {
       // The heaviest penalty in the game, charged once per connection —
       // never per frame of contact.
       if (attacker.team === Team.PLAYER) recordStrike(game.run, result);
+
+      if (result.damage > 0) {
+        game.damageNumbers.push({
+          x: target.x, y: target.y, amount: result.damage, life: 40,
+          kind: attacker.combo >= 4 ? 'critical' : 'hit',
+        });
+        if (attacker.team === Team.PLAYER) game.run.power.damageDealt += result.damage;
+      }
 
       // Zero 力 sits them down. Nobody dies; nobody stays down.
       if (result.dazed && !wasDazed) beginDaze(target);
@@ -170,6 +184,17 @@ function update() {
 
   for (const a of game.awards) a.life -= 1;
   game.awards = game.awards.filter((a) => a.life > 0);
+  for (const d of game.damageNumbers) d.life -= 1;
+  game.damageNumbers = game.damageNumbers.filter((d) => d.life > 0);
+
+  // The clock. Every player reads it as a rescue timer. It is when dinner is
+  // served, and punctuality quietly feeds the column he cannot see.
+  game.elapsedMs += STEP_MS;
+  game.run.durationMs = game.elapsedMs;
+  game.run.judgment.arrivalMsBefore1800 = msBeforeDinner(game.elapsedMs);
+  game.run.power.longestCombo = Math.max(game.run.power.longestCombo, player.combo ?? 0);
+  game.run.power.powerRemaining = player.power;
+  game.run.power.powerMax = player.powerMax;
 
   for (const e of activeEntities(world)) {
     const next = e.kind === Kind.PLAYER ? playerAnim(e)
@@ -243,26 +268,31 @@ function render() {
 
   drawSorted(ctx, activeEntities(world), game.camera, drawEntity);
 
+  for (const d of game.damageNumbers) {
+    drawDamageNumber(ctx, Math.round(d.x - game.camera.x),
+      Math.round(d.y - 52 - (40 - d.life) * 0.4), d.amount, d.kind);
+  }
+
   // Restraint awards: a bare gold +3 with a seal dot and NO LABEL. Players will
   // assume it is a minor bonus. It is the entire test. The hidden column's
   // character must not appear on screen before the evaluation form. See
   // SPEC.md §8 — and note that test/game/spoiler.test.js bans that character
   // from every file under game/, comments included, so it cannot leak by a
   // copy-paste into a fillText.
-  ctx.font = '8px monospace';
   for (const a of game.awards) {
-    const ax = Math.round(a.x - game.camera.x);
-    const ay = Math.round(a.y - 56 - (60 - a.life) * 0.35);
-    ctx.fillStyle = '#D9A441';
-    ctx.fillRect(ax - 9, ay - 6, 5, 5);
-    ctx.fillStyle = '#F2C75C';
-    ctx.fillText('+3', ax - 2, ay);
+    drawAward(ctx, Math.round(a.x - game.camera.x),
+      Math.round(a.y - 56 - (60 - a.life) * 0.35));
   }
 
-  ctx.fillStyle = '#E8E8F0';
-  ctx.fillText(`力 ${player.power}/${player.powerMax}`, 8, 14);
-  ctx.fillText('arrows · space · Z light · X heavy · shift guard · E · Q · ` debug',
-    8, HEIGHT - 8);
+  drawHud(ctx, {
+    power: player.power, powerMax: player.powerMax,
+    spirit: player.spirit, spiritMax: player.spiritMax,
+    money: game.run.money.collected,
+    elapsedMs: game.elapsedMs,
+    level: game.level, exp: game.exp,
+  });
+
+  if (canCallAlly(game.roster)) drawAllyPrompt(ctx, getActive(game.roster), HEIGHT - 4);
 }
 
 let carry = 0;
