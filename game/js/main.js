@@ -25,11 +25,20 @@ import {
 } from './stages/stage.js';
 import { CITY, ENEMIES, MONEY_DROP, waveSpawns } from './stages/city.js';
 import { createFruitShopOwner, resolveFruitShopFight } from './entities/boss.js';
+import {
+  startRun, recordDamage, recordMoney, recordCombo, recordPower, tickRun, finalizeRun,
+} from './run.js';
+import {
+  createEvaluation, advanceEvaluation, drawEvaluation, currentBeat, Beat,
+} from './ui/evaluation.js';
+import {
+  createNameEntry, updateNameEntry, drawNameEntry, nameOf,
+} from './ui/nameEntry.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
 import { CHARACTERS, CANDIDATES } from '/shared/characters.js';
-import { emptyRun, DAZE_WINDOW_MS } from '/shared/scoring.js';
+import { emptyRun, DAZE_WINDOW_MS, computeGrade } from '/shared/scoring.js';
 
 /**
  * Top-level state machine. See SPEC.md §4.2.
@@ -105,7 +114,9 @@ const game = {
   props,
   boss: null,
   roster: createRoster(),
-  run: emptyRun(),
+  run: startRun(emptyRun(), { candidate: 'felix', difficulty: 'normal' }),
+  evaluation: null,
+  nameEntry: null,
   prompt: null,           // the entity the E prompt is currently offering
   awards: [],             // floating gold +3 pops, deliberately unlabelled
   damageNumbers: [],
@@ -159,7 +170,10 @@ function resolveHits() {
           x: target.x, y: target.y, amount: result.damage, life: 40,
           kind: attacker.combo >= 4 ? 'critical' : 'hit',
         });
-        if (attacker.team === Team.PLAYER) game.run.power.damageDealt += result.damage;
+        if (attacker.team === Team.PLAYER) {
+          recordDamage(game.run, result.damage);
+          recordCombo(game.run, attacker.combo);
+        }
       }
 
       // Zero 力 sits them down. Nobody dies; nobody stays down.
@@ -167,7 +181,7 @@ function resolveHits() {
         beginDaze(target);
         // Every coin dropped off a man on the Lin payroll. It was always their
         // money, and it counts in his favour.
-        if (target.money) game.run.money.collected += target.money;
+        if (target.money) recordMoney(game.run, target.money);
       }
 
       // One connection per swing, or a three-frame active window would deal
@@ -256,6 +270,13 @@ function update() {
   if (game.boss && game.boss.power <= 0 && !state.bossDefeated) {
     resolveFruitShopFight(game.boss, game.run);
     clearStage(STAGE, state, game.run, 1);
+
+    // The vertical slice ends here: stage 1 → the evaluation form. Stages 2
+    // and 3 slot in ahead of this in Phases 9 and 10.
+    game.evaluation = createEvaluation(computeGrade(game.run), {
+      candidateName: CHARACTERS[game.run.candidate].name.zh,
+    });
+    game.state = States.STAGE_CLEAR;
   }
 
   // THE TEN-SECOND WINDOW. Stars orbit and visibly slow; that deceleration is
@@ -288,11 +309,8 @@ function update() {
   // The clock. Every player reads it as a rescue timer. It is when dinner is
   // served, and punctuality quietly feeds the column he cannot see.
   game.elapsedMs += STEP_MS;
-  game.run.durationMs = game.elapsedMs;
-  game.run.judgment.arrivalMsBefore1800 = msBeforeDinner(game.elapsedMs);
-  game.run.power.longestCombo = Math.max(game.run.power.longestCombo, player.combo ?? 0);
-  game.run.power.powerRemaining = player.power;
-  game.run.power.powerMax = player.powerMax;
+  tickRun(game.run, msBeforeDinner(game.elapsedMs));
+  recordPower(game.run, player.power, player.powerMax);
 
   for (const e of activeEntities(world)) {
     const next = e.kind === Kind.PLAYER ? playerAnim(e)
@@ -448,6 +466,42 @@ function render() {
   if (canCallAlly(game.roster)) drawAllyPrompt(ctx, getActive(game.roster), HEIGHT - 4);
 }
 
+/** The evaluation form. Pacing matters more than layout — see ui/evaluation.js. */
+function updateEvaluation() {
+  advanceEvaluation(game.evaluation, { skipPressed: justPressed(input, Action.CONTEXT) });
+
+  if (currentBeat(game.evaluation) === Beat.DONE) {
+    game.nameEntry = createNameEntry(game.run.name);
+    game.state = States.NAME_ENTRY;
+  }
+  endFrame(input);
+}
+
+function updateNameEntryState() {
+  updateNameEntry(game.nameEntry, {
+    up: justPressed(input, Action.UP),
+    down: justPressed(input, Action.DOWN),
+    left: justPressed(input, Action.LEFT),
+    right: justPressed(input, Action.RIGHT),
+    accept: justPressed(input, Action.CONTEXT),
+  });
+
+  if (game.nameEntry.confirmed) {
+    finalizeRun(game.run, nameOf(game.nameEntry));
+    game.state = States.LEADERBOARD;   // T64 submits it; for now it just rests
+  }
+  endFrame(input);
+}
+
+function step() {
+  switch (game.state) {
+    case States.STAGE_CLEAR: return updateEvaluation();
+    case States.NAME_ENTRY: return updateNameEntryState();
+    case States.LEADERBOARD: return endFrame(input);
+    default: return update();
+  }
+}
+
 let carry = 0;
 let last = performance.now();
 
@@ -457,12 +511,16 @@ function frame(now) {
   carry = remainder;
   last = now;
 
-  for (let i = 0; i < steps; i += 1) update();
+  for (let i = 0; i < steps; i += 1) step();
 
   pushFrameTime(game.debug.tracker, elapsed);
   game.debug.stepsThisFrame = steps;
   game.frame += 1;
-  render();
+
+  if (game.state === States.STAGE_CLEAR) drawEvaluation(ctx, game.evaluation);
+  else if (game.state === States.NAME_ENTRY) drawNameEntry(ctx, game.nameEntry, game.frame);
+  else if (game.state === States.LEADERBOARD) drawNameEntry(ctx, game.nameEntry, game.frame);
+  else render();
 
   if (game.debug.visible) {
     drawOverlay(ctx, {

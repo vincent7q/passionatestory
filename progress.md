@@ -56,10 +56,10 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-6 complete — next is **Phase 7, the evaluation form** |
-| **Next task** | **T51** — run accumulator |
-| **Suite** | 🟢 green — **344 tests** |
-| **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
+| **Phase** | ✅ Phases 0-7 complete — next is **Phase 8, backend & leaderboard** |
+| **Next task** | **T56** — `db.js` ⚠️ needs `better-sqlite3`, see environment note |
+| **Suite** | 🟢 green — **386 tests** |
+| **Blocked on** | ⚠️ **T56 needs `better-sqlite3`, which will not install here.** See the environment note below. |
 
 **C1 is satisfied and measured.** With the formula as committed:
 
@@ -72,6 +72,35 @@ HTTP. Always run through the server.
 71 sits cleanly between them, so the hidden column is what decides it. If a
 tuning change moves that band, `test/shared/scoring.masher.test.js` fails —
 **retune `POWER_TUNING`, never the test.**
+
+### ⚠️ Open design question — a player can clear 71 without ever helping anyone up
+
+Phase 7's end-to-end test surfaced this. All four cases are now pinned as tests in
+`test/shared/scoring.masher.test.js`:
+
+| Player | 力 | 錢 | 禮 | Total | vs 71 |
+|---|---|---|---|---|---|
+| Masher — hits the downed, arrives late | 40 | 20 | 0 | **60** | ✅ short |
+| Masher — hits the downed, arrives on time | 40 | 20 | 0 | **60** | ✅ short |
+| **Violent but never hits the downed, on time** | 40 | 20 | 17 | **77** | ⚠️ **clears it** |
+| Perfect set-pieces, never helps anyone up | 40 | 20 | 40 | **100** | by design |
+
+**C1 as specified holds.** A masher tops out at 60, because striking the downed
+wipes out even the punctuality he earned — eleven short.
+
+The third row is the question. That player wrecks the fruit stall, flattens the
+market row, refuses all three of 二叔 BAN's cups and never bows — but he stops
+attacking when someone falls, and he is on time. That earns `NEVER_STRIKE_DOWNED`
+(+5), `NEVER_STRIKE_TODDLER` (+4) and punctuality (+8) = 17, which clears 71.
+
+Arguably fine: not hitting a man who is down **is** restraint, and it is the
+behaviour the family is measuring. Arguably wrong: he never once helped anyone
+up, and 林建國 would not approve that man.
+
+**This is a design call, not a bug.** If it should not clear 71, retune the
+whole-run conditionals down (`NEVER_STRIKE_DOWNED` and `NEVER_STRIKE_TODDLER`
+are the levers) — the test documents the current numbers so any change is
+visible.
 
 ### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
 
@@ -129,9 +158,15 @@ response but not yet seen on screen:**
   the chase *feels* like a chase, and whether the market row presents a real temptation to smash,
   can only be judged by playing it.
 
-What *is* proved: 344 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
-confirms `main.js` imports everything it references **and defines every constant it uses**; and every
-module serves 200 from a running server, including `stages/`, `entities/`, `ui/` and `/shared/*`.
+- **Phase 7 — the pacing of the reveal.** The beat order and dwell times are tested, and the reveal
+  is deliberately unskippable before the third line lands. But whether the pause on a good 力 and 錢
+  actually *feels* like a moment of being pleased, before the floor goes out, is the other judgement
+  only a human can make. It and the star deceleration are the two things this whole project rests on.
+
+What *is* proved: 386 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
+confirms `main.js` imports everything it references **and defines every constant it uses**;
+`test/game/vertical-slice.test.js` drives a whole stage-1 run through the real modules end to end;
+and every module serves 200 from a running server.
 
 **Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z light,
 X heavy, Shift guards, **E helps up**, Q calls an ally, backtick toggles the debug overlay. Stage 1
@@ -154,6 +189,10 @@ specifically:
 9. 力 bleeds in the covered arcade when out from under an awning, and stops under one.
 10. Market stalls break when hit, with **no warning and no penalty message** — that silence is the
     point.
+11. **Beat the boss and watch the form.** 力 and 錢 write in first and should land as a win; there
+    is a real pause; then 禮 arrives with 「他沒看到這一欄」 beside it, and 林建國 (1994) — 71
+    underneath. Mashing must not fast-forward past the pause.
+12. Name entry accepts three initials and returns to rest.
 
 Then delete this section.
 
@@ -240,11 +279,11 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T50 — stage clear
 
 ### Phase 7 — Evaluation form, end to end
-- [ ] T51 — run accumulator
-- [ ] T52 — `ui/evaluation.js`
-- [ ] T53 — the pacing
-- [ ] T54 — name entry
-- [ ] T55 — vertical slice → tag `v0.1-vertical-slice`
+- [x] T51 — run accumulator
+- [x] T52 — `ui/evaluation.js`
+- [x] T53 — the pacing
+- [x] T54 — name entry
+- [x] T55 — vertical slice → tagged `v0.1-vertical-slice`
 
 ### Phase 8 — Backend
 - [ ] T56 — `db.js`, WAL, `DB_PATH`
@@ -329,6 +368,37 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 7 complete (T51–T55), tagged `v0.1-vertical-slice`
+Suite green at **386 tests**. The hidden system is now proved end to end on one stage, which is what
+`docs/PRD.md` §17 asked for before stage 2 exists.
+
+**`ui/evaluation.js` is the first place 禮 appears in the entire game.** The C2 gate needed two
+corrections to accommodate it, both of which made it stricter rather than looser:
+
+1. The allowlist now applies to *every* rule, not just the character ban. The form's whole job is to
+   name the criteria, so exempting it from "nothing explains the scoring" is correct — and I added a
+   test asserting the form **does** contain 禮, so the allowlist can never quietly become an excuse
+   for the payoff going missing.
+2. The scoring-explanation check was matching apostrophes in prose comments as string delimiters —
+   "a stranger's livelihood" opened a phantom string. It now strips comments and scans only real
+   string literals. **Verified by planting both a `'JUDGMENT BONUS'` label and a 禮 in `main.js` and
+   watching each fail.**
+
+**The pacing is deliberately unskippable before the third line.** A player who mashes through the
+pleased pause would meet 禮 cold, and the entire twenty minutes pays off in that one transition.
+`DWELL[PLEASED]` is load-bearing; cutting it is the easiest way to ruin the reveal.
+
+**The end-to-end test surfaced a design question** — see the open question above. A player who never
+strikes the downed and arrives on time clears 71 without ever helping anyone up. C1 as specified
+still holds (a masher tops out at 60), but the edge is real and now documented with numbers rather
+than left to be discovered later.
+
+I also pulled the run accumulator out of `main.js` into `run.js`. Both runtime-only bugs so far have
+lived in `main.js` because it cannot be imported in Node — accumulation logic does not belong in the
+project's blind spot.
+
+**Next: T56**, and Phase 8 is the first thing that actually needs `better-sqlite3`.
 
 ### 2026-08-07 — Phase 6 complete (T42–T50)
 Suite green at **344 tests**. Stage 1 城市「追」 runs end to end: four sections, gated waves, rain,

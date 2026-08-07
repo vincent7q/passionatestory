@@ -78,6 +78,53 @@ test('C1: a restraint player can beat 71', () => {
     `restraint run scored ${g.total}; it must be able to clear ${FATHER_SCORE}`);
 });
 
+/**
+ * THE BOUNDARY, pinned with numbers.
+ *
+ * A masher does not stop when someone falls — that is what mashing IS — so the
+ * strike penalty wipes the column out even at maximum 力, maximum 錢 and full
+ * punctuality. 60 is the ceiling for that player, eleven short of 71.
+ *
+ * The fourth case below scores 77 and DOES clear 71 without ever helping anyone
+ * up. That is a live design question, recorded in progress.md — it is not a
+ * masher (he deliberately stops attacking when someone falls, which is the
+ * behaviour being measured), but he also wrecks the stall, refuses every cup
+ * and never bows. Change the design if that is wrong; do not change this test
+ * to hide it.
+ */
+test('C1 boundary: the ceiling for a player who strikes the downed is 60', () => {
+  const r = masherRun();
+  r.judgment.arrivalMsBefore1800 = 300_000;     // punctual as well as violent
+  r.power = { damageDealt: 1e9, longestCombo: 99, powerRemaining: 150, powerMax: 150,
+              sectionTimesMs: [], bossTimesMs: [] };
+  r.durationMs = 14 * 60 * 1000;
+
+  const g = computeGrade(r);
+  assert.equal(g.power, 40);
+  assert.equal(g.money, 20);
+  assert.equal(g.judgment, 0, 'the strikes wipe out the punctuality he earned');
+  assert.equal(g.total, 60);
+  assert.ok(g.total < FATHER_SCORE);
+});
+
+test('C1 boundary: restraint without generosity clears 71 — a known design edge', () => {
+  const r = masherRun();
+  r.durationMs = 14 * 60 * 1000;
+  r.power = { damageDealt: 1e9, longestCombo: 99, powerRemaining: 150, powerMax: 150,
+              sectionTimesMs: [], bossTimesMs: [] };
+  Object.assign(r.judgment, {
+    strikesOnDowned: 0, neverStruckDowned: true, neverStruckToddler: true,
+    arrivalMsBefore1800: 300_000,
+    // still wrecks the stall, refuses the cups, never bows, never helps anyone
+  });
+
+  const g = computeGrade(r);
+  assert.equal(g.judgment, 17);
+  assert.equal(g.total, 77);
+  assert.ok(g.total > FATHER_SCORE,
+    'documented deliberately: if this should not clear 71, the AWARDS need retuning');
+});
+
 // A player who maxes both visible criteria and nothing else should still fall
 // short — that is the entire premise of the reveal.
 test('C1: maxing both VISIBLE criteria is not enough', () => {

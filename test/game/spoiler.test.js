@@ -20,11 +20,30 @@ import { join } from 'node:path';
  * added the restraint award rendering — the exact place a label would slip in.
  */
 
-/** The only files permitted to contain 禮. Its first appearance is the form. */
+/**
+ * The evaluation form and the reveal. These two files ARE the payoff — showing
+ * the third column and naming the criteria is their entire job — so every rule
+ * below is scoped to "before the form", which means everything except these.
+ */
 const ALLOWED = new Set([
   'game/js/ui/evaluation.js',
   'game/js/ui/reveal.js',
 ]);
+
+const guarded = (files) => files.filter((p) => !ALLOWED.has(p));
+
+/**
+ * Comments must be stripped before scanning for string literals: an apostrophe
+ * in ordinary prose ("a stranger's livelihood") reads as a quote delimiter and
+ * turns the surrounding sentence into a phantom string.
+ */
+function stringLiterals(src) {
+  const code = src
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/\/\/.*$/gm, ' ');
+  return [...code.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`]*)`/g)]
+    .map((m) => m[1] ?? m[2] ?? m[3] ?? '');
+}
 
 function walk(dir, out = []) {
   if (!existsSync(dir)) return out;
@@ -37,11 +56,16 @@ function walk(dir, out = []) {
 }
 
 test('C2: 禮 never appears outside the evaluation form', () => {
-  const offenders = walk('game').filter((p) =>
-    !ALLOWED.has(p) && readFileSync(p, 'utf8').includes('禮'));
+  const offenders = guarded(walk('game'))
+    .filter((p) => readFileSync(p, 'utf8').includes('禮'));
 
   assert.deepEqual(offenders, [],
     `禮 leaked into: ${offenders.join(', ')} — the twist is on screen`);
+});
+
+test('the evaluation form does show the third column — that is its job', () => {
+  const src = readFileSync('game/js/ui/evaluation.js', 'utf8');
+  assert.ok(src.includes('禮'), 'the payoff must actually name it');
 });
 
 /**
@@ -51,7 +75,7 @@ test('C2: 禮 never appears outside the evaluation form', () => {
  */
 test('C2: the clock is never labelled', () => {
   const banned = /['"`](\s*)(TIME|TIMER|TIME LEFT|RESCUE|COUNTDOWN|DEADLINE)(\s*)['"`]/i;
-  const offenders = walk('game').filter((p) => banned.test(readFileSync(p, 'utf8')));
+  const offenders = guarded(walk('game')).filter((p) => banned.test(readFileSync(p, 'utf8')));
   assert.deepEqual(offenders, [], `the clock must stay a bare number: ${offenders.join(', ')}`);
 });
 
@@ -59,9 +83,13 @@ test('C2: the clock is never labelled', () => {
  * Nothing in the game explains the scoring. The pause menu is
  * Resume · Restart Section · Controls · Quit and nothing more.
  */
-test('C2: nothing on screen explains the scoring', () => {
-  const banned = /(JUDGMENT|RESTRAINT|MERCY|COURTESY|MANNERS)\s*[:=]|['"`][^'"`]*\b(judgment|restraint)\s+(score|points|bonus)/i;
-  const offenders = walk('game').filter((p) => banned.test(readFileSync(p, 'utf8')));
+test('C2: nothing on screen explains the scoring before the form', () => {
+  const banned = /\b(JUDGMENT|RESTRAINT|MERCY|COURTESY|MANNERS)\b/i;
+  const offenders = [];
+  for (const p of guarded(walk('game'))) {
+    const bad = stringLiterals(readFileSync(p, 'utf8')).filter((s) => banned.test(s));
+    if (bad.length) offenders.push(`${p} (${bad.join(' / ')})`);
+  }
   assert.deepEqual(offenders, [], `scoring must never be explained: ${offenders.join(', ')}`);
 });
 
