@@ -57,13 +57,32 @@ HTTP. Always run through the server.
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
 | **Phase** | Phase 0 — Foundation |
-| **Next task** | **T1** — dependencies and test skeleton |
-| **Suite** | No tests yet |
-| **Blocked on** | Nothing |
+| **Next task** | **T2** — Fastify server, static serving, `/healthz` |
+| **Suite** | 🟢 green — 1 test |
+| **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
-**What exists right now:** documentation only. `SPEC.md`, `implementation.md`, `docs/story.md`,
-`docs/PRD.md`, `CLAUDE.md`, `package.json`, and five character portraits in `docs/images/`. No
-`shared/`, no `game/`, no `server/`, no `test/`. Phase 0 starts from an empty codebase.
+### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
+
+`npm install better-sqlite3` fails here: there is **no prebuilt binary for Node 20 on Windows**, so
+it falls back to compiling, and node-gyp cannot find Visual Studio.
+
+```
+gyp ERR! find VS  Could not find any Visual Studio installation to use
+```
+
+**Deferred deliberately** — it is a Phase 8 dependency (T56) and nothing before then touches it. Do
+not let it block Phase 0–7.
+
+**The fix, in order of preference:**
+
+1. **Upgrade to Node 22.** `package.json` already declares `"node": ">=22"` and this machine is on
+   **v20.17.0**, so the runtime is out of spec regardless. Node 22 has prebuilds for
+   `better-sqlite3` on Windows and the compile is skipped entirely. This is the recommended fix and
+   it resolves both problems at once.
+2. Install the Visual Studio Build Tools with the "Desktop development with C++" workload.
+
+Everything through Phase 7 runs fine on Node 20 — `node --test`, Fastify 5, and plain ES modules all
+work. Only the native binding is affected.
 
 ---
 
@@ -84,7 +103,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 `implementation.md`.
 
 ### Phase 0 — Foundation
-- [ ] T1 — dependencies and test skeleton
+- [x] T1 — test skeleton *(`better-sqlite3` deferred to T56 — see environment note)*
 - [ ] T2 — Fastify server, static serving, `/healthz`
 - [ ] T3 — canvas page, integer upscaling `[no-test]`
 - [ ] T4 — fixed-timestep loop
