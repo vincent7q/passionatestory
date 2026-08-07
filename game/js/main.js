@@ -34,6 +34,7 @@ import {
 import {
   createNameEntry, updateNameEntry, drawNameEntry, nameOf,
 } from './ui/nameEntry.js';
+import { startRunToken, submitRun } from './net.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
@@ -117,6 +118,8 @@ const game = {
   run: startRun(emptyRun(), { candidate: 'felix', difficulty: 'normal' }),
   evaluation: null,
   nameEntry: null,
+  runToken: null,
+  submission: null,
   prompt: null,           // the entity the E prompt is currently offering
   awards: [],             // floating gold +3 pops, deliberately unlabelled
   damageNumbers: [],
@@ -129,6 +132,11 @@ const game = {
 window.addEventListener('keydown', (e) => {
   if (e.key === '`') game.debug.visible = !game.debug.visible;
 });
+
+// Requested at the START of the run. The token carries a server timestamp, and
+// the wall clock between issue and submission is what makes a fabricated
+// duration impossible. Requesting it at the end would defeat the whole check.
+startRunToken().then((token) => { game.runToken = token; });
 
 function readIntent() {
   return {
@@ -486,9 +494,13 @@ function updateNameEntryState() {
     accept: justPressed(input, Action.CONTEXT),
   });
 
-  if (game.nameEntry.confirmed) {
+  if (game.nameEntry.confirmed && !game.submission) {
     finalizeRun(game.run, nameOf(game.nameEntry));
-    game.state = States.LEADERBOARD;   // T64 submits it; for now it just rests
+    game.submission = { pending: true };
+    // Fails soft: a leaderboard that is down must never stop someone
+    // finishing a run.
+    submitRun(game.runToken, game.run).then((result) => { game.submission = result; });
+    game.state = States.LEADERBOARD;
   }
   endFrame(input);
 }

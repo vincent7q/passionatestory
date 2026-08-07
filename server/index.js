@@ -2,6 +2,8 @@ import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { openDatabase } from './db.js';
+import { registerRunRoutes } from './routes/runs.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -32,6 +34,14 @@ export async function buildServer(opts = {}) {
     prefix: '/dashboard/',
     decorateReply: false,
   });
+
+  // Tests pass ':memory:'. Production passes a path on a MOUNTED VOLUME —
+  // inside the image, every redeploy silently wipes all records.
+  const db = opts.db ?? openDatabase(opts.dbPath ?? process.env.DB_PATH ?? ':memory:');
+  app.decorate('db', db);
+  app.addHook('onClose', () => db.close());
+
+  registerRunRoutes(app, db);
 
   app.get('/healthz', async () => ({ status: 'ok' }));
 

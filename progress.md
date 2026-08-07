@@ -41,9 +41,9 @@ npm install
 npm run dev                # http://localhost:8080
 ```
 
-Requires **Node ≥ 22**. `better-sqlite3` compiles a native binding on install — on Windows this
-needs the Visual Studio Build Tools; on Linux, `build-essential` and `python3`. If `npm install`
-fails there, that is why.
+Requires **Node ≥ 20**. `better-sqlite3` is pinned to `^11.10.0` because 11.x ships a prebuilt
+binary for Node 20 on Windows and 12.x does not — see the resolved environment note below before
+touching that dependency.
 
 **The game cannot be opened via `file://`.** These are real ES modules; they must be served over
 HTTP. Always run through the server.
@@ -56,10 +56,10 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-7 complete — next is **Phase 8, backend & leaderboard** |
-| **Next task** | **T56** — `db.js` ⚠️ needs `better-sqlite3`, see environment note |
-| **Suite** | 🟢 green — **386 tests** |
-| **Blocked on** | ⚠️ **T56 needs `better-sqlite3`, which will not install here.** See the environment note below. |
+| **Phase** | ✅ Phases 0-8 complete — next is **Phase 9, Stage 2 森林「山路」** |
+| **Next task** | **T65** — `stages/forest.js` |
+| **Suite** | 🟢 green — **415 tests** |
+| **Blocked on** | Nothing. The `better-sqlite3` blocker is resolved — see below. |
 
 **C1 is satisfied and measured.** With the formula as committed:
 
@@ -102,28 +102,21 @@ whole-run conditionals down (`NEVER_STRIKE_DOWNED` and `NEVER_STRIKE_TODDLER`
 are the levers) — the test documents the current numbers so any change is
 visible.
 
-### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
+### ✅ Resolved — `better-sqlite3` is installed and working
 
-`npm install better-sqlite3` fails here: there is **no prebuilt binary for Node 20 on Windows**, so
-it falls back to compiling, and node-gyp cannot find Visual Studio.
+The blocker from Phase 0–7 is gone. The cause was **version**, not toolchain:
 
-```
-gyp ERR! find VS  Could not find any Visual Studio installation to use
-```
+- `better-sqlite3@12.x` (what `npm install better-sqlite3` resolves to) publishes **no prebuilt
+  binary for Node 20 on win32**. It falls back to compiling, and node-gyp needs Visual Studio.
+- **`better-sqlite3@11.10.0` does ship a Node 20 win32 prebuild.** It installs in seconds with no
+  compiler at all.
 
-**Deferred deliberately** — it is a Phase 8 dependency (T56) and nothing before then touches it. Do
-not let it block Phase 0–7.
+Pinned as `"better-sqlite3": "^11.10.0"`. **Do not bump it to 12.x** without either upgrading Node or
+installing the VS Build Tools — the caret deliberately stays inside 11.x.
 
-**The fix, in order of preference:**
-
-1. **Upgrade to Node 22.** `package.json` already declares `"node": ">=22"` and this machine is on
-   **v20.17.0**, so the runtime is out of spec regardless. Node 22 has prebuilds for
-   `better-sqlite3` on Windows and the compile is skipped entirely. This is the recommended fix and
-   it resolves both problems at once.
-2. Install the Visual Studio Build Tools with the "Desktop development with C++" workload.
-
-Everything through Phase 7 runs fine on Node 20 — `node --test`, Fastify 5, and plain ES modules all
-work. Only the native binding is affected.
+`package.json` previously declared `"node": ">=22"` while this machine runs **v20.17.0**. Everything
+is verified working on Node 20 — all 415 tests, Fastify 5, the native binding — so `engines` is now
+`">=20"`, which reflects what is actually proved rather than what was assumed.
 
 ### ⏳ Outstanding visual verification
 
@@ -163,7 +156,12 @@ response but not yet seen on screen:**
   actually *feels* like a moment of being pleased, before the floor goes out, is the other judgement
   only a human can make. It and the star deceleration are the two things this whole project rests on.
 
-What *is* proved: 386 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
+**Phase 8 needs no visual verification** — the backend was exercised against a real running server
+over HTTP, not only via `inject`. Confirmed by hand: `/healthz`, the seeded board, a signed
+submission accepted and ranked, a token-less `curl` rejected, `/api/stats`, and **C3 — a record
+surviving a full process restart on a `DB_PATH` volume, with the seed not duplicated.**
+
+What *is* proved: 415 unit tests; every file passes `node --check`; `test/game/undefined-refs.test.js`
 confirms `main.js` imports everything it references **and defines every constant it uses**;
 `test/game/vertical-slice.test.js` drives a whole stage-1 run through the real modules end to end;
 and every module serves 200 from a running server.
@@ -286,15 +284,15 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T55 — vertical slice → tagged `v0.1-vertical-slice`
 
 ### Phase 8 — Backend
-- [ ] T56 — `db.js`, WAL, `DB_PATH`
-- [ ] T57 — migrations
-- [ ] T58 — seed `LIN` 71
-- [ ] T59 — `POST /api/runs/start`
-- [ ] T60 — `POST /api/runs`, recompute server-side
-- [ ] **T61 — ⚠️ C4 + C5 integrity tests**
-- [ ] T62 — `GET /api/leaderboard`
-- [ ] T63 — `GET /api/stats`
-- [ ] T64 — `net.js` → tag `v0.2-leaderboard`
+- [x] T56 — `db.js`, WAL, `DB_PATH`
+- [x] T57 — migrations
+- [x] T58 — seed `LIN` 71
+- [x] T59 — `POST /api/runs/start`
+- [x] T60 — `POST /api/runs`, recompute server-side
+- [x] **T61 — ⚠️ C4 + C5 integrity tests**
+- [x] T62 — `GET /api/leaderboard`
+- [x] T63 — `GET /api/stats`
+- [x] T64 — `net.js` → tagged `v0.2-leaderboard`
 
 ### Phase 9 — Stage 2 森林「山路」
 - [ ] T65 — `stages/forest.js`
@@ -368,6 +366,39 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 8 complete (T56–T64), tagged `v0.2-leaderboard`
+Suite green at **415 tests**. Backend, leaderboard, integrity and persistence are in.
+
+**The `better-sqlite3` blocker turned out to be a version problem, not a toolchain one.** 12.x ships
+no Node 20 win32 prebuild and falls back to compiling; **11.10.0 ships one and installs in seconds.**
+Pinned to `^11.10.0` — do not bump to 12.x without upgrading Node or installing VS Build Tools.
+`engines` corrected from `>=22` to `>=20`, which is what is actually verified.
+
+**C3, C4 and C5 are all verified, three of the seven hard criteria:**
+
+- **C5** — an inflated `grade: 100` on the payload is ignored; the stored value is the recomputed
+  one, and the row on the board agrees. A fabricated `judgment.score` is likewise not read.
+- **C4** — rejected: no token, forged token, expired token, future token, a body tampered after
+  signing, a bad name, `vincent` as a candidate, a duration below the stage floor, and **a run
+  claiming fifteen minutes that started thirty seconds ago.**
+- **C3** — proved twice: a unit test closing and reopening the file, and by hand against a real
+  server, killing the process and confirming the record survived with the seed not duplicated.
+
+**A test-helper mistake worth remembering.** My first submission helper requested a token and
+immediately posted a six-minute run — every valid case 400'd. That was the wall-clock check working
+exactly as designed. The helper now backdates the token by the run's duration, which is what really
+happens; the "impossible duration" cases do it deliberately instead.
+
+**One cross-implementation test earns its keep:** the client signs with WebCrypto in the browser and
+the server verifies with `node:crypto`. Two implementations of the same HMAC — if they ever
+disagree, every honest submission is rejected as a forgery. `persistence.test.js` asserts they agree
+byte for byte.
+
+`net.js` requests its token at the **start** of a run. Requesting it at the end would defeat the only
+check that has teeth.
+
+**Next: T65**, stage 2 森林「山路」.
 
 ### 2026-08-07 — Phase 7 complete (T51–T55), tagged `v0.1-vertical-slice`
 Suite green at **386 tests**. The hidden system is now proved end to end on one stage, which is what
