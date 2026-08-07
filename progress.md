@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phase 0 and Phase 1 complete — next is **Phase 2, Engine core** |
-| **Next task** | **T14** — `input.js`, keyboard state with edge detection |
-| **Suite** | 🟢 green — **71 tests** |
+| **Phase** | ✅ Phases 0, 1, 2 complete — next is **Phase 3, Entities & combat** |
+| **Next task** | **T22** — entity factory and object pool |
+| **Suite** | 🟢 green — **122 tests** |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -104,14 +104,20 @@ response but not yet seen on screen:**
 
 - **T3** — the canvas actually rendering, and staying crisp while the window resizes through
   integer scale steps.
-- **T4/T5** — the loop holding 60 FPS with the debug overlay.
+- **T4/T5** — the loop holding 60 FPS with the debug overlay (backtick toggles it).
+- **T19/T20** — what the chibi rig actually *looks like*. The pose table and palettes are tested,
+  but nobody has yet seen a sprite. Expect the first draw to need art tuning; that is normal and is
+  why `POSES` is data rather than code.
+- **T21** — depth sorting on screen. The ordering logic is tested, but the walkable strip
+  (`STRIP` in `main.js`) is a placeholder until Phase 6 gives each section real values.
 
-What *is* proved: `computeScale` is unit-tested across fractional, tight-axis, and tiny-viewport
-cases; every file passes `node --check`; and `index.html`, `main.js`, `utils.js`, `renderer.js` and
-`style.css` all serve 200 from a running server.
+What *is* proved: 122 unit tests; every file passes `node --check`; and every module —
+`index.html`, `main.js`, `physics.js`, `camera.js`, `assets.js`, `input.js` and `/shared/*` — serves
+200 from a running server.
 
-**Next person: open <http://localhost:8080>, confirm you see the placeholder screen and a rising
-step counter, resize the window, then delete this section.**
+**Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z attacks,
+backtick toggles the debug overlay. Confirm Felix draws and moves, that walking "into" the screen
+changes his draw order against the ground stripes, then delete this section.
 
 ---
 
@@ -153,10 +159,10 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T15 — footprint overlap
 - [x] T16 — `canHit` (z overlap + facing + active frames)
 - [x] T17 — integration; gravity on `z` only, never `y`
-- [ ] T18 — `camera.js`
-- [ ] T19 — chibi rig `[no-test]`
-- [ ] T20 — animation frames `[no-test]`
-- [ ] T21 — y-sorted renderer `[no-test]`
+- [x] T18 — `camera.js`
+- [x] T19 — chibi rig *(contract tested; pixels pending visual)*
+- [x] T20 — animation frames *(pose table tested)*
+- [x] T21 — y-sorted renderer *(draw order tested)*
 
 ### Phase 3 — Entities & combat
 - [ ] T22 — entity factory + pool
@@ -285,6 +291,28 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 2 complete (T14–T21)
+Suite green at **122 tests**. The engine core is in and wired into `main.js`, so the game is now a
+running loop with a movable character rather than a placeholder screen.
+
+Three tests worth knowing about, because they guard bugs that fail *silently*:
+
+- **`input.test.js`** holds a key for 60 frames and asserts zero repeat presses. Browsers auto-repeat
+  `keydown`; without the edge distinction, holding **E** beside a dazed opponent would help them up
+  over and over and inflate the hidden column.
+- **`physics.test.js`** asserts gravity never touches `y`. `y` is depth — applying gravity to it
+  slides characters toward the camera, which reads as a rendering bug and would be hunted in the
+  wrong file.
+- **`draw-order.test.js`** asserts a jumping character keeps its depth ordering. Height is `z`,
+  depth is `y`, and only `y` orders the draw.
+
+`assets.test.js` also enforces the spritesheet seam: it fails if any file under `entities/` or
+`stages/` contains `fillRect(`, `getContext(` or `drawImage(`. Keeping drawing out of those files is
+what makes the eventual swap to real spritesheets a drop-in.
+
+**Next: T22**, entity factory and object pool. Cap is ~50 on screen, and the 10-second despawn is
+load-bearing for that cap.
 
 ### 2026-08-07 — Phase 0 and Phase 1 complete (T1–T13)
 Suite green at **71 tests**. Foundation and the whole `shared/` layer are done.
