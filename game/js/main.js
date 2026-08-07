@@ -13,10 +13,15 @@ import {
 import { createPlayer, updatePlayer, playerAnim } from './entities/player.js';
 import { updateEnemy } from './entities/enemy.js';
 import { applyDamage, ATTACKS } from './combat.js';
+import {
+  beginDaze, advanceDaze, promptTarget, helpUp, recordStrike, starPositions,
+} from './daze.js';
+import { createRoster, callAlly, canCallAlly } from './entities/ally.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
 import { CHARACTERS, CANDIDATES } from '/shared/characters.js';
+import { emptyRun, DAZE_WINDOW_MS } from '/shared/scoring.js';
 
 /**
  * Top-level state machine. See SPEC.md §4.2.
@@ -69,6 +74,10 @@ const game = {
   steps: 0,
   world,
   camera: createCamera(),
+  roster: createRoster(),
+  run: emptyRun(),
+  prompt: null,           // the entity the E prompt is currently offering
+  awards: [],             // floating gold +3 pops, deliberately unlabelled
   debug: { visible: false, tracker: createFpsTracker(), stepsThisFrame: 0 },
 };
 
@@ -98,12 +107,22 @@ function resolveHits() {
       if (attacker.hitThisSwing?.has(target.id)) continue;
       if (!canHit(attacker, target)) continue;
 
-      applyDamage(target, data.damage, {
+      const wasDazed = target.state === State.DAZED;
+
+      const result = applyDamage(target, data.damage, {
         fromFacing: attacker.facing,
         knockback: data.knockback,
         knockdown: data.knockdown,
         attacker,
       });
+
+      // The heaviest penalty in the game, charged once per connection —
+      // never per frame of contact.
+      if (attacker.team === Team.PLAYER) recordStrike(game.run, result);
+
+      // Zero 力 sits them down. Nobody dies; nobody stays down.
+      if (result.dazed && !wasDazed) beginDaze(target);
+
       // One connection per swing, or a three-frame active window would deal
       // damage three times.
       attacker.hitThisSwing ??= new Set();
@@ -127,14 +146,30 @@ function update() {
 
   resolveHits();
 
-  // Placeholder despawn. Phase 4 replaces this with the ten-second window:
-  // stars orbit, visibly slow, and pressing E flips DAZED → ALLIED.
+  // THE TEN-SECOND WINDOW. Stars orbit and visibly slow; that deceleration is
+  // the only countdown the player gets. On expiry they stand, dust themselves
+  // off, and leave — which is also what keeps the entity array bounded.
   for (const e of activeEntities(world)) {
-    if (e.state === State.DAZED) {
-      e.dazeTimer = (e.dazeTimer ?? 0) + 1;
-      if (e.dazeTimer > 600) despawn(world, e);
+    if (e.state !== State.DAZED) continue;
+    if (advanceDaze(e, DAZE_WINDOW_MS) === 'expired') despawn(world, e);
+  }
+
+  // The prompt appears and never explains itself.
+  game.prompt = promptTarget(player, activeEntities(world), DAZE_WINDOW_MS);
+
+  if (justPressed(input, Action.CONTEXT) && game.prompt) {
+    const target = game.prompt;
+    if (helpUp(player, target, game.roster, game.run, DAZE_WINDOW_MS)) {
+      // A bare gold +3 with a seal icon and NO LABEL. Its meaning is not
+      // revealed until the evaluation form. See SPEC.md §8.
+      game.awards.push({ x: target.x, y: target.y, life: 60 });
     }
   }
+
+  if (justPressed(input, Action.ALLY) && canCallAlly(game.roster)) callAlly(game.roster);
+
+  for (const a of game.awards) a.life -= 1;
+  game.awards = game.awards.filter((a) => a.life > 0);
 
   for (const e of activeEntities(world)) {
     const next = e.kind === Kind.PLAYER ? playerAnim(e)
@@ -174,15 +209,25 @@ function drawEntity(c, e, sx, sy) {
   }
   c.restore();
 
-  // Stars over a dazed opponent. Phase 4 makes them slow across the window —
-  // that deceleration is the only countdown the player ever gets.
+  // Stars over a dazed opponent, orbiting from daze.js so they slow as the
+  // window closes. That deceleration is the countdown, and it is the ONLY
+  // signal the player ever gets.
   if (e.state === State.DAZED) {
     c.fillStyle = '#FFE066';
-    for (let i = 0; i < 3; i += 1) {
-      const a = game.frame * 0.06 + (i * Math.PI * 2) / 3;
-      c.fillRect(Math.round(sx + Math.cos(a) * 9) - 1,
-                 Math.round(sy - FRAME_H - 2 + Math.sin(a) * 3) - 1, 2, 2);
+    for (const { dx, dy } of starPositions(e)) {
+      c.fillRect(Math.round(sx + dx) - 1, Math.round(sy - FRAME_H - 2 + dy) - 1, 2, 2);
     }
+  }
+
+  // The context prompt. A bare key cap — it never says what it does, or why
+  // you would want to press it.
+  if (e === game.prompt) {
+    const py = sy - FRAME_H - 12;
+    c.fillStyle = '#101018';
+    c.fillRect(sx - 5, py - 7, 10, 9);
+    c.fillStyle = '#F4F4FA';
+    c.font = '8px monospace';
+    c.fillText('E', sx - 2, py);
   }
 }
 
@@ -198,10 +243,26 @@ function render() {
 
   drawSorted(ctx, activeEntities(world), game.camera, drawEntity);
 
-  ctx.fillStyle = '#E8E8F0';
+  // Restraint awards: a bare gold +3 with a seal dot and NO LABEL. Players will
+  // assume it is a minor bonus. It is the entire test. The hidden column's
+  // character must not appear on screen before the evaluation form. See
+  // SPEC.md §8 — and note that test/game/spoiler.test.js bans that character
+  // from every file under game/, comments included, so it cannot leak by a
+  // copy-paste into a fillText.
   ctx.font = '8px monospace';
+  for (const a of game.awards) {
+    const ax = Math.round(a.x - game.camera.x);
+    const ay = Math.round(a.y - 56 - (60 - a.life) * 0.35);
+    ctx.fillStyle = '#D9A441';
+    ctx.fillRect(ax - 9, ay - 6, 5, 5);
+    ctx.fillStyle = '#F2C75C';
+    ctx.fillText('+3', ax - 2, ay);
+  }
+
+  ctx.fillStyle = '#E8E8F0';
   ctx.fillText(`力 ${player.power}/${player.powerMax}`, 8, 14);
-  ctx.fillText('arrows · space jump · Z light · X heavy · shift guard · ` debug', 8, HEIGHT - 8);
+  ctx.fillText('arrows · space · Z light · X heavy · shift guard · E · Q · ` debug',
+    8, HEIGHT - 8);
 }
 
 let carry = 0;

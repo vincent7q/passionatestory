@@ -56,9 +56,9 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | ✅ Phases 0-3 complete — next is **Phase 4, the ten-second window** |
-| **Next task** | **T31** — `DAZED` state and the star timer ⚠️ the heart of the game |
-| **Suite** | 🟢 green — **216 tests** |
+| **Phase** | ✅ Phases 0-4 complete (+T41) — next is **Phase 5, HUD** |
+| **Next task** | **T37** — 力 / 氣 bars (T41 already done) |
+| **Suite** | 🟢 green — **263 tests** |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 **C1 is satisfied and measured.** With the formula as committed:
@@ -115,16 +115,26 @@ response but not yet seen on screen:**
   `ATTACKS` in `combat.js` and `AI` in `entities/enemy.js` to want retuning once someone plays it —
   both are data tables for exactly that reason.
 
-What *is* proved: 216 unit tests; every file passes `node --check`; and every module serves 200 from
+- **Phase 4 — the star deceleration.** The maths is tested (monotonic, and ≥2× slower by the end),
+  but whether that reads *as a countdown* to a player who is told nothing is a judgement only a
+  human can make. **This is the single most important thing to eyeball in the whole project.** If
+  the slowing is not legible, the ten-second window has no signal and the game's central mechanic is
+  invisible.
+
+What *is* proved: 263 unit tests; every file passes `node --check`; and every module serves 200 from
 a running server, including all of `entities/` and `/shared/*`.
 
 **Next person: open <http://localhost:8080>.** Arrows move, ↑↓ change depth, Space jumps, Z light,
-X heavy, Shift guards, backtick toggles the debug overlay. Three enemies are spawned ahead of you.
-Worth confirming specifically:
+X heavy, Shift guards, **E helps up**, Q calls an ally, backtick toggles the debug overlay. Three
+enemies are spawned ahead of you. Worth confirming specifically:
 
 1. Felix draws, and walking "into" the screen changes his draw order against the enemies.
 2. An attack **misses** an enemy standing on a different depth line — that is the 2.5D system.
 3. A defeated enemy sits down with stars orbiting rather than vanishing.
+4. **The stars visibly slow** over the ten seconds, and a bare `E` prompt appears when you stand
+   next to them. It must not explain itself.
+5. Pressing E pops a bare gold **`+3`** with a seal dot and **no label**, and the enemy gets up on
+   your side.
 
 Then delete this section.
 
@@ -185,19 +195,19 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T30 — items and 錢
 
 ### Phase 4 — The ten-second window ⚠️ the heart of the game
-- [ ] T31 — `DAZED` state, star timer
-- [ ] T32 — the **E** prompt
-- [ ] T33 — help-up → `ALLIED`
-- [ ] T34 — roster tracking
-- [ ] T35 — active ally, `Q`
-- [ ] T36 — strike-on-downed penalty
+- [x] T31 — `DAZED` state, star timer
+- [x] T32 — the **E** prompt
+- [x] T33 — help-up → `ALLIED`
+- [x] T34 — roster tracking
+- [x] T35 — active ally, `Q`
+- [x] T36 — strike-on-downed penalty
 
 ### Phase 5 — HUD
 - [ ] T37 — 力 / 氣 bars `[no-test]`
 - [ ] T38 — the clock (never labelled) `[no-test]`
 - [ ] T39 — 錢 counter `[no-test]`
 - [ ] T40 — damage numbers, bare gold `+3` `[no-test]`
-- [ ] **T41 — ⚠️ C2 spoiler test**
+- [x] **T41 — ⚠️ C2 spoiler test** — brought forward from Phase 5
 
 ### Phase 6 — Stage 1 城市「追」
 - [ ] T42 — `stages/stage.js` base
@@ -300,6 +310,37 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — Phase 4 complete (T31–T36), plus T41 brought forward
+Suite green at **263 tests**. The ten-second window is in and wired: stars orbit and slow, a bare
+`E` prompt appears, pressing it converts the opponent and pops an unlabelled gold `+3`.
+
+**I brought T41 (the C2 spoiler gate) forward from Phase 5**, because Phase 4 is the phase that adds
+the restraint-award rendering — the exact place a label slips in. Waiting until Phase 5 would have
+meant writing the leak first and catching it second.
+
+**It immediately caught two leaks — in my own comments warning about the leak.** `main.js` and
+`ally.js` both contained the character while explaining that it must never appear. Those are
+technically false positives; a comment never reaches a player. **I fixed the comments rather than
+narrowing the test**, because a check with zero exceptions cannot be gamed or mis-parsed, and it
+removes any chance of a comment being copy-pasted into a `fillText`. Comments in `game/` now say
+"the hidden column" instead.
+
+The gate also asserts the clock is never labelled (`TIME`, `TIMER`, `COUNTDOWN`, `DEADLINE`…) and
+that nothing on screen explains the scoring.
+
+**Two rules the tests pin down, because both would break the mechanic silently:**
+
+- **Both edges of the window are tested explicitly.** One step inside works; one step past does not.
+- **The same opponent can never be helped up twice.** Input edge detection guards the button, but a
+  second path in — an ally re-entering `DAZED` — would inflate the hidden column. `addToRoster` is
+  idempotent and `helpUp` returns false on a repeat.
+- **`recordStrike` charges per connection, not per frame of contact.** An attack's active frames span
+  several steps; charging per frame would cost 3–4× what one careless swing should.
+- **`resolveSummon` checks the roster, not the active ally.** Benching someone at a checkpoint must
+  not cost you the payoff — tested directly.
+
+**Next: T37**, the HUD. T41 is already done, so Phase 5 is four tasks.
 
 ### 2026-08-07 — Phase 3 complete (T22–T30)
 Suite green at **216 tests**. Entities, combat, enemy AI, items and weapons are in and wired into

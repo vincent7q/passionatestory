@@ -43,6 +43,18 @@ export const JUDGMENT = {
 export const PUNCTUAL_TARGET_MS = 5 * 60 * 1000;
 
 /**
+ * The ten-second window — the mechanic the whole game is built around.
+ *
+ * A defeated opponent sits down dazed with stars orbiting. For this long, and
+ * only this long, pressing E beside them helps them up and they switch sides
+ * permanently.
+ *
+ * ONE tuning constant. It is a guess; it may want to be 8s or 12s. It lives
+ * here so both the game and any future server-side replay agree on it.
+ */
+export const DAZE_WINDOW_MS = 10_000;
+
+/**
  * Being on time is a courtesy, so punctuality lives inside 禮 rather than
  * standing alone — which means the clock, the most prominent thing on screen,
  * is quietly feeding the hidden column all game.

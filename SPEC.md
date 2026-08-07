@@ -45,7 +45,7 @@ shared/         characters.js  scoring.js  validation.js   ← imported by BOTH 
 game/
   index.html    css/style.css
   js/           main.js  renderer.js  input.js  assets.js  physics.js
-                camera.js  combat.js  debug.js  net.js  utils.js
+                camera.js  combat.js  daze.js  debug.js  net.js  utils.js
     entities/   entity.js  player.js  enemy.js  boss.js  item.js  projectile.js  ally.js
     stages/     stage.js  city.js  forest.js  castle.js
     ui/         hud.js  menu.js  dialog.js  nameEntry.js  evaluation.js  reveal.js
@@ -60,6 +60,9 @@ Three files here are not in `docs/PRD.md` §15 and were added during implementat
   whether two things *touched*; this decides what that touch **means**. Putting damage rules in
   `physics.js` would have broken its "collision math only" boundary.
 - **`entities/entity.js`** — the factory, pool, and shared state enums.
+- **`daze.js`** — the ten-second window: the countdown, the prompt, helping up, and the penalty for
+  striking someone who is down. The mechanic everything else serves, so it gets its own file rather
+  than being spread across `combat.js` and `enemy.js`.
 - **`debug.js`** — the frame-time overlay, which exists from Phase 0 because it is how C6 is verified.
 
 ### 2.1 The `shared/` contract — the most important rule in the codebase
