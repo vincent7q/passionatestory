@@ -104,11 +104,20 @@ installing the VS Build Tools — the caret deliberately stays inside 11.x.
 is verified working on Node 20 — all 415 tests, Fastify 5, the native binding — so `engines` is now
 `">=20"`, which reflects what is actually proved rather than what was assumed.
 
-### ⏳ Outstanding visual verification — **scheduled for the office machine**
+### ⏳ Outstanding visual verification
 
-The Chrome extension does not connect on this machine. **Vincent is testing it on the office machine
-on 2026-08-08.** Everything below is proved by test and by HTTP response, but has not been seen on
-screen. Work through the numbered checklist at the end of this section and delete it once done.
+**The two that the whole project rested on are confirmed.** Vincent checked them on 2026-08-07:
+
+> **#4 — the stars visibly slow.** ✅
+> **#11 — the pause before 禮 lands.** ✅
+
+Those were the only two no test could ever settle: whether the ten-second window has a *readable*
+countdown, and whether the reveal has a *felt* beat before the floor goes out. Both work. The
+central mechanic is legible and the payoff lands.
+
+The rest of the numbered checklist below is **still unchecked** — mostly art and feel, none of it
+load-bearing on the design. Tick them off as they are confirmed and delete this section when it is
+empty.
 
 Rendering tasks are verified by looking at them (`SPEC.md` §12), so these remain open:
 
@@ -125,11 +134,11 @@ Rendering tasks are verified by looking at them (`SPEC.md` §12), so these remai
   `ATTACKS` in `combat.js` and `AI` in `entities/enemy.js` to want retuning once someone plays it —
   both are data tables for exactly that reason.
 
-- **Phase 4 — the star deceleration.** The maths is tested (monotonic, and ≥2× slower by the end),
-  but whether that reads *as a countdown* to a player who is told nothing is a judgement only a
-  human can make. **This is the single most important thing to eyeball in the whole project.** If
-  the slowing is not legible, the ten-second window has no signal and the game's central mechanic is
-  invisible.
+- ~~**Phase 4 — the star deceleration.**~~ ✅ **VERIFIED 2026-08-07 (checklist #4).** The stars
+  visibly slow. The ten-second window has a readable signal, so the game's central mechanic is
+  legible without a single word of explanation. **Do not retune `STAR_SPEED_START` /
+  `STAR_SPEED_END` without re-checking this by eye** — the test only proves the curve is monotonic,
+  not that a human can read it.
 
 - **Phase 5 — HUD layout.** The formatting is tested (clock never reads 17:65, a 1-力 sliver never
   rounds to an empty bar), but whether it *matches* `docs/1.jpg` / `docs/2.jpg` is a comparison only
@@ -139,10 +148,10 @@ Rendering tasks are verified by looking at them (`SPEC.md` §12), so these remai
   the chase *feels* like a chase, and whether the market row presents a real temptation to smash,
   can only be judged by playing it.
 
-- **Phase 7 — the pacing of the reveal.** The beat order and dwell times are tested, and the reveal
-  is deliberately unskippable before the third line lands. But whether the pause on a good 力 and 錢
-  actually *feels* like a moment of being pleased, before the floor goes out, is the other judgement
-  only a human can make. It and the star deceleration are the two things this whole project rests on.
+- ~~**Phase 7 — the pacing of the reveal.**~~ ✅ **VERIFIED 2026-08-07 (checklist #11).** The pause
+  before 禮 lands. He gets his moment of being pleased about 力 and 錢, and then the floor goes out.
+  **`DWELL[PLEASED]` in `ui/evaluation.js` is now load-bearing and confirmed by eye** — shortening it
+  is the easiest way to throw away twenty minutes of setup.
 
 **Phase 8 needs no visual verification** — the backend was exercised against a real running server
 over HTTP, not only via `inject`. Confirmed by hand: `/healthz`, the seeded board, a signed
@@ -162,7 +171,7 @@ specifically:
 1. Felix draws, and walking "into" the screen changes his draw order against the enemies.
 2. An attack **misses** an enemy standing on a different depth line — that is the 2.5D system.
 3. A defeated enemy sits down with stars orbiting rather than vanishing.
-4. **The stars visibly slow** over the ten seconds, and a bare `E` prompt appears when you stand
+4. ✅ **The stars visibly slow** over the ten seconds, and a bare `E` prompt appears when you stand
    next to them. It must not explain itself.
 5. Pressing E pops a bare gold **`+3`** with a seal dot and **no label**, and the enemy gets up on
    your side.
@@ -175,7 +184,7 @@ specifically:
 9. 力 bleeds in the covered arcade when out from under an awning, and stops under one.
 10. Market stalls break when hit, with **no warning and no penalty message** — that silence is the
     point.
-11. **Beat the boss and watch the form.** 力 and 錢 write in first and should land as a win; there
+11. ✅ **Beat the boss and watch the form.** 力 and 錢 write in first and should land as a win; there
     is a real pause; then 禮 arrives with 「他沒看到這一欄」 beside it, and 林建國 (1994) — 71
     underneath. Mashing must not fast-forward past the pause.
 12. Name entry accepts three initials and returns to rest.
@@ -359,6 +368,26 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-07 — ✅ the two load-bearing visual checks passed
+Vincent confirmed **#4 (the stars visibly slow)** and **#11 (the pause before 禮 lands)** on the
+office machine.
+
+These were the only two things in the project that no test could ever settle, and both are now
+answered yes:
+
+- The ten-second window **has a readable countdown**. A player who is told nothing can still see the
+  window closing, so the mechanic the entire game is built on is legible without a word of
+  explanation.
+- The reveal **has a felt beat**. He gets his moment of being pleased about 力 and 錢 before the
+  floor goes out.
+
+Two constants are now confirmed-by-eye and should not be casually retuned: `STAR_SPEED_START` /
+`STAR_SPEED_END` in `daze.js`, and `DWELL[PLEASED]` in `ui/evaluation.js`. The tests around them
+only prove shape — that the curve is monotonic, that the beats are ordered — not that a human can
+read them. Change either and re-check by eye.
+
+The rest of the checklist is art and feel, and none of it is load-bearing on the design.
 
 ### 2026-08-07 — design change: the timer is gone (Vincent's call)
 Suite green at **511 tests**. This lands ahead of Phase 11 because it changes the ending.
