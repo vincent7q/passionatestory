@@ -57,8 +57,8 @@ HTTP. Always run through the server.
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
 | **Phase** | Phase 0 — Foundation |
-| **Next task** | **T2** — Fastify server, static serving, `/healthz` |
-| **Suite** | 🟢 green — 1 test |
+| **Next task** | **T3** — canvas page, integer upscaling |
+| **Suite** | 🟢 green — 4 tests |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 ### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
@@ -104,7 +104,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 
 ### Phase 0 — Foundation
 - [x] T1 — test skeleton *(`better-sqlite3` deferred to T56 — see environment note)*
-- [ ] T2 — Fastify server, static serving, `/healthz`
+- [x] T2 — Fastify server, static serving, `/healthz`
 - [ ] T3 — canvas page, integer upscaling `[no-test]`
 - [ ] T4 — fixed-timestep loop
 - [ ] T5 — debug frame-time overlay `[no-test]`
