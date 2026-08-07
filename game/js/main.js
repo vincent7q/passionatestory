@@ -1,5 +1,6 @@
 import { WIDTH, HEIGHT, fitCanvas, getContext, clear } from './renderer.js';
 import { stepCount, STEP_MS } from './utils.js';
+import { createFpsTracker, pushFrameTime, drawOverlay } from './debug.js';
 
 /**
  * Top-level state machine. See SPEC.md §4.2.
@@ -33,8 +34,14 @@ const game = {
   state: States.TITLE,
   frame: 0,
   steps: 0,
-  debug: { visible: false, fps: 0, stepsThisFrame: 0 },
+  entities: [],
+  debug: { visible: false, tracker: createFpsTracker(), stepsThisFrame: 0 },
 };
+
+// Backtick toggles the overlay. Never shown by default.
+window.addEventListener('keydown', (e) => {
+  if (e.key === '`') game.debug.visible = !game.debug.visible;
+});
 
 // T5 replaces this with the real overlay; T22+ replace the placeholder render.
 function update() {
@@ -54,15 +61,26 @@ let carry = 0;
 let last = performance.now();
 
 function frame(now) {
-  const { steps, remainder } = stepCount(carry, now - last);
+  const elapsed = now - last;
+  const { steps, remainder } = stepCount(carry, elapsed);
   carry = remainder;
   last = now;
 
   for (let i = 0; i < steps; i += 1) update();
 
+  pushFrameTime(game.debug.tracker, elapsed);
   game.debug.stepsThisFrame = steps;
   game.frame += 1;
   render();
+
+  if (game.debug.visible) {
+    drawOverlay(ctx, {
+      tracker: game.debug.tracker,
+      steps: game.debug.stepsThisFrame,
+      entityCount: game.entities.length,
+      state: game.state,
+    });
+  }
 
   requestAnimationFrame(frame);
 }

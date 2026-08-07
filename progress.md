@@ -57,8 +57,8 @@ HTTP. Always run through the server.
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
 | **Phase** | Phase 0 — Foundation |
-| **Next task** | **T5** — debug frame-time overlay |
-| **Suite** | 🟢 green — 17 tests |
+| **Next task** | **T6** — `shared/characters.js` (Phase 1 begins) |
+| **Suite** | 🟢 green — 21 tests |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
 
 ### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
@@ -124,7 +124,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T2 — Fastify server, static serving, `/healthz`
 - [x] T3 — canvas page, integer upscaling *(scale math tested; visual check pending — see below)*
 - [x] T4 — fixed-timestep loop
-- [ ] T5 — debug frame-time overlay `[no-test]`
+- [x] T5 — debug frame-time overlay *(fps math tested; overlay visual pending)*
 
 ### Phase 1 — `shared/` ← where correctness lives
 - [ ] T6 — `shared/characters.js`
