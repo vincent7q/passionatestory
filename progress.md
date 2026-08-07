@@ -216,6 +216,7 @@ Decisions that are settled. Do not relitigate these without a reason; append new
 | 2026-08-07 | Scoring split is 力 20/10/10 (combat / survival / speed). Chosen so a masher lands 56–60. Constants live in `POWER_TUNING`; **the masher test is the constraint, not the formula.** |
 | 2026-08-07 | Rendering is CSS integer upscaling, not the PRD §9.1 offscreen-buffer blit. Equivalent result, simpler, GPU-accelerated. |
 | 2026-08-07 | High scores use the SQLite backend, **superseding the PRD's original localStorage plan**. |
+| 2026-08-07 | 二叔 is named **BAN 班**. He is still addressed as 二叔 in dialogue — that is how family speaks, and it keeps the joke. |
 
 ---
 
@@ -225,7 +226,7 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 
 | # | Question | Needed by |
 |---|---|---|
-| 1 | 二叔 has no personal name since Hilman became a candidate. Is "Second Uncle" the joke, or does he need one? | T70 |
+| ~~1~~ | ~~二叔's personal name.~~ **Answered 2026-08-07: he is BAN 班.** Still addressed as 二叔 in dialogue — the relational term is how family speaks. | ~~T70~~ |
 | 2 | `docs/story.md:317` — "Rule 47: Survive." is orphaned; nothing else references numbered rules. Cut, or a post-credits hook? | T84 |
 | 3 | Three candidates run "an hour apart" but 禮 scores punctuality against 18:00 specifically. Only one can be on time. | T51 |
 | 4 | `docs/images/*.png` are portraits only — no body proportions. Hilman must silhouette as the biggest of the three at 32×48. No reference exists for 二叔 or the fruit shop owner. | T19 |

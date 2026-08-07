@@ -156,7 +156,7 @@ without looking up from his homework.
 wearing collars. The "guards" apologise, help each other up, and are unfailingly polite. The estate
 lights come on automatically as he passes, as though someone is expecting him.
 
-**Boss — 二叔 (Second Uncle).**
+**Boss — 二叔 BAN 班 (Second Uncle).**
 
 An enormous, beaming man is sitting in the middle of the mountain road behind a folding table with
 a full tea service laid out. He will not let the candidate past until he has sat down and had a cup.

@@ -290,7 +290,7 @@ chest. The dogs wear collars and are well fed. Opponents help each other up.
 | 表弟 Young Cousin | 35 | Ranged. Throws stationery without looking up from his homework |
 | 保全 Estate Security | 80 | Guards, parries, waits. The first enemy that punishes mashing |
 
-**Boss — 二叔 (Second Uncle), 500 HP**
+**Boss — 二叔 BAN 班 (Second Uncle), 500 HP**
 
 An enormous beaming man sitting in the middle of the road behind a folding table with a full tea
 service laid out.

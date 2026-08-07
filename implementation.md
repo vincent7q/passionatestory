@@ -818,8 +818,8 @@ None of these block Phase 0–5. Flag them in `progress.md` when you reach them.
 
 1. **T45/T66/T72 — enemy dialogue.** Every line must hold the six content rules in `SPEC.md` §14.
    Nobody is ever rude; hostility is expressed entirely through hospitality.
-2. **T70 — 二叔 has no personal name.** "Second Uncle" may be the joke. Confirm before writing his
-   dialogue.
+2. ~~**T70 — 二叔 has no personal name.**~~ **Answered: he is BAN 班.** Still addressed as 二叔 in
+   dialogue — the relational term is how family actually speaks.
 3. **T84 — Rule 47.** `docs/story.md:317` says "Rule 47: Survive." Nothing else references numbered
    rules. Orphan, or a hook for the post-credits?
 4. **T51 — punctuality vs. three candidates.** Three candidates run "an hour apart" but 禮 scores
