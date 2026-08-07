@@ -56,10 +56,22 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-07 |
 | **Branch** | `main` |
-| **Phase** | Phase 0 — Foundation |
-| **Next task** | **T6** — `shared/characters.js` (Phase 1 begins) |
-| **Suite** | 🟢 green — 21 tests |
+| **Phase** | ✅ Phase 0 and Phase 1 complete — next is **Phase 2, Engine core** |
+| **Next task** | **T14** — `input.js`, keyboard state with edge detection |
+| **Suite** | 🟢 green — **71 tests** |
 | **Blocked on** | Nothing. See the environment note below; it does not bite until T56. |
+
+**C1 is satisfied and measured.** With the formula as committed:
+
+| Run | 力 | 錢 | 禮 | Total |
+|---|---|---|---|---|
+| Masher — maximal violence, zero restraint | 36 | 20 | **0** | **56** |
+| 林建國, 1994 | — | — | — | **71** |
+| Restraint — helps people up, spares the melon, bows | 29 | 20 | **40** | **89** |
+
+71 sits cleanly between them, so the hidden column is what decides it. If a
+tuning change moves that band, `test/shared/scoring.masher.test.js` fails —
+**retune `POWER_TUNING`, never the test.**
 
 ### ⚠️ Environment note — `better-sqlite3` will not install on this machine yet
 
@@ -134,7 +146,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T10 — `computePower`
 - [x] T11 — `computeGrade`, `leaderboardValue`
 - [x] **T12 — ⚠️ C1 masher test** — masher 56, restraint 89
-- [ ] T13 — `shared/validation.js`
+- [x] T13 — `shared/validation.js`
 
 ### Phase 2 — Engine core
 - [ ] T14 — `input.js`
@@ -274,9 +286,28 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 
 Newest first. One line per working session: what moved, and anything the next person needs.
 
+### 2026-08-07 — Phase 0 and Phase 1 complete (T1–T13)
+Suite green at **71 tests**. Foundation and the whole `shared/` layer are done.
+
+Two things worth knowing before you continue:
+
+- **A real exploit surfaced while writing `computePower`.** A run claiming `durationMs: 0` divided
+  down to a huge ratio and scored **full** speed marks — ten free points for an impossible time. Now
+  guarded: a run must actually have taken time to earn them. The bounds check in `validation.js`
+  rejects it too, so it is covered on both sides.
+- **`better-sqlite3` is not installed** and T1 shipped without it deliberately. See the environment
+  note above. It does not matter until T56.
+
+`shared/` has portability tests asserting no `node:` imports, `process`, or `require` leak in — that
+module is fetched by the browser over HTTP as well as imported by the server, and a Node-only import
+would break the game at runtime while every server test stayed green.
+
+**Next: T14**, `input.js`. Edge detection matters more than it looks — `E` firing twice on one press
+would let a player help the same opponent up twice and double-count 禮.
+
 ### 2026-08-07 — planning
 Wrote `SPEC.md` (engineering contracts, constants, acceptance criteria), `implementation.md` (92
-tasks across 13 phases), and this file. No code yet. **Next: T1.**
+tasks across 13 phases), and this file.
 
 Prior to this, commit `d796d18` landed the cast revision across `docs/story.md`, `docs/PRD.md`, and
-`CLAUDE.md`, and added `docs/images/`.
+`CLAUDE.md`, and added `docs/images/`. Commit `1c85ca8` named 二叔 as BAN 班.

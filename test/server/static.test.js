@@ -2,8 +2,20 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildServer } from '../../server/index.js';
 
-// Content-serving assertions live with the tasks that create the content:
-//   T7 adds the /shared/scoring.js check.
+// The whole point of shared/: the browser imports the very modules Node does,
+// so scoring exists exactly once and the client cannot drift from the server.
+// If this route breaks, the evaluation form silently disagrees with the
+// leaderboard and nothing else fails loudly.
+test('serves shared/ modules over HTTP for the browser', async () => {
+  const app = await buildServer();
+  for (const file of ['scoring.js', 'characters.js', 'validation.js']) {
+    const res = await app.inject({ method: 'GET', url: `/shared/${file}` });
+    assert.equal(res.statusCode, 200, `/shared/${file} should serve`);
+    assert.match(res.headers['content-type'], /javascript/, `${file} needs a JS content type`);
+    assert.match(res.body, /export /, `${file} should be an ES module`);
+  }
+  await app.close();
+});
 
 test('serves the game at the site root', async () => {
   const app = await buildServer();
