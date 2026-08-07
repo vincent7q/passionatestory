@@ -149,10 +149,10 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T13 — `shared/validation.js`
 
 ### Phase 2 — Engine core
-- [ ] T14 — `input.js`
-- [ ] T15 — footprint overlap
-- [ ] T16 — `canHit` (z overlap + facing + active frames)
-- [ ] T17 — integration; gravity on `z` only, never `y`
+- [x] T14 — `input.js`
+- [x] T15 — footprint overlap
+- [x] T16 — `canHit` (z overlap + facing + active frames)
+- [x] T17 — integration; gravity on `z` only, never `y`
 - [ ] T18 — `camera.js`
 - [ ] T19 — chibi rig `[no-test]`
 - [ ] T20 — animation frames `[no-test]`
