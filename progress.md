@@ -55,7 +55,7 @@ HTTP. Always run through the server.
 | | |
 |---|---|
 | **Date** | 2026-08-08 |
-| **Branch** | `phase-11-reveal` — **not yet merged to `main`** |
+| **Branch** | `main` — merged and **pushed** 2026-08-08, tagged `v0.9-content-complete` |
 | **Phase** | ✅ Phases 0-11 complete — next is **Phase 12, polish and ship** |
 | **Next task** | **T85** — touch controls |
 | **Suite** | 🟢 green — **601 tests** |
@@ -443,7 +443,7 @@ Newest first. One line per working session: what moved, and anything the next pe
 Suite green at **601 tests**, up from 511. The game is content-complete: it now runs from the van
 pulling away to 「第2次」 without a gap.
 
-**On a branch, `phase-11-reveal`, not merged and not pushed.** See *Still to do* below.
+**Merged to `main` and pushed**, tagged `v0.9-content-complete`. See *Still to do* below.
 
 **The reveal is ONE state, not six.** `main.js` gained exactly one branch for the whole phase, and
 `ui/reveal.js` sequences beats 1–7, the form, the stinger and the ending internally. That was
@@ -517,10 +517,9 @@ What the same pass confirmed, all by eye: the form matches `docs/PRD.md` §8.1 l
 
 #### Still to do
 
-- **Nothing is pushed.** `origin` is configured, but pushing a branch and a tag is an outward-facing
-  action nobody asked for, so it was left for Vincent. The branch and the tag exist **locally only**
-  — until `git push -u origin phase-11-reveal --follow-tags` runs, the work does not travel, which
-  is the one failure mode the resume protocol at the top of this file exists to prevent.
+- ~~**Nothing is pushed.**~~ ✅ **Merged to `main` and pushed 2026-08-08**, fast-forward from
+  `8eeb3b0`, with `v0.9-content-complete` on the remote. The suite was re-run green on `main` itself
+  before pushing, not only on the branch. The work travels.
 - **The reveal has been seen frame by frame, but never *played*.** Each beat was captured on its
   own; nobody has watched it run start to finish at 60fps with the dwells actually elapsing. The
   pacing — whether `DWELL[WIN]` at 200 steps holds or drags now that there is something to look at —
