@@ -5,7 +5,7 @@ import {
   FILE_ENTRIES, FILE_OPENING, FILE_START,
   STINGER_INTRUDERS, STINGER_LINE, SOUP_LINE,
   createReveal, currentBeat, reached, advanceReveal, beatProgress,
-  buildLineup, auntLine, fileEntriesShown, riderWaves,
+  buildLineup, auntLine, fileEntriesShown, riderWaves, drawReveal, drawRoom,
   intrudersDown, soupAsked, stingerLineShown, sheMouthsIt,
 } from '../../game/js/ui/reveal.js';
 import { ENDINGS, SHE_MOUTHS, POST_CREDITS } from '../../game/js/ui/ending.js';
@@ -605,6 +605,93 @@ test('it begins again, and he still does not know what is coming', () => {
   const s = reveal();
   runTo(s, Beat.POST_CREDITS, { skipPressed: true });
   assert.ok(reached(s, Beat.ENDING), 'the card comes after the table, not instead of it');
+});
+
+// ── Every beat must actually draw something ──────────────────────────────────
+
+/**
+ * REGRESSION GUARD — this caught a real bug, but only once a human looked.
+ *
+ * PRD §8 beat 1 is "he wins, nothing happens next, hold on this". That was
+ * first implemented as a near-empty screen: three dots on black, six ink
+ * pixels. Every test passed. On a monitor it read as a crash.
+ *
+ * The stillness belongs to the ACTION, not the picture — he is standing in the
+ * wreckage while eight people calmly eat, and that image IS the joke. So a
+ * dining-room beat that fails to paint the room is broken however green the
+ * suite is.
+ */
+function recordingCtx() {
+  const calls = [];
+  const ctx = new Proxy({}, {
+    get: (t, k) => {
+      if (k === 'calls') return calls;
+      if (k === 'measureText') return (s) => ({ width: String(s).length * 6 });
+      return (...args) => { calls.push({ fn: String(k), args }); };
+    },
+    set: () => true,
+  });
+  return ctx;
+}
+
+const drawnAt = (beat, into = 0) => {
+  const s = reveal();
+  runTo(s, beat, { skipPressed: true });
+  // FORM and ENDING carry a dwell of Infinity — they are paced by their own
+  // contents — so this must never be derived from DWELL without a clamp.
+  const steps = Number.isFinite(into) ? into : 60;
+  for (let i = 0; i < steps; i += 1) advanceReveal(s, {});
+  const ctx = recordingCtx();
+  drawReveal(ctx, s);
+  return ctx.calls;
+};
+
+/**
+ * A weak check on purpose: every beat puts SOMETHING on screen beyond its own
+ * background. Counting draw calls cannot tell a broken beat from a deliberately
+ * sparse one — 「第2次」 is a title card and is meant to be two calls — so the
+ * real guard is the room test below, which is what would have caught the bug.
+ */
+test('every beat draws content, not just a background', () => {
+  for (const beat of BEAT_ORDER) {
+    if (beat === Beat.DONE) continue;
+    const dwell = DWELL[beat];
+    const calls = drawnAt(beat, Number.isFinite(dwell) ? Math.floor(dwell / 2) : 120);
+    const content = calls
+      .filter((c) => /fillRect|fillText|ellipse/.test(c.fn))
+      .slice(1);                                  // drop the background fill
+    assert.ok(content.length >= 1, `${beat} drew nothing but its own background`);
+  }
+});
+
+test('every dining-room beat paints the room', () => {
+  const roomBeats = [Beat.WIN, Beat.PHONE, Beat.LINEUP, Beat.AUNT,
+    Beat.FORM_SLIDE, Beat.STINGER, Beat.ENDING];
+  for (const beat of roomBeats) {
+    const calls = drawnAt(beat, 40);
+    // The round table and the dishes are ellipses; nothing else in the reveal
+    // draws one, so this is a reliable signal that the room is there.
+    assert.ok(calls.some((c) => c.fn === 'ellipse'),
+      `${beat} did not draw the table — the room is missing and the beat reads as a crash`);
+  }
+});
+
+test('the win is a populated room, not three dots', () => {
+  const calls = drawnAt(Beat.WIN, 100);
+  const ellipses = calls.filter((c) => c.fn === 'ellipse').length;
+  const rects = calls.filter((c) => c.fn === 'fillRect').length;
+  // Eight diners and eight dishes, a table, a candidate and the wreckage.
+  assert.ok(ellipses >= 10, `only ${ellipses} ellipses — the table and dishes are missing`);
+  assert.ok(rects >= 16, `only ${rects} rects — the eight diners are missing`);
+});
+
+/** The paperwork and the title card are deliberately NOT in the room. */
+test('the form, the file and the post-credits card do not draw the table', () => {
+  for (const beat of [Beat.FORM, Beat.FILE, Beat.POST_CREDITS]) {
+    const calls = drawnAt(beat, 40);
+    assert.ok(!calls.some((c) => c.fn === 'ellipse'),
+      `${beat} drew the dining table over what should be a full-screen page or card`);
+  }
 });
 
 test('mashing the reveal cannot skip the pause before the third line', () => {
