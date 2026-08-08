@@ -2,8 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   footprint, boxesOverlap, zRange, zRangesOverlap, attackBox, canHit,
-  integrate, GRAVITY, GROUND_Z,
+  integrate, GRAVITY, GROUND_Z, GROUND_FRICTION, REST_SPEED,
 } from '../../game/js/physics.js';
+import { Kind, createEntity } from '../../game/js/entities/entity.js';
 
 /** x = world horizontal, y = DEPTH, z = height. See SPEC.md §3.3. */
 function ent(over = {}) {
@@ -142,4 +143,63 @@ test('gravity is a per-step constant, not a per-second rate', () => {
   // Physics constants assume the fixed 1/60s step; nothing may scale by dt.
   assert.ok(GRAVITY < 0);
   assert.ok(Math.abs(GRAVITY) < 5, 'a per-step value, not a per-second one');
+});
+
+// ── Knockback must bleed off ─────────────────────────────────────────────────
+
+/**
+ * REGRESSION — the game was uncompletable, and only a playthrough found it.
+ *
+ * `applyDamage` adds knockback onto `vx`, and integrate moved by `vx` with
+ * nothing to slow it. Enemies hid the bug: `updateEnemy` re-authors `vx` from
+ * `steer()` every frame, so knockback never survived to accumulate. The player
+ * hides it the same way.
+ *
+ * 水果店老闆娘 is Kind.BOSS and has no update function, so nothing re-authored
+ * hers. One hit set vx = 1.5 and she slid at a constant 1.5px/step, IDLE and
+ * facing the player, straight off the end of the world — observed in Chrome at
+ * x = 13601 on a 3200-wide stage, with the player clamped to a gate at 3200.
+ * The stage 1 boss could not be reached, so no run could ever be finished.
+ */
+test('knockback decays instead of carrying an entity away forever', () => {
+  const e = createEntity(Kind.BOSS, { x: 3110, y: 120, vx: 1.5 });
+  for (let i = 0; i < 600; i += 1) integrate(e, STRIP);
+
+  assert.equal(e.vx, 0, 'velocity never came to rest');
+  assert.ok(e.x < 3130, `drifted to ${e.x} — a single hit should not relocate her`);
+});
+
+/**
+ * Friction BOUNDS the drift; it does not cap it. Ten hits from the same side
+ * still walk her about a hundred pixels, which is why main.js also clamps a
+ * live boss to the same gate the player is clamped to. This test pins the
+ * property friction alone is responsible for: each hit is worth a short slide,
+ * not an unbounded one.
+ */
+test('each knockback is worth a short slide, not an open-ended one', () => {
+  const boss = createEntity(Kind.BOSS, { x: 3110, y: 120 });
+  const start = boss.x;
+
+  for (let hit = 0; hit < 10; hit += 1) {
+    boss.vx += 1.5;
+    for (let i = 0; i < 60; i += 1) integrate(boss, STRIP);
+  }
+
+  const perHit = (boss.x - start) / 10;
+  assert.ok(perHit < 15, `each hit moved her ${perHit.toFixed(1)}px — that compounds off the map`);
+  assert.equal(boss.vx, 0, 'she never came to rest');
+});
+
+test('friction does not fight an entity that authors its own velocity', () => {
+  const e = createEntity(Kind.ENEMY, { x: 0, y: 120 });
+  // What updateEnemy does every step: set vx, then integrate.
+  for (let i = 0; i < 60; i += 1) { e.vx = 1; integrate(e, STRIP); }
+  assert.equal(Math.round(e.x), 60, 'a walking enemy must still cover ground at full speed');
+});
+
+/** Airborne knockback must carry, or a launched opponent stops in mid-air. */
+test('friction does not apply while airborne', () => {
+  const e = createEntity(Kind.ENEMY, { x: 0, y: 120, z: 40, vx: 2, vz: 0 });
+  integrate(e, STRIP);
+  assert.equal(e.vx, 2, 'a knocked-up opponent should keep travelling');
 });

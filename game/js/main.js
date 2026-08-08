@@ -491,6 +491,15 @@ function update() {
     game.boss = spawnBossFor(stage);
   }
 
+  // A boss stays inside the arena the player is locked into. Friction alone
+  // bounds the drift but does not cap it, and a boss knocked repeatedly from
+  // one side would still walk out of reach — which is exactly how the stage 1
+  // fight became unwinnable. The player is clamped to these bounds two lines
+  // above; so is she.
+  if (game.boss?.alive) {
+    game.boss.x = Math.min(Math.max(game.boss.x, game.bounds.xMin), game.bounds.xMax);
+  }
+
   /**
    * Music follows the fight. `playMusic` ignores a request for the cue already
    * playing, so calling it every step is safe and does not restart the bar.

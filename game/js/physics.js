@@ -21,6 +21,31 @@ export const GRAVITY = -0.9;      // per step
 export const GROUND_Z = 0;
 export const DEFAULT_REACH = 14;  // how far in front an attack box extends
 
+/**
+ * Ground friction, applied to horizontal velocity every step.
+ *
+ * THIS EXISTS BECAUSE THE GAME WAS UNCOMPLETABLE WITHOUT IT.
+ *
+ * `applyDamage` adds knockback straight onto `vx`, and integrate used to move
+ * by `vx` forever with nothing to slow it. Enemies masked the problem — their
+ * AI re-authors `vx` from `steer()` every single frame, so knockback was
+ * overwritten before it could accumulate. The player masks it the same way.
+ *
+ * 水果店老闆娘 has no update function at all, so nothing ever re-authored hers.
+ * One hit knocked her back at 1.5px/step and she slid — IDLE, facing the
+ * player, at a constant 1.5 — clean off the end of the world. Observed in a
+ * browser at x=13601 on a 3200-wide stage, ten thousand pixels past a gate the
+ * player is clamped to. The stage 1 boss simply could not be reached.
+ *
+ * Friction is the general fix rather than a special case for her: any entity
+ * that does not author its own velocity now comes to rest instead of leaving.
+ * It is safe for the ones that do, because they overwrite `vx` before the next
+ * integrate anyway, and nothing in this game relies on carried momentum —
+ * there are no projectiles.
+ */
+export const GROUND_FRICTION = 0.85;   // per step
+export const REST_SPEED = 0.05;        // below this, stop dead rather than crawl
+
 /** The (x, y) footprint — what the entity occupies on the ground plane. */
 export function footprint(e) {
   const hw = e.w / 2;
@@ -80,6 +105,18 @@ export function integrate(e, strip) {
     e.z = GROUND_Z;
     e.vz = 0;
     e.airborne = false;
+  }
+
+  // Knockback bleeds off, but only against the ground — a launched opponent
+  // keeps travelling or they stop dead in mid-air. This runs AFTER the block
+  // above because that is where `airborne` is decided for this step.
+  //
+  // It only matters for entities that do not re-author `vx` themselves; for
+  // everyone else it is overwritten before it is next read. See
+  // GROUND_FRICTION — without this the stage 1 boss slid off the map.
+  if (!e.airborne) {
+    e.vx *= GROUND_FRICTION;
+    if (Math.abs(e.vx) < REST_SPEED) e.vx = 0;
   }
   return e;
 }
