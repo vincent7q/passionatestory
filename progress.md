@@ -41,9 +41,9 @@ npm install
 npm run dev                # http://localhost:8080
 ```
 
-Requires **Node ≥ 20**. `better-sqlite3` is pinned to `^11.10.0` because 11.x ships a prebuilt
-binary for Node 20 on Windows and 12.x does not — see the resolved environment note below before
-touching that dependency.
+Requires **Node ≥ 20**; verified on **20.17.0 and 22.16.0**. `better-sqlite3` is pinned to
+`^11.10.0` because 11.x ships a prebuilt binary for Windows and 12.x does not — see the resolved
+environment note below before touching that dependency.
 
 **The game cannot be opened via `file://`.** These are real ES modules; they must be served over
 HTTP. Always run through the server.
@@ -54,12 +54,27 @@ HTTP. Always run through the server.
 
 | | |
 |---|---|
-| **Date** | 2026-08-07 |
-| **Branch** | `main` |
-| **Phase** | ✅ Phases 0-10 complete — next is **Phase 11, the reveal** |
-| **Next task** | **T79** — `ui/reveal.js`. `ui/ending.js` already holds the dialogue |
-| **Suite** | 🟢 green — **511 tests** |
-| **Blocked on** | Nothing. The `better-sqlite3` blocker is resolved — see below. |
+| **Date** | 2026-08-08 |
+| **Branch** | `phase-11-reveal` — **not yet merged to `main`** |
+| **Phase** | ✅ Phases 0-11 complete — next is **Phase 12, polish and ship** |
+| **Next task** | **T85** — touch controls |
+| **Suite** | 🟢 green — **597 tests** |
+| **Blocked on** | Nothing. |
+
+### ⚠️ Read this before running anything — the test command changed
+
+**`node --test test/` runs ZERO tests on Node ≥ 22.** It stops treating a bare directory as a
+discovery root, tries to load it as a module, and reports one `ERR_MODULE_NOT_FOUND` — which looks
+exactly like a broken checkout rather than a broken command. It cost the first twenty minutes of the
+2026-08-08 session.
+
+**Use `npm test`.** It is now `node --test "test/**/*.test.js"`, and both details matter: the
+pattern stays **quoted** so no shell collapses `**` and silently drops `test/smoke.test.js`, and it
+is a pattern rather than bare `node --test` because Node's default discovery would execute
+`test/helpers/` as tests. See `SPEC.md` §12.
+
+This machine runs **Node v22.16.0**; `progress.md` previously recorded v20.17.0. `better-sqlite3`
+11.10.0 works fine on 22 — no change needed there.
 
 ### ✅ RESOLVED 2026-08-07 — the timer is gone, and the 71 hole closed with it
 
@@ -100,9 +115,12 @@ The blocker from Phase 0–7 is gone. The cause was **version**, not toolchain:
 Pinned as `"better-sqlite3": "^11.10.0"`. **Do not bump it to 12.x** without either upgrading Node or
 installing the VS Build Tools — the caret deliberately stays inside 11.x.
 
-`package.json` previously declared `"node": ">=22"` while this machine runs **v20.17.0**. Everything
-is verified working on Node 20 — all 415 tests, Fastify 5, the native binding — so `engines` is now
-`">=20"`, which reflects what is actually proved rather than what was assumed.
+`package.json` previously declared `"node": ">=22"` while the office machine runs **v20.17.0**.
+`engines` is now `">=20"`, which reflects what is actually proved rather than what was assumed.
+
+**Updated 2026-08-08:** the whole suite, Fastify 5 and the native binding are now also verified on
+**Node v22.16.0**, so `^11.10.0` is good on both. The only thing Node 22 broke was the *test
+command* — see the note under **Current status**.
 
 ### ⏳ Outstanding visual verification
 
@@ -193,6 +211,13 @@ specifically:
 14. **二叔 BAN cannot be beaten by fighting.** Knock him to zero and he pours another cup and gets
     straight back up. E accepts a cup; after three, E bows and he steps aside. This is the beat
     where the player is supposed to work it out — watch whether it lands.
+15. **The reveal, end to end** *(new 2026-08-08, never seen)*. Beat 林建國 and it should run: the
+    silence → 「你來得好慢。」 → the line-up bowing → the aunt sitting down → the form → the file →
+    the stinger → the table → 「第2次」. Every beat is proved to *draw*; none is proved to **read**.
+16. **The `WIN` silence specifically.** 200 steps of almost nothing, and it cannot be skipped. It
+    should feel like a man braced for consequences that are not coming. If it instead feels like the
+    game has hung, `DWELL[WIN]` is the number to move — **but move it down, not away.** The silence
+    is the beat the whole reveal starts from.
 
 Then delete this section.
 
@@ -315,12 +340,12 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T78 — Phase 2「站起來」
 
 ### Phase 11 — The reveal
-- [ ] T79 — `ui/reveal.js` beats 1–7
-- [ ] T80 — the bow line-up
-- [ ] T81 — the form, then 71
-- [ ] T82 — the file, two photos
-- [ ] T83 — the stinger
-- [ ] T84 — the ending → tag `v0.9-content-complete`
+- [x] T79 — `ui/reveal.js` beats 1–7
+- [x] T80 — the bow line-up
+- [x] T81 — the form, then 71
+- [x] T82 — the file, two photos
+- [x] T83 — the stinger
+- [x] T84 — the ending → tagged `v0.9-content-complete`
 
 ### Phase 12 — Polish and ship
 - [ ] T85 — touch controls
@@ -368,6 +393,72 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 ## Session log
 
 Newest first. One line per working session: what moved, and anything the next person needs.
+
+### 2026-08-08 — Phase 11 complete (T79–T84), tagged `v0.9-content-complete`
+Suite green at **597 tests**, up from 511. The game is content-complete: it now runs from the van
+pulling away to 「第2次」 without a gap.
+
+**On a branch, `phase-11-reveal`, not merged and not pushed.** See *Still to do* below.
+
+**The reveal is ONE state, not six.** `main.js` gained exactly one branch for the whole phase, and
+`ui/reveal.js` sequences beats 1–7, the form, the stinger and the ending internally. That was
+deliberate: `main.js` is this project's documented blind spot and every runtime bug so far has lived
+there.
+
+**Two beats ignore input entirely, and they are the two that carry the joke.** `UNSKIPPABLE` holds
+`WIN` and `STINGER`. The stinger's test is the one worth keeping: two reveals run side by side
+through all 240 steps, one untouched and one with every button held, asserting the takedown sequence
+is identical at every step. **He does not move — that is the gag.** Give the player agency there and
+the last beat in the game stops working.
+
+**T80 needed data that did not exist.** The roster tracked only who was *helped up*; beat 3 needs
+everyone who was *defeated*. Conflating them would have emptied the line-up for exactly the player
+who earned it most. `ally.js` now has `defeated` alongside `members` — deliberately **not** in the
+run payload, because it is presentation, is never scored, and `shared/scoring.js` must not grow a
+field the server would then have to validate.
+
+The van crew and 二叔 can never appear in `defeated` — the first are the prologue, the second cannot
+be beaten by fighting — so both are seeded unconditionally. He is still holding the tea set.
+
+**71 existed twice and now does not.** `evaluation.js` carried its own literal while
+`shared/scoring.js` published `FATHER_SCORE` for the leaderboard seed. Moving the bar would have
+changed the board and left the reveal quoting the old number at the exact moment the game makes its
+point.
+
+#### `main.js` is no longer the blind spot
+
+This is the part with value beyond Phase 11. `main.js` touches `document` at import time, so no test
+could reach it — and it is the only file that has ever shipped a runtime bug here, **twice** (a
+missing `STEP_MS` in Phase 5, a deleted `BOUNDS` in Phase 6). Both were valid syntax and both passed
+`node --check`.
+
+`test/game/main-boot.test.js` boots it and steps real frames. Two pieces made that possible:
+
+- **`test/helpers/dom-stub.js`** — a Proxy 2D context accepting any call, and a
+  `requestAnimationFrame` that **stores** the callback instead of invoking it, so the loop can be
+  driven one frame at a time instead of recursing forever.
+- **`test/helpers/shared-loader.js`** — a resolver hook doing for Node what the static server does
+  for the browser. `main.js` imports `/shared/…` absolutely, which is the only correct form in a
+  browser (`SPEC.md` §2.3) and resolves to nothing on disk. **That one detail is the entire reason
+  the file was unreachable for eleven phases.**
+
+**It is a smoke test and must stay one** — no pixel assertions; rendering is still verified by eye.
+**Verified by sabotage:** reintroducing the Phase 6 undefined-constant bug fails it immediately.
+
+#### Still to do
+
+- **Nothing is pushed.** `origin` is configured, but pushing a branch and a tag is an outward-facing
+  action nobody asked for, so it was left for Vincent. The branch and the tag exist **locally only**
+  — until `git push -u origin phase-11-reveal --follow-tags` runs, the work does not travel, which
+  is the one failure mode the resume protocol at the top of this file exists to prevent.
+- **Nobody has seen Phase 11 on screen.** The Chrome extension was not connected this session, so
+  the reveal has never been looked at. The boot test proves every beat *draws without throwing*; it
+  proves nothing about whether it **reads**. Two things specifically want an eye:
+  - **The `WIN` silence.** 200 steps of near-nothing is right on paper. Whether it plays as a held
+    beat or as the game having hung is exactly the kind of thing no test settles.
+  - **The `LINEUP` grouping.** 「阿姨 ×6」 was chosen because six identical figures read as a crowd
+    rather than a family. That is a guess about how it looks.
+- The visual checklist below is otherwise unchanged.
 
 ### 2026-08-07 — ✅ the two load-bearing visual checks passed
 Vincent confirmed **#4 (the stars visibly slow)** and **#11 (the pause before 禮 lands)** on the
