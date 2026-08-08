@@ -58,7 +58,7 @@ HTTP. Always run through the server.
 | **Branch** | `phase-11-reveal` — **not yet merged to `main`** |
 | **Phase** | ✅ Phases 0-11 complete — next is **Phase 12, polish and ship** |
 | **Next task** | **T85** — touch controls |
-| **Suite** | 🟢 green — **597 tests** |
+| **Suite** | 🟢 green — **601 tests** |
 | **Blocked on** | Nothing. |
 
 ### ⚠️ Read this before running anything — the test command changed
@@ -122,6 +122,25 @@ installing the VS Build Tools — the caret deliberately stays inside 11.x.
 **Node v22.16.0**, so `^11.10.0` is good on both. The only thing Node 22 broke was the *test
 command* — see the note under **Current status**.
 
+### 📸 How to look at a specific frame without playing to it
+
+Worked out on 2026-08-08 and worth keeping, because "verified by eye" (`SPEC.md` §12) otherwise
+means playing twenty minutes to reach the beat you want to check — and the first attempt at
+Phase 11 shipped a beat that read as a crash precisely because nobody had.
+
+The trick is that **a hidden Chrome tab still executes canvas drawing.** It stops compositing and
+it stops `requestAnimationFrame`, but `fillRect`, `toDataURL` and `getImageData` all work. So:
+
+1. Freeze the loop: `window.requestAnimationFrame = () => 0`, then wait ~300ms for the frame already
+   queued to fire. **Miss that wait and the pending frame repaints over your draw** — which happens
+   silently and looks like your code did nothing.
+2. Build the state you want and call its draw function directly on
+   `document.getElementById('screen').getContext('2d')`.
+3. `canvas.toDataURL('image/png')` and POST it to a throwaway local sink that writes a file.
+
+Reload to undo all of it — nothing is patched on disk. A ready-made sink is in the session
+scratchpad as `shotserver.mjs`; it is about thirty lines and touches no project file.
+
 ### ⏳ Outstanding visual verification
 
 **The two that the whole project rested on are confirmed.** Vincent checked them on 2026-08-07:
@@ -146,10 +165,15 @@ Rendering tasks are verified by looking at them (`SPEC.md` §12), so these remai
 - ~~**#6 — the HUD matches `docs/1.jpg` / `docs/2.jpg`.**~~ ✅ **VERIFIED 2026-08-08.** 力 green bar
   reading `100/100`, 氣 orange beneath at `0/80`, `Lv.1` far left, 錢 top right with its gold dot —
   and **the clock centred, large, bare, starting at 17:20 with no label.** The joke is on screen.
-- **T4/T5** — the loop holding 60 FPS with the debug overlay (backtick toggles it). **Cannot be
-  checked from an automated tab:** Chrome freezes `requestAnimationFrame` in a hidden tab, so the
-  loop stalls whenever the window is not foreground. That is browser behaviour, not a bug — but it
-  means C6 needs a human with the window in front.
+- ~~**T4/T5 — the loop and the debug overlay.**~~ ✅ **VERIFIED 2026-08-08.** The overlay reads
+  `fps 59.9 · worst 17.4ms · steps 1 · ents 3 · PLAYING`. **That is C6 met in Chrome** — Firefox is
+  still unchecked, so C6 is half done.
+
+  **Caveat worth knowing before anyone tries to automate this:** Chrome freezes
+  `requestAnimationFrame` entirely in a hidden tab, so the loop stalls whenever the window is not
+  in front, and a hidden tab does not composite either — screenshots come back as the last painted
+  frame. Neither is a bug. Canvas *drawing* still works while hidden, which is the loophole the
+  reveal captures below went through.
 - **T19/T20** — what the chibi rig actually *looks like*. The pose table and palettes are tested,
   but nobody has yet seen a sprite. Expect the first draw to need art tuning; that is normal and is
   why `POSES` is data rather than code.
@@ -219,25 +243,24 @@ specifically:
 14. **二叔 BAN cannot be beaten by fighting.** Knock him to zero and he pours another cup and gets
     straight back up. E accepts a cup; after three, E bows and he steps aside. This is the beat
     where the player is supposed to work it out — watch whether it lands.
-15. **The reveal, end to end** *(new 2026-08-08)*. Beat 林建國 and it should run: the silence →
-    「你來得好慢。」 → the line-up bowing → the aunt sitting down → the form → the file → the stinger
-    → the table → 「第2次」.
+15. ~~**The reveal, end to end.**~~ ✅ **VERIFIED 2026-08-08 — every beat seen and one real bug
+    fixed.** All eleven beats were captured as PNGs and looked at. The evaluation form matches
+    `docs/PRD.md` §8.1 line for line: 力 38/40, 錢 19/20 with 「這些是我們的錢。」, 禮 12/40 with
+    ← 他沒看到這一欄, 總分 69/100, and **林建國 (1994) — 71** underneath. He is two short.
+    **C2 confirmed by eye:** at the pleased pause only 力 and 錢 are on the page — no divider, no
+    third line.
+16. ~~**The `WIN` silence.**~~ ✅ **FIXED 2026-08-08 — it was broken, and only looking found it.**
+    It rendered as three dots on black. Indistinguishable from the game having hung.
 
-    **Partly checked 2026-08-08 by pixel audit** — every beat was driven through the real
-    `drawReveal` on the real canvas and every one paints actual content, so no beat falls through
-    blank, and `FILE` correctly repaints on paper rather than the room. The line-up groups as
-    「上班族 ×2 / 阿姨 ×2 / 廂型車的三個人 ×3 / 二叔 ×1」 — thirteen people, reading as a family.
+    **The mistake was reading "nothing happens" as "nothing is drawn".** The stillness is in the
+    *action*: he is standing in the wreckage breathing hard while eight people calmly eat, and
+    nobody looks up. That image is the joke, and a black screen cannot tell it. The whole reveal had
+    the same fault — every beat was text in a void.
 
-    **None of it has been seen by an eye**, because a hidden Chrome tab does not composite, so no
-    screenshot of the reveal was possible. It draws; whether it *reads* is still open.
-16. **The `WIN` silence specifically.** 200 steps of almost nothing, and it cannot be skipped. It
-    should feel like a man braced for consequences that are not coming. If it instead feels like the
-    game has hung, `DWELL[WIN]` is the number to move — **but move it down, not away.** The silence
-    is the beat the whole reveal starts from.
-
-    The pixel audit puts a number on "almost nothing": **six ink pixels**, against 1,578 for the
-    line-up. That is the intent taken literally, and it is the most likely thing in Phase 11 to read
-    as a crash rather than a pause. **Look at this one first.**
+    `drawRoom()` now paints the dining room and every room beat draws it first, which also makes the
+    sequence read as one continuous moment instead of a slideshow of captions. **Do not "simplify"
+    a beat back to bare text** — three tests in `reveal.test.js` will fail, and they were verified
+    by sabotage.
 
 Then delete this section.
 
@@ -373,7 +396,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [ ] T87 — dashboard
 - [ ] T88 — Docker, **DB on a mounted volume**
 - [ ] T89 — ⚠️ C3 records survive a recycle
-- [ ] T90 — C6 60 FPS in Chrome and Firefox
+- [ ] T90 — C6 60 FPS in Chrome and Firefox *(Chrome ✅ 59.9 fps 2026-08-08; Firefox outstanding)*
 - [ ] T91 — full acceptance pass
 - [ ] T92 — README
 
@@ -393,6 +416,8 @@ Decisions that are settled. Do not relitigate these without a reason; append new
 | 2026-08-07 | Rendering is CSS integer upscaling, not the PRD §9.1 offscreen-buffer blit. Equivalent result, simpler, GPU-accelerated. |
 | 2026-08-07 | High scores use the SQLite backend, **superseding the PRD's original localStorage plan**. |
 | 2026-08-07 | 二叔 is named **BAN 班**. He is still addressed as 二叔 in dialogue — that is how family speaks, and it keeps the joke. |
+| 2026-08-08 | **The reveal is drawn in the dining room, always.** Beat 1 was first built as a near-empty screen, reading "nothing happens next" as "nothing is drawn" — on a monitor it looked like a crash. The stillness is in the *action*: eight people eat, nobody looks up, and that image is the joke. `ROOM_BEATS` in `reveal.js` names the beats that paint the room; only the paperwork and the 「第2次」 card do not. |
+| 2026-08-08 | **`npm test` is the test command**, not `node --test test/`, which discovers nothing on Node ≥ 22 while looking like a broken checkout. See `SPEC.md` §12. |
 
 ---
 
@@ -415,7 +440,7 @@ Answer each before starting the task that needs it. None block Phase 0–5.
 Newest first. One line per working session: what moved, and anything the next person needs.
 
 ### 2026-08-08 — Phase 11 complete (T79–T84), tagged `v0.9-content-complete`
-Suite green at **597 tests**, up from 511. The game is content-complete: it now runs from the van
+Suite green at **601 tests**, up from 511. The game is content-complete: it now runs from the van
 pulling away to 「第2次」 without a gap.
 
 **On a branch, `phase-11-reveal`, not merged and not pushed.** See *Still to do* below.
@@ -465,20 +490,47 @@ missing `STEP_MS` in Phase 5, a deleted `BOUNDS` in Phase 6). Both were valid sy
 **It is a smoke test and must stay one** — no pixel assertions; rendering is still verified by eye.
 **Verified by sabotage:** reintroducing the Phase 6 undefined-constant bug fails it immediately.
 
+#### Then it was looked at, and beat 1 was broken
+
+Vincent connected Chrome and the whole reveal was captured frame by frame. **The first beat was a
+black screen.**
+
+`WIN` was three dots on black — six ink pixels — and on a monitor that is indistinguishable from the
+game having hung. The rest was no better: every beat was text floating in a void. The fault was
+reading *"nothing happens next"* as *"nothing is drawn"*. The stillness is in the **action**. He is
+standing in the wreckage breathing hard while eight people calmly eat and nobody looks up, and that
+image **is** the joke.
+
+`drawRoom()` now paints the round table, eight diners, the dishes, the warm pool of light and the
+toppled chair nobody has mentioned, and every room beat draws it first. The line-up became thirteen
+people actually bowing — gold for the ones he helped up — instead of a credits list. Two smaller
+things the screenshots caught: the candidate was drawn *behind* the ending's verdict panel and
+simply vanished, and 「第2次」 was floating over the dining room instead of being a title card.
+
+**No test could have caught this**, and that is the honest lesson: 597 tests passed against a beat
+that read as a crash. Three tests now guard it, verified by sabotage — but they only exist because
+someone looked.
+
+What the same pass confirmed, all by eye: the form matches `docs/PRD.md` §8.1 line for line and
+**C2 holds visually** (at the pleased pause only 力 and 錢 are on the page); the HUD matches
+`docs/1.jpg`; the canvas is a clean 2× integer upscale; and the debug overlay reads **59.9 fps**.
+
 #### Still to do
 
 - **Nothing is pushed.** `origin` is configured, but pushing a branch and a tag is an outward-facing
   action nobody asked for, so it was left for Vincent. The branch and the tag exist **locally only**
   — until `git push -u origin phase-11-reveal --follow-tags` runs, the work does not travel, which
   is the one failure mode the resume protocol at the top of this file exists to prevent.
-- **Nobody has seen Phase 11 on screen.** The Chrome extension was not connected this session, so
-  the reveal has never been looked at. The boot test proves every beat *draws without throwing*; it
-  proves nothing about whether it **reads**. Two things specifically want an eye:
-  - **The `WIN` silence.** 200 steps of near-nothing is right on paper. Whether it plays as a held
-    beat or as the game having hung is exactly the kind of thing no test settles.
-  - **The `LINEUP` grouping.** 「阿姨 ×6」 was chosen because six identical figures read as a crowd
-    rather than a family. That is a guess about how it looks.
-- The visual checklist below is otherwise unchanged.
+- **The reveal has been seen frame by frame, but never *played*.** Each beat was captured on its
+  own; nobody has watched it run start to finish at 60fps with the dwells actually elapsing. The
+  pacing — whether `DWELL[WIN]` at 200 steps holds or drags now that there is something to look at —
+  is still a judgement only a playthrough settles. **Watch it before touching any dwell.**
+- **Nobody has reached it by playing.** Every capture jumped straight to a beat. The path
+  `advanceStage()` → `REVEAL` is covered by `main-boot.test.js` but has never been walked by beating
+  林建國 for real.
+- **Firefox is unchecked**, so C6 is half met — Chrome is confirmed at 59.9 fps.
+- **Art, not layout.** The diners are coloured rectangles. They read correctly at 480×270 and the
+  staging works, but this is placeholder art in the same sense the chibi rig is.
 
 ### 2026-08-07 — ✅ the two load-bearing visual checks passed
 Vincent confirmed **#4 (the stars visibly slow)** and **#11 (the pause before 禮 lands)** on the
