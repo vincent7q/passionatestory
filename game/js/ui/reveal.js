@@ -168,7 +168,13 @@ export function createReveal(grade, opts = {}) {
     beatSteps: 0,
     endingLine: 0,
     endingSteps: 0,
-    evaluation: createEvaluation(grade, { candidateName: opts.candidateName }),
+    // fatherScore is threaded from the caller because 71 belongs to
+    // shared/scoring.js, which the leaderboard seed reads too. reveal.js may
+    // not import shared/ (SPEC.md §2.3), so it arrives as a parameter.
+    evaluation: createEvaluation(grade, {
+      candidateName: opts.candidateName,
+      fatherScore: opts.fatherScore,
+    }),
   };
 }
 

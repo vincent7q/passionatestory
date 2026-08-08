@@ -6,6 +6,7 @@ import {
   buildLineup, auntLine,
 } from '../../game/js/ui/reveal.js';
 import { createRoster, addToRoster, recordDefeat } from '../../game/js/entities/ally.js';
+import { FATHER_SCORE } from '../../shared/scoring.js';
 import {
   Beat as FormBeat, BEAT_ORDER as FORM_ORDER, DWELL as FORM_DWELL,
 } from '../../game/js/ui/evaluation.js';
@@ -292,6 +293,52 @@ test('the reveal leaves the form only once it reaches its own DONE', () => {
  * The pleased pause is load-bearing and confirmed by eye (progress.md,
  * 2026-08-07). Mashing through the reveal must not fast-forward it.
  */
+// ── T81: the form, then 71 ───────────────────────────────────────────────────
+
+/** 「候選人:」 — his name is on it, and it is mostly already filled in. */
+test('the form slid across the table already has his name on it', () => {
+  const s = reveal({ candidateName: '盧西安' });
+  runTo(s, Beat.FORM_SLIDE, { skipPressed: true });
+  assert.equal(s.evaluation.candidateName, '盧西安');
+});
+
+/**
+ * 71 is 林建國's score and it lives in shared/scoring.js, where the leaderboard
+ * seed also reads it. If the form re-hardcoded it, changing the constant would
+ * move the bar on the board and leave the reveal claiming the old number.
+ */
+test("the father's score is threaded in, not re-hardcoded", () => {
+  const s = createReveal(GRADE, { tier: 'on_time', fatherScore: 77 });
+  assert.equal(s.evaluation.fatherScore, 77);
+});
+
+test('the father figure defaults to the one shared/scoring.js publishes', () => {
+  assert.equal(reveal().evaluation.fatherScore, FATHER_SCORE);
+});
+
+test("the father's score never moves with the candidate's", () => {
+  const weak = createReveal({ power: 5, money: 1, judgment: 0, total: 6 }, {});
+  const strong = createReveal({ power: 40, money: 20, judgment: 40, total: 100 }, {});
+  assert.equal(weak.evaluation.fatherScore, strong.evaluation.fatherScore);
+});
+
+test('the form is reached only after the whole line-up has bowed', () => {
+  const s = reveal();
+  runTo(s, Beat.FORM, { skipPressed: true });
+  assert.ok(reached(s, Beat.LINEUP));
+  assert.ok(reached(s, Beat.AUNT));
+});
+
+/** The page is turned AFTER the 71 has landed — the file is the answer to it. */
+test('the file is not reached until the father line and the quote have shown', () => {
+  const s = reveal();
+  runTo(s, Beat.FILE, { skipPressed: true });
+  const order = Object.values(FormBeat);
+  assert.equal(s.evaluation.beatIndex, order.length - 1);
+  assert.ok(s.evaluation.beatIndex > order.indexOf(FormBeat.FATHER));
+  assert.ok(s.evaluation.beatIndex > order.indexOf(FormBeat.QUOTE));
+});
+
 test('mashing the reveal cannot skip the pause before the third line', () => {
   const s = reveal();
   runTo(s, Beat.FORM, { skipPressed: true });
