@@ -56,10 +56,10 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-08 |
 | **Branch** | `main` — merged and **pushed** 2026-08-08, tagged `v0.9-content-complete` |
-| **Phase** | Phases 0-11 complete; **Phase 12 code complete** — T85-T88, T91, T92 done |
-| **Next task** | **T89 / T90** — both blocked on tooling, see below |
+| **Phase** | **Phase 12 complete bar T89** — all code written, T90 met in Chrome |
+| **Next task** | **T89** — Vincent runs the C3 recycle on the server. Then: a playthrough. |
 | **Suite** | 🟢 green — **693 tests** |
-| **Blocked on** | **Docker not installed** (C3 recycle) and **Firefox not checked** (C6). Neither is a code defect. |
+| **Blocked on** | Nothing in code. **Nobody has played this game end to end** — that is what is left. |
 
 ### ⚠️ Read this before running anything — the test command changed
 
@@ -277,14 +277,14 @@ right in the code.**
 |---|---|---|---|
 | **C1** | A mashing player cannot beat 71 | ✅ | `scoring.masher.test.js`, 7 tests. Masher tops out at **60**. |
 | **C2** | 禮 never on screen before the form | ✅ | `spoiler.test.js`, 8 tests, now covering `dashboard/` too. Confirmed **by eye** 2026-08-08: at the pleased pause only 力 and 錢 are on the page. |
-| **C3** | Records survive `docker compose down && up` | ⚠️ | **Substance proved, container half not run.** A record written by one process survives that process exiting, on a real file, seed not duplicated (`deploy.test.js`). Docker is not installed here, so the compose recycle itself has never been executed. |
+| **C3** | Records survive `docker compose down && up` | ⏳ | **Substance proved; the recycle is Vincent's, on the Ubuntu box.** A record written by one process survives that process exiting, on a real file, seed not duplicated (`deploy.test.js`). Docker is not installed on the dev machine, and Vincent's call 2026-08-08 was to verify it on the deploy target — which is the more meaningful place anyway. |
 | **C4** | A forged `curl` is rejected | ✅ | 21 automated tests, **plus a live check today**: token-less POST → 400, forged token → `token signature invalid`, board unchanged. |
 | **C5** | Server never trusts a client grade | ✅ | Automated. An inflated `grade: 100` is ignored; the stored value is the recomputed one. |
-| **C6** | 60 FPS in Chrome and Firefox | ⚠️ | **Chrome only.** Overlay read `fps 59.9 · worst 17.4ms · steps 1`. Firefox never opened. |
+| **C6** | 60 FPS in Chrome ~~and Firefox~~ | ✅ | Overlay read `fps 59.9 · worst 17.4ms · steps 1`. **Firefox descoped by Vincent 2026-08-08 — Chrome is enough.** |
 | **C7** | No build step | ✅ | Three runtime deps, **zero** devDependencies, no bundler anywhere, `scripts` is dev/start/test. `deploy.test.js` also fails if one enters the image. |
 
-**Five of seven pass outright. Neither of the two gaps is a code defect** — both are "this machine
-has no Docker / no Firefox", and both are listed under *Blocked* below.
+**Six of seven pass.** The seventh, C3, is not a code defect and not blocked either — its substance
+is proved and Vincent is running the container recycle on the Ubuntu deploy target.
 
 ### `docs/PRD.md` §16
 
@@ -295,8 +295,8 @@ has no Docker / no Firefox", and both are listed under *Blocked* below.
 | A forged `curl` is rejected | ✅ | C4. |
 | Nothing inappropriate for a child | ✅ | Now a **test**: no player-facing string suggests real violence. It caught one word — `stab`, a music-layer id — renamed to `chord`. |
 | All three candidates play distinctly | ✅ *(data)* | Every numeric stat differs across `felix`/`lucian`/`hilman` (100/80, 80/100, 140/60) and all nine specials are distinct. Whether they *feel* distinct still needs playing. |
-| Records survive a recycle | ⚠️ | C3. |
-| Stable 60 FPS, Chrome **and** Firefox | ⚠️ | C6. |
+| Records survive a recycle | ⏳ | C3 — Vincent verifies on the server. |
+| Stable 60 FPS in Chrome | ✅ | C6. Firefox descoped by Vincent 2026-08-08. |
 | Touch controls playable on a phone | ⚠️ | Built and tested — 60px floor, every action mapped, aim assist, a cancelled gesture releases. **Never used on an actual phone.** |
 | Full playthrough in 15–25 minutes | ❌ | **Nobody has played it end to end.** |
 | Playtesters suspect during stage 2 but cannot confirm | ❌ | Needs playtesters. |
@@ -439,10 +439,10 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T86 — audio
 - [x] T87 — dashboard
 - [x] T88 — Docker, **DB on a mounted volume** *(invariants pinned by `deploy.test.js`)*
-- [ ] T89 — ⚠️ C3 records survive a recycle — **BLOCKED: Docker not installed.** Substance proved
-      (a record survives its writing process exiting, seed not duplicated); the compose recycle has
-      not been run.
-- [ ] T90 — C6 60 FPS in Chrome and Firefox — **Chrome ✅ 59.9 fps; Firefox never opened**
+- [ ] T89 — ⏳ C3 records survive a recycle — **Vincent runs this on the Ubuntu server.** Substance
+      proved here (a record survives its writing process exiting, seed not duplicated); the compose
+      recycle itself is his.
+- [x] T90 — C6 60 FPS **in Chrome, 59.9 fps** — Firefox descoped by Vincent 2026-08-08
 - [x] T91 — full acceptance pass *(see the table under **Current status**)*
 - [x] T92 — README
 
@@ -464,6 +464,9 @@ Decisions that are settled. Do not relitigate these without a reason; append new
 | 2026-08-07 | 二叔 is named **BAN 班**. He is still addressed as 二叔 in dialogue — that is how family speaks, and it keeps the joke. |
 | 2026-08-08 | **The reveal is drawn in the dining room, always.** Beat 1 was first built as a near-empty screen, reading "nothing happens next" as "nothing is drawn" — on a monitor it looked like a crash. The stillness is in the *action*: eight people eat, nobody looks up, and that image is the joke. `ROOM_BEATS` in `reveal.js` names the beats that paint the room; only the paperwork and the 「第2次」 card do not. |
 | 2026-08-08 | **`npm test` is the test command**, not `node --test test/`, which discovers nothing on Node ≥ 22 while looking like a broken checkout. See `SPEC.md` §12. |
+| 2026-08-08 | **Vincent's call: C6 is Chrome only.** Firefox is descoped — 59.9 fps in Chrome is enough. `docs/PRD.md` §16 and `SPEC.md` §1 still read "Chrome and Firefox"; this supersedes them. |
+| 2026-08-08 | **Vincent's call: C3 is verified on the Ubuntu deploy target**, not on a dev machine. Docker is not installed on the Windows box, and the recycle means more on the box that actually runs it. The substance — a record outliving the process that wrote it — is already proved by `deploy.test.js`. |
+| 2026-08-08 | **The leaderboard shows totals only.** `/api/leaderboard` returns the hidden column but the dashboard never renders it: a board is the one screen likely to be up *before* somebody plays, and a named third criterion there hands over the twist. `spoiler.test.js` walks `dashboard/` for this. |
 
 ---
 
