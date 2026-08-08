@@ -150,6 +150,62 @@ export const AUNT_LINES = {
 
 export const auntLine = (spared) => (spared ? AUNT_LINES.spared : AUNT_LINES.wrecked);
 
+// ── Beat 7: the file ─────────────────────────────────────────────────────────
+
+/**
+ * 林建國 turns the page, and the evening stops being about tonight.
+ *
+ * The file starts the day they met. He has been graded on the hidden column for
+ * two years without knowing there was one, and the evidence is not the fighting
+ * — it is two small things he did when they cost him something and nobody was
+ * keeping score. The second entry is the whole game in one line.
+ *
+ * PRD §8 is explicit: TWO entries, no more. A third would turn a quiet proof
+ * into a montage, and the point is how little it took.
+ */
+export const FILE_OPENING = {
+  zh: '這份資料不是今天才開始的。',
+  en: 'This file did not start today.',
+};
+
+export const FILE_START = {
+  zh: '是從你們認識那天開始的。',
+  en: 'It starts the day the two of you met.',
+};
+
+export const FILE_ENTRIES = [
+  {
+    id: 'cafe',
+    when: { zh: '兩年前', en: 'Two years ago' },
+    where: { zh: '咖啡店', en: 'A café' },
+    note: { zh: '他先付錢。', en: 'He paid first.' },
+  },
+  {
+    id: 'street',
+    when: { zh: '去年春天', en: 'Last spring' },
+    where: { zh: '路上,幫人撿掉的袋子', en: 'A street — helping a stranger with a dropped bag' },
+    note: { zh: '他以為沒人看到。', en: 'He thought no one was watching.' },
+  },
+];
+
+/**
+ * Entries appear one at a time so each gets the screen to itself. The last one
+ * lands with roughly a third of the beat left to sit with it.
+ */
+export function fileEntriesShown(s) {
+  if (currentBeat(s) !== Beat.FILE) return reached(s, Beat.FILE) ? FILE_ENTRIES.length : 0;
+  const p = beatProgress(s);
+  return Math.min(FILE_ENTRIES.length, Math.floor(p * (FILE_ENTRIES.length + 1)));
+}
+
+/**
+ * The delivery rider from stage 1 is the man who brings his food every week.
+ * He waves — but only if he is in the room, which means the player fought him.
+ */
+export function riderWaves(s) {
+  return (s.lineup?.rows ?? []).some((r) => r.enemyType === 'delivery_rider' && r.total > 0);
+}
+
 /** ENDING sub-pacing: one line at a time, then the verdict. */
 export const ENDING_LINE_STEPS = 110;
 export const ENDING_VERDICT_STEPS = 200;
@@ -307,5 +363,32 @@ export function drawReveal(ctx, s) {
     const slide = beatProgress(s);
     ctx.fillRect(96 + Math.round((1 - slide) * 60), 120, 220, 40);
     return;
+  }
+
+  if (beat === Beat.FILE) {
+    // Paper again, because this is the same file — he has just turned the page.
+    ctx.fillStyle = '#EFE7D6';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    ctx.fillStyle = '#241C18';
+    ctx.font = '8px monospace';
+    ctx.fillText(FILE_OPENING.zh, 96, 44);
+    ctx.fillText(FILE_START.zh, 96, 58);
+
+    const shown = fileEntriesShown(s);
+    for (let i = 0; i < shown; i += 1) {
+      const e = FILE_ENTRIES[i];
+      const y = 92 + i * 44;
+      ctx.fillStyle = '#8A8296';
+      ctx.fillText(`照片 — ${e.where.zh},${e.when.zh}`, 96, y);
+      ctx.fillStyle = '#241C18';
+      ctx.fillText(`「${e.note.zh}」`, 108, y + 14);
+    }
+
+    // He brings the food every week. Nobody remarks on it.
+    if (shown >= FILE_ENTRIES.length && riderWaves(s)) {
+      ctx.fillStyle = '#8A8296';
+      ctx.fillText('外送員向他揮手。', 96, 196);
+    }
   }
 }

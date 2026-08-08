@@ -2,8 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   Beat, BEAT_ORDER, DWELL, UNSKIPPABLE, PHONE_LINE, ALWAYS_PRESENT, AUNT_LINES,
+  FILE_ENTRIES, FILE_OPENING, FILE_START,
   createReveal, currentBeat, reached, advanceReveal, beatProgress,
-  buildLineup, auntLine,
+  buildLineup, auntLine, fileEntriesShown, riderWaves,
 } from '../../game/js/ui/reveal.js';
 import { createRoster, addToRoster, recordDefeat } from '../../game/js/entities/ally.js';
 import { FATHER_SCORE } from '../../shared/scoring.js';
@@ -337,6 +338,79 @@ test('the file is not reached until the father line and the quote have shown', (
   assert.equal(s.evaluation.beatIndex, order.length - 1);
   assert.ok(s.evaluation.beatIndex > order.indexOf(FormBeat.FATHER));
   assert.ok(s.evaluation.beatIndex > order.indexOf(FormBeat.QUOTE));
+});
+
+// ── T82: beat 7, the file ────────────────────────────────────────────────────
+
+/**
+ * The file does not start tonight. It starts the day they met — which means he
+ * was being graded on the hidden column two years before he had any idea there
+ * was one, and the evidence is two things he did when it cost him something and
+ * nobody was keeping score.
+ */
+test('the file holds exactly two entries — PRD §8 says two, no more', () => {
+  assert.equal(FILE_ENTRIES.length, 2);
+});
+
+test('neither entry is from tonight', () => {
+  for (const e of FILE_ENTRIES) {
+    assert.ok(e.when?.zh, `${e.id} is undated — the date is the whole point`);
+    assert.ok(!/今天|今晚/.test(e.when.zh), `${e.id} is from tonight`);
+  }
+});
+
+test('he paid first, in a café, two years ago', () => {
+  const cafe = FILE_ENTRIES[0];
+  assert.equal(cafe.note.zh, '他先付錢。');
+  assert.match(cafe.when.zh, /兩年/);
+});
+
+/** The one that carries the game: an act with no witness, and it was witnessed. */
+test('the second entry is a kindness he thought nobody saw', () => {
+  assert.equal(FILE_ENTRIES[1].note.zh, '他以為沒人看到。');
+});
+
+test('the opening line says the file predates tonight', () => {
+  assert.ok(!/今天開始|今晚開始/.test(FILE_START.zh));
+  assert.match(FILE_OPENING.zh, /不是今天/);
+});
+
+test('the entries turn up one at a time, and both are read by the end', () => {
+  const s = reveal();
+  runTo(s, Beat.FILE, { skipPressed: true });
+  assert.equal(fileEntriesShown(s), 0, 'the page has only just been turned');
+
+  const seen = new Set();
+  for (let i = 0; i < DWELL[Beat.FILE] - 1; i += 1) {
+    advanceReveal(s, {});
+    seen.add(fileEntriesShown(s));
+  }
+  assert.deepEqual([...seen].sort(), [0, 1, 2], 'each entry must get the screen to itself');
+  assert.equal(fileEntriesShown(s), FILE_ENTRIES.length);
+});
+
+test('the entry count never runs past the entries that exist', () => {
+  const s = reveal();
+  runTo(s, Beat.FILE, { skipPressed: true });
+  for (let i = 0; i < 5000; i += 1) {
+    assert.ok(fileEntriesShown(s) <= FILE_ENTRIES.length);
+    advanceReveal(s, {});
+  }
+});
+
+/**
+ * The delivery rider he fought in stage 1 brings his food every week. He waves.
+ * He can only wave if he is actually in the room, which means the player fought
+ * him — so this reads the line-up rather than asserting it.
+ */
+test('the delivery rider waves, having been fought in stage 1', () => {
+  const r = rosterWith([[1, 'delivery_rider']]);
+  assert.equal(riderWaves(createReveal(GRADE, { roster: r })), true);
+});
+
+test('a rider never met does not wave from a room he is not in', () => {
+  const r = rosterWith([[1, 'office_worker']]);
+  assert.equal(riderWaves(createReveal(GRADE, { roster: r })), false);
 });
 
 test('mashing the reveal cannot skip the pause before the third line', () => {
