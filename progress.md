@@ -57,9 +57,9 @@ HTTP. Always run through the server.
 | **Date** | 2026-08-08 |
 | **Branch** | `main` — merged and **pushed** 2026-08-08, tagged `v0.9-content-complete` |
 | **Phase** | **Phase 12 complete bar T89** — all code written, T90 met in Chrome |
-| **Next task** | **T89** — Vincent runs the C3 recycle on the server. Then: a playthrough. |
-| **Suite** | 🟢 green — **693 tests** |
-| **Blocked on** | Nothing in code. **Nobody has played this game end to end** — that is what is left. |
+| **Next task** | Give 水果店老闆娘 an attack cycle, which is what makes the melon a real decision. |
+| **Suite** | 🟢 green — **697 tests** |
+| **Blocked on** | Nothing. One **known defect** open: 水果店老闆娘 has no AI, so the melon is inert — see below. |
 
 ### ⚠️ Read this before running anything — the test command changed
 
@@ -307,6 +307,37 @@ is proved and Vincent is running the container recycle on the Ubuntu deploy targ
 **The five ❌ are all the same thing: nobody has played this game.** They are not defects and no test
 can settle them — they are the questions a build gets answered by putting it in front of a person.
 That is the honest state of the project.
+
+---
+
+## 🐛 Known defect — 水果店老闆娘 has no behaviour, so the melon does nothing
+
+Found 2026-08-08 by driving a real playthrough in Chrome. **Not fixed.** It is not a crash and it
+does not break C1, but it means the sharpest set-piece in the game is currently inert.
+
+**She has no update function.** 二叔 has `updateTeaCeremony`, 林建國 has `updateFinalBoss`; she has
+nothing. She never attacks, never moves, and simply absorbs damage. This is the exact gap Phase 10
+caught for 林建國 — *"I nearly shipped him as a punching bag: `MOVES` existed as data with nothing
+driving it"* — and she was never checked.
+
+**The melon is unreachable as a consequence.** `hitMelon` is exported from `boss.js`, has a whole
+test file, and is **called from nowhere in `game/`**. So `melonSpared` is always true and
+`spareFruitStall` is a free **+8** for everybody, including a player who smashes the entire market
+row on the way in.
+
+`docs/PRD.md` §6.1 is specific about how it should work, and the two halves depend on each other:
+
+> - Fights with the melon — overhead swings, a rolling bowl, a two-handed shove
+> - **The melon has its own 40 HP** and any connecting hit damages it
+> - Beat her without touching it and she points up the road
+
+"Any connecting hit damages it" only leaves room for sparing it **because she is swinging it** —
+the melon is exposed while she attacks and safe while she does not. Without an attack cycle there is
+no window, so there is no decision, so there is no test of restraint. Building her AI is what makes
+the melon real; wiring `hitMelon` alone would just make the award impossible instead of automatic.
+
+**C1 is unaffected** — a masher still lands exactly **60**, because the −4 per strike on a downed
+opponent clamps the hidden column to 0 long before a free +8 matters. Verified today.
 
 ---
 
