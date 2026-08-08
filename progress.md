@@ -297,7 +297,7 @@ is proved and Vincent is running the container recycle on the Ubuntu deploy targ
 | All three candidates play distinctly | ✅ *(data)* | Every numeric stat differs across `felix`/`lucian`/`hilman` (100/80, 80/100, 140/60) and all nine specials are distinct. Whether they *feel* distinct still needs playing. |
 | Records survive a recycle | ⏳ | C3 — Vincent verifies on the server. |
 | Stable 60 FPS in Chrome | ✅ | C6. Firefox descoped by Vincent 2026-08-08. |
-| Touch controls playable on a phone | ⚠️ | Built and tested — 60px floor, every action mapped, aim assist, a cancelled gesture releases. **Never used on an actual phone.** |
+| Touch controls playable on a phone | ✅ *(measured)* | **Seen in Chrome 2026-08-08.** All 11 buttons build and render; measured at a 753×268 landscape viewport the smallest target is exactly **60.0px**, none falls off screen, and the help-up button is the largest at 86px. It frames the canvas the way mobile pads do. Whether it *feels* right under a thumb still needs a phone. |
 | Full playthrough in 15–25 minutes | ❌ | **Nobody has played it end to end.** |
 | Playtesters suspect during stage 2 but cannot confirm | ❌ | Needs playtesters. |
 | The reveal reads as a surprise, not a cheat | ❌ | Needs playtesters. |
@@ -437,7 +437,7 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 ### Phase 12 — Polish and ship
 - [x] T85 — touch controls *(never used on an actual phone)*
 - [x] T86 — audio
-- [x] T87 — dashboard
+- [x] T87 — dashboard *(seen in Chrome; two layout bugs found and fixed)*
 - [x] T88 — Docker, **DB on a mounted volume** *(invariants pinned by `deploy.test.js`)*
 - [ ] T89 — ⏳ C3 records survive a recycle — **Vincent runs this on the Ubuntu server.** Substance
       proved here (a record survives its writing process exiting, seed not duplicated); the compose

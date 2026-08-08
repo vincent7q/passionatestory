@@ -69,7 +69,9 @@ th {
 
 td { padding: 5px 6px 5px 0; border-bottom: 1px dotted var(--rule); }
 
-.rank { color: var(--dim); width: 1.6em; }
+/* nowrap, or the seal dot on 林建國's row wraps onto a second line and the
+   rank column grows a phantom row. */
+.rank { color: var(--dim); white-space: nowrap; }
 .name { letter-spacing: 0.14em; }
 .score { font-weight: bold; }
 .date { color: var(--dim); font-size: 11px; }

@@ -73,7 +73,11 @@ function renderBoard(candidate, entries) {
   const table = el('table');
   const head = el('tr');
   // Total only. No column names a criterion — see the note at the top.
-  for (const h of ['#', '姓名', '分數', '進度', '時間', '難度', '日期']) {
+  //
+  // 用時 rather than 時間: this column is a DURATION, and an 18-minute run
+  // renders as "18:00" — which under a heading meaning "time" reads as six
+  // o'clock, the one clock face this game has trained the player to watch.
+  for (const h of ['#', '姓名', '分數', '進度', '用時', '難度', '日期']) {
     head.appendChild(el('th', null, h));
   }
   table.appendChild(el('thead')).appendChild(head);
