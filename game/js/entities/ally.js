@@ -13,6 +13,13 @@
  *   ACTIVE — exactly one, callable once per fight with Q. Swappable at
  *            checkpoints. Swapping changes who fights beside you, NEVER who is
  *            on the roster.
+ *   DEFEATED — everyone knocked down this run, whether or not he helped them
+ *            up. Strictly larger than ROSTER. Nothing in play reads this; it
+ *            exists for the bow line-up in the reveal, where every single one
+ *            of them files in behind him. Keeping it here rather than in the
+ *            run payload is deliberate: it is presentation, it is never scored,
+ *            and shared/scoring.js must not grow a field the server would then
+ *            have to validate.
  */
 
 import { State, Team } from './entity.js';
@@ -28,7 +35,19 @@ export const TECHNIQUES = {
 };
 
 export function createRoster() {
-  return { members: [], activeId: null, calledThisFight: false };
+  return { members: [], defeated: [], activeId: null, calledThisFight: false };
+}
+
+/**
+ * Record someone as knocked down. Idempotent for the same reason addToRoster
+ * is: an opponent who is dazed, helped up, and dazed again is still one person,
+ * and he should bow once.
+ */
+export function recordDefeat(roster, entity) {
+  roster.defeated ??= [];
+  if (roster.defeated.some((d) => d.id === entity.id)) return false;
+  roster.defeated.push({ id: entity.id, enemyType: entity.enemyType ?? 'office_worker' });
+  return true;
 }
 
 /**

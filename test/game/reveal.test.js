@@ -1,9 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  Beat, BEAT_ORDER, DWELL, UNSKIPPABLE, PHONE_LINE,
+  Beat, BEAT_ORDER, DWELL, UNSKIPPABLE, PHONE_LINE, ALWAYS_PRESENT, AUNT_LINES,
   createReveal, currentBeat, reached, advanceReveal, beatProgress,
+  buildLineup, auntLine,
 } from '../../game/js/ui/reveal.js';
+import { createRoster, addToRoster, recordDefeat } from '../../game/js/entities/ally.js';
 import {
   Beat as FormBeat, BEAT_ORDER as FORM_ORDER, DWELL as FORM_DWELL,
 } from '../../game/js/ui/evaluation.js';
@@ -110,6 +112,102 @@ test('the win outlasts every beat between it and the form', () => {
 test('her line is the first thing anyone says, and it is about the wait', () => {
   assert.equal(PHONE_LINE.who, '小雨');
   assert.equal(PHONE_LINE.zh, '你來得好慢。');
+});
+
+// ── Beat 3: the line-up ──────────────────────────────────────────────────────
+
+/** A roster where `defeated` are ids beaten and `helped` are ids helped up. */
+function rosterWith(defeated, helped = []) {
+  const r = createRoster();
+  for (const [id, enemyType] of defeated) recordDefeat(r, { id, enemyType });
+  for (const [id, enemyType] of defeated) {
+    if (helped.includes(id)) addToRoster(r, { id, enemyType });
+  }
+  return r;
+}
+
+test('everyone he defeated files in — grouped, and counted honestly', () => {
+  const r = rosterWith([
+    [1, 'office_worker'], [2, 'office_worker'], [3, 'scalper'],
+  ]);
+  const rows = buildLineup(r).rows.filter((x) => x.enemyType);
+
+  const office = rows.find((x) => x.enemyType === 'office_worker');
+  assert.equal(office.total, 2);
+  assert.equal(rows.find((x) => x.enemyType === 'scalper').total, 1);
+});
+
+test('the same opponent never bows twice', () => {
+  const r = createRoster();
+  recordDefeat(r, { id: 7, enemyType: 'scalper' });
+  recordDefeat(r, { id: 7, enemyType: 'scalper' });
+  assert.equal(buildLineup(r).rows.find((x) => x.enemyType === 'scalper').total, 1);
+});
+
+test('the line-up marks who was helped up, and who was only beaten', () => {
+  const r = rosterWith([[1, 'office_worker'], [2, 'office_worker']], [1]);
+  const office = buildLineup(r).rows.find((x) => x.enemyType === 'office_worker');
+  assert.equal(office.total, 2);
+  assert.equal(office.helped, 1);
+});
+
+/**
+ * The three from the van and Second Uncle are there whatever the player did.
+ * The van crew were never fought — they are the prologue — and 二叔 cannot be
+ * beaten by fighting at all, so neither can ever appear in `defeated`.
+ */
+test('the van crew and Second Uncle bow even on an empty roster', () => {
+  const rows = buildLineup(createRoster()).rows;
+  for (const guest of ALWAYS_PRESENT) {
+    assert.ok(rows.some((x) => x.id === guest.id), `${guest.id} must be in the line-up`);
+  }
+});
+
+test('Second Uncle is still holding the tea set', () => {
+  const uncle = ALWAYS_PRESENT.find((g) => g.id === 'second_uncle');
+  assert.equal(uncle.teaSet, true);
+});
+
+test('the van crew are three men, because three men took her', () => {
+  assert.equal(ALWAYS_PRESENT.find((g) => g.id === 'van_crew').total, 3);
+});
+
+test('the line-up total counts every person bowing, guests included', () => {
+  const r = rosterWith([[1, 'office_worker'], [2, 'scalper']]);
+  const { rows, total } = buildLineup(r);
+  assert.equal(total, rows.reduce((n, x) => n + x.total, 0));
+  assert.equal(total, 2 + 3 + 1); // two beaten, three from the van, one uncle
+});
+
+test('a defeated toddler is impossible, so she is never in the line-up', () => {
+  // 小表妹 cannot be attacked at all — the hit resolver refuses the swing.
+  const rows = buildLineup(rosterWith([[1, 'aunt']])).rows;
+  assert.ok(!rows.some((x) => x.enemyType === 'toddler'));
+});
+
+// ── Beat 3b: the aunt ────────────────────────────────────────────────────────
+
+test('she is still angry about the melon — factually, never rudely', () => {
+  assert.equal(auntLine(false).zh, AUNT_LINES.wrecked.zh);
+  assert.match(AUNT_LINES.wrecked.zh, /瓜/);
+});
+
+test('spare the melon and she says something else entirely', () => {
+  assert.equal(auntLine(true).zh, AUNT_LINES.spared.zh);
+  assert.notEqual(AUNT_LINES.spared.zh, AUNT_LINES.wrecked.zh);
+});
+
+test('neither of her lines is an insult — content rule 1 holds for family too', () => {
+  for (const line of Object.values(AUNT_LINES)) {
+    assert.equal(line.who, '水果店老闆娘');
+    assert.ok(!/[!！?？]/.test(line.zh), `"${line.zh}" is raised, and nobody here raises their voice`);
+  }
+});
+
+test('the reveal carries the line-up it was given', () => {
+  const r = rosterWith([[1, 'office_worker']]);
+  const s = reveal({ roster: r });
+  assert.ok(s.lineup.total >= 4, 'the van crew and the uncle are always there');
 });
 
 // ── Skipping ─────────────────────────────────────────────────────────────────

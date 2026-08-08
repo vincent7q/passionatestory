@@ -4,7 +4,7 @@ import { Kind, State, Team, createEntity, resetIds } from '../../game/js/entitie
 import {
   TECHNIQUES, createRoster, addToRoster, isOnRoster, rosterSize,
   getActive, setActive, techniques, canCallAlly, callAlly, resetFight,
-  resolveSummon, convertToAlly,
+  resolveSummon, convertToAlly, recordDefeat,
 } from '../../game/js/entities/ally.js';
 
 const opponent = (enemyType, over = {}) => createEntity(Kind.ENEMY, {
@@ -167,4 +167,43 @@ test('the summon checks the roster, not the active ally', () => {
 
   const { refused } = resolveSummon(r, [a]);
   assert.equal(refused.length, 1, 'a benched ally still refuses to fight you');
+});
+
+// ── T80: who bows at the end ─────────────────────────────────────────────────
+
+/**
+ * DEFEATED is a strictly larger set than ROSTER, and conflating the two would
+ * empty the bow line-up for exactly the player who earned it most — someone who
+ * helped everyone up would otherwise have nobody left "merely defeated" to bow.
+ */
+test('defeat is recorded separately from being helped up', () => {
+  resetIds();
+  const r = createRoster();
+  const a = opponent('office_worker');
+
+  recordDefeat(r, a);
+  assert.equal(r.defeated.length, 1);
+  assert.equal(rosterSize(r), 0, 'knocking someone down is not a kindness');
+
+  addToRoster(r, a);
+  assert.equal(r.defeated.length, 1, 'helping him up does not un-defeat him');
+  assert.equal(rosterSize(r), 1);
+});
+
+test('the same opponent is only ever recorded as defeated once', () => {
+  resetIds();
+  const r = createRoster();
+  const a = opponent('scalper');
+
+  assert.equal(recordDefeat(r, a), true);
+  // Helped up, fought again, knocked down again — still one man, one bow.
+  assert.equal(recordDefeat(r, a), false);
+  assert.equal(r.defeated.length, 1);
+});
+
+test('a defeated opponent remembers what kind of person they were', () => {
+  resetIds();
+  const r = createRoster();
+  recordDefeat(r, opponent('delivery_rider'));
+  assert.equal(r.defeated[0].enemyType, 'delivery_rider');
 });

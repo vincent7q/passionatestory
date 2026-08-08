@@ -16,7 +16,9 @@ import { applyDamage, ATTACKS } from './combat.js';
 import {
   beginDaze, advanceDaze, promptTarget, helpUp, recordStrike, starPositions,
 } from './daze.js';
-import { createRoster, callAlly, canCallAlly, getActive, resetFight } from './entities/ally.js';
+import {
+  createRoster, callAlly, canCallAlly, getActive, resetFight, recordDefeat,
+} from './entities/ally.js';
 import { drawHud, drawAward, drawAllyPrompt, drawDamageNumber, msBeforeDinner }
   from './ui/hud.js';
 import {
@@ -213,6 +215,8 @@ function resolveHits() {
       // Zero 力 sits them down. Nobody dies; nobody stays down.
       if (result.dazed && !wasDazed) {
         beginDaze(target);
+        // Remembered only so he can bow at the end. Never scored.
+        if (attacker.team === Team.PLAYER) recordDefeat(game.roster, target);
         // Every coin dropped off a man on the Lin payroll. It was always their
         // money, and it counts in his favour.
         if (target.money) recordMoney(game.run, target.money);
