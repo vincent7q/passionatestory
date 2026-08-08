@@ -26,6 +26,15 @@ services:
       PORT: "8080"
       NODE_ENV: production
 
+      # Signing key for run submissions. Put RUN_KEY in a .env file beside this
+      # one to override it; unset, it falls back to the same development default
+      # the code uses, so behaviour does not change silently.
+      #
+      # Changing it raises the effort to forge a score. It does not prevent one:
+      # the client has to sign its own submission, so this key necessarily ships
+      # to the browser. See the README's integrity note.
+      RUN_KEY: ${RUN_KEY:-passionatestory-client-key}
+
     volumes:
       # C3: records survive `docker compose down && up`. This line is the reason
       # they do. A named volume rather than a bind mount so it is not tied to a
@@ -33,8 +42,10 @@ services:
       - records:/data
 
     healthcheck:
-      # /healthz touches the database, so this reports the store being unusable
-      # rather than only the process being alive.
+      # NOTE: /healthz returns a static {status:"ok"} and does NOT read the
+      # database, so a pass means the process is up and serving — not that the
+      # store is usable. A corrupt or unwritable DB would still report healthy.
+      # Check the leaderboard endpoint if you need the store proved.
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 5s

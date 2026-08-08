@@ -13,27 +13,303 @@ You will not understand the title until you finish.
 Runs entirely on HTML5 Canvas with no game engine and no build step. A small Node backend records
 completed runs to SQLite and serves a leaderboard dashboard.
 
-## Requirements
+---
 
-- **Node.js 20 or newer.** Verified on 20.17.0 and 22.16.0.
-- Docker + Docker Compose (deployment only)
+## Contents
+
+- [Running locally](#running-locally)
+- [Deploying on Ubuntu 22.04 with Docker](#deploying-on-ubuntu-2204-with-docker) ← the deployment guide
+- [Backups](#backups)
+- [Updating a running deployment](#updating-a-running-deployment)
+- [Behind Nginx with HTTPS](#behind-nginx-with-https-optional)
+- [Troubleshooting](#troubleshooting)
+- [Controls](#controls) · [Tests](#tests) · [Leaderboard integrity](#leaderboard-integrity-honestly)
+
+---
 
 ## Running locally
 
+Requires **Node.js 20 or newer** (verified on 20.17.0 and 22.16.0). No Docker needed for local work.
+
 ```bash
+git clone https://github.com/vincent7q/passionatestory.git
+cd passionatestory
 npm install
 npm run dev
 ```
-
-Then open:
 
 | URL | |
 |---|---|
 | <http://localhost:8080> | the game |
 | <http://localhost:8080/dashboard> | leaderboard + stats |
 
-The game uses ES modules, so it must be served over HTTP — opening `game/index.html` directly from
-the filesystem will not work.
+The game uses ES modules, so it must be served over HTTP — opening `game/index.html` from the
+filesystem will not work.
+
+> **Local runs keep no records.** With `DB_PATH` unset the database is `:memory:`, so scores vanish
+> when you stop the server. That is deliberate for development. Set `DB_PATH=./records.db` if you
+> want them to persist locally.
+
+---
+
+## Deploying on Ubuntu 22.04 with Docker
+
+One container, SQLite on a named volume. Takes about five minutes on a fresh box.
+
+### 1. Install Docker Engine and the Compose plugin
+
+Ubuntu's own `docker.io` package is old and does **not** include `docker compose` (the v2 plugin), so
+use Docker's official repository:
+
+```bash
+# Remove anything conflicting that may already be present
+sudo apt-get remove -y docker docker-engine docker.io containerd runc
+
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+
+# Docker's official GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# The repository (jammy = 22.04)
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu jammy stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io \
+  docker-buildx-plugin docker-compose-plugin
+```
+
+Verify — the second command must print v2.x:
+
+```bash
+sudo docker --version
+sudo docker compose version
+```
+
+Optionally run Docker without `sudo` (log out and back in afterwards):
+
+```bash
+sudo usermod -aG docker "$USER"
+```
+
+> Adding yourself to the `docker` group grants effective root on the host. On a shared machine,
+> prefer `sudo docker`.
+
+### 2. Get the code
+
+```bash
+sudo apt-get install -y git
+git clone https://github.com/vincent7q/passionatestory.git
+cd passionatestory
+```
+
+### 3. Configure
+
+Compose already sets `DB_PATH`, `PORT` and `NODE_ENV`. The one thing worth changing is the signing
+key, and compose picks it up from a `.env` file automatically — no YAML editing:
+
+```bash
+printf 'RUN_KEY=%s\n' "$(openssl rand -hex 32)" > .env
+chmod 600 .env
+```
+
+`.env` is already gitignored. Leave it out and the key falls back to the development default, so
+nothing breaks silently — it is simply a key everyone can read in the source.
+
+> Read [Leaderboard integrity](#leaderboard-integrity-honestly) before assuming this key buys more
+> than it does. It ships to the browser by necessity, so it raises the effort to forge a score — it
+> does not prevent it.
+
+### 4. Build and start
+
+```bash
+sudo docker compose up --build -d
+```
+
+### 5. Verify
+
+```bash
+sudo docker compose ps                 # State should be "running (healthy)"
+curl -fsS http://localhost:8080/healthz # {"status":"ok"}
+curl -fsS "http://localhost:8080/api/leaderboard?limit=3"
+```
+
+The last one is the one that matters: `/healthz` returns a static payload and never reads the
+database, so it can report healthy while the store is broken. The leaderboard endpoint actually
+queries SQLite, and a fresh install returns 林建國's seeded **71**.
+
+Then open `http://<server-ip>:8080` for the game and `http://<server-ip>:8080/dashboard` for the
+board.
+
+### 6. Confirm records survive a recycle
+
+This is hard success criterion **C3**, and it is worth doing once on the real box:
+
+```bash
+# Note what is on the board
+curl -fsS "http://localhost:8080/api/leaderboard?limit=100" | head -c 400
+
+sudo docker compose down          # stops and removes the container
+sudo docker compose up -d         # brings it back
+
+# The same rows must still be there
+curl -fsS "http://localhost:8080/api/leaderboard?limit=100" | head -c 400
+```
+
+If the board came back empty, `DB_PATH` is not pointing inside the mounted volume — see
+[Troubleshooting](#troubleshooting).
+
+### Open the firewall, if `ufw` is active
+
+```bash
+sudo ufw allow 8080/tcp     # or 80/443 only, if you put Nginx in front
+```
+
+---
+
+## The data, and the one mistake that actually hurts
+
+Records live at **`/data/records.db` inside the container**, backed by the named volume
+**`passionatestory_records`**.
+
+**`DB_PATH` must point inside that mount.** Anywhere else puts the database in the container's own
+filesystem, where **every redeploy destroys it silently** — you find out when the leaderboard is
+empty and there is nothing to recover. `test/server/deploy.test.js` fails if either the compose file
+or the Dockerfile ever drifts.
+
+| Command | Records |
+|---|---|
+| `docker compose down` | **kept** |
+| `docker compose down && up --build` | **kept** |
+| `docker compose down -v` | **destroyed** — the `-v` removes named volumes |
+
+**Never scale this service.** The store is SQLite, which takes a single writer; a second replica
+would corrupt it or silently diverge. There is no `replicas` setting in the compose file and a test
+fails if one appears.
+
+---
+
+## Backups
+
+The whole database is one file on a volume. SQLite runs in WAL mode, so copying the file while the
+server is writing can capture a torn state — use `sqlite3 .backup`, which is safe on a live database:
+
+```bash
+sudo docker compose exec -T game \
+  node -e "const D=require('better-sqlite3');const d=new D(process.env.DB_PATH,{readonly:true});d.backup('/data/backup.db').then(()=>d.close())"
+
+sudo docker compose cp game:/data/backup.db "./records-$(date +%F).db"
+sudo docker compose exec -T game rm /data/backup.db
+```
+
+To restore, stop the stack, copy a backup back in as `/data/records.db`, and start it again.
+
+---
+
+## Updating a running deployment
+
+```bash
+cd passionatestory
+git pull
+sudo docker compose up --build -d
+```
+
+Compose recreates the container and reattaches the same volume, so records carry over. Take a backup
+first if the release touches `server/migrations/`.
+
+Roll back to a known tag:
+
+```bash
+git checkout v0.9-content-complete
+sudo docker compose up --build -d
+```
+
+---
+
+## Behind Nginx with HTTPS (optional)
+
+Publishing on port 8080 is fine for a LAN or a demo. For anything public, terminate TLS in front.
+
+Bind the app to localhost only, so it is reachable *only* through the proxy — in
+`docker-compose.yml`:
+
+```yaml
+    ports:
+      - "127.0.0.1:8080:8080"
+```
+
+Then:
+
+```bash
+sudo apt-get install -y nginx
+sudo tee /etc/nginx/sites-available/passionatestory > /dev/null <<'CONF'
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass         http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+}
+CONF
+
+sudo ln -sf /etc/nginx/sites-available/passionatestory /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+
+# Free certificate, and a redirect to HTTPS
+sudo apt-get install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d example.com
+```
+
+Remember to close the direct port if you opened it: `sudo ufw delete allow 8080/tcp`.
+
+---
+
+## Troubleshooting
+
+**`docker compose` says `compose` is not a command.** You have Compose v1 from Ubuntu's own
+packages. Install `docker-compose-plugin` from Docker's repository (step 1).
+
+**The leaderboard is empty after a redeploy.** `DB_PATH` is not inside the volume. Check both:
+
+```bash
+sudo docker compose config | grep -E "DB_PATH|records|/data"
+sudo docker compose exec game sh -c 'ls -la /data'
+```
+
+`/data/records.db` must exist and `DB_PATH` must be `/data/records.db`. Confirm the volume is real:
+
+```bash
+sudo docker volume inspect passionatestory_records
+```
+
+**Container restarts in a loop.** Read the logs — a permission error on `/data` is the usual cause,
+since the process runs as the unprivileged `node` user:
+
+```bash
+sudo docker compose logs --tail=50 game
+```
+
+**Port 8080 already in use.** Change the host side only, leaving the container port alone:
+`- "9090:8080"`.
+
+**The page loads but nothing renders.** Check the browser console. The game is served as ES modules
+with no build step, so a 404 on any module leaves a blank canvas rather than an error dialog.
+
+**`healthy` but the game misbehaves.** Expected: `/healthz` never reads the database. Use
+`/api/leaderboard` to prove the store.
+
+---
 
 ## Controls
 
@@ -70,29 +346,14 @@ npm test
 > and reports a single module-not-found, which looks exactly like a broken checkout. See `SPEC.md`
 > §12 for why the script is the shape it is.
 
-## Deployment
-
-Targets Ubuntu 22.04 with Docker. **One container, and it must never be replicated** — the store is
-SQLite, which takes a single writer.
-
-```bash
-docker compose up --build -d
-```
-
-Records live at `/data/records.db`, backed by the named volume `passionatestory_records`. They
-survive `docker compose down`; they do **not** survive `docker compose down -v`.
-
-**The database must stay on that volume.** A `DB_PATH` pointing anywhere else puts it inside the
-image, where every redeploy destroys it silently — you find out when the leaderboard is empty.
-`test/server/deploy.test.js` fails if the compose file or the Dockerfile ever drifts.
-
-### Environment
+## Environment variables
 
 | Variable | Default | |
 |---|---|---|
-| `DB_PATH` | `:memory:` | Path to the SQLite file. **Set this in production.** An unset value means records vanish on restart. |
+| `DB_PATH` | `:memory:` | Path to the SQLite file. Compose sets it to `/data/records.db`. Unset, records vanish on restart. |
 | `PORT` | `8080` | |
-| `RUN_KEY` | a dev default | HMAC key for run submissions. Change it in production — but read the note below about what that does and does not buy you. |
+| `NODE_ENV` | — | Compose sets `production`. |
+| `RUN_KEY` | `passionatestory-client-key` | HMAC key for run submissions. Override via `.env`; read the note below for what it does and does not buy you. |
 
 ## Leaderboard integrity, honestly
 
