@@ -121,6 +121,51 @@ test('the debug overlay draws without throwing when toggled on', () => {
   main.game.debug.visible = false;
 });
 
+// ── Audio, through main.js's own wiring ──────────────────────────────────────
+
+test('the stage cue starts playing once the game is running', () => {
+  stepFrames(handle, 5);
+  assert.equal(main.audio.cue, 'stage_city', 'stage 1 should be playing its own cue');
+});
+
+test('a browser gesture is what starts the context, not module load', () => {
+  assert.ok(main.audio.ctx, 'the first stepFrames should have resumed it');
+  assert.equal(main.audio.failed, false);
+});
+
+/**
+ * PRD §11: when 林建國 stands up, everything drops out but a single drum. This
+ * is the wiring for that moment, and it lives in main.js where nothing else can
+ * see it.
+ */
+test('林建國 standing up drops the music to the single-drum cue', () => {
+  const saved = main.game.boss;
+  main.game.boss = { bossId: 'lin_jianguo', phase: 'STANDING', power: 100 };
+  stepFrames(handle, 2);
+  assert.equal(main.audio.cue, 'boss_final_phase2');
+
+  main.game.boss = saved;
+  stepFrames(handle, 2);
+});
+
+test('an ordinary boss gets the driving cue, not the drop', () => {
+  const saved = main.game.boss;
+  main.game.boss = { bossId: 'fruit_shop_owner', phase: 'INTERVIEW', power: 100 };
+  stepFrames(handle, 2);
+  assert.equal(main.audio.cue, 'boss');
+
+  main.game.boss = saved;
+  stepFrames(handle, 2);
+});
+
+test('muting is silent and does not stop the game', () => {
+  const before = main.game.frame;
+  main.audio.muted = true;
+  assert.doesNotThrow(() => stepFrames(handle, 30));
+  assert.ok(main.game.frame > before);
+  main.audio.muted = false;
+});
+
 /**
  * Every state must survive being rendered — each given the data it would
  * actually have on arriving there, since no state is ever entered without it.

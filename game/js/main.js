@@ -46,6 +46,10 @@ import {
 } from './ui/nameEntry.js';
 import { startRunToken, submitRun } from './net.js';
 import { bindTouch, wantsTouch, nearestFacing } from './touch.js';
+import {
+  createAudio, resumeAudio, playSfx, playMusic, playStinger, stopMusic, toggleMute,
+  cueForStage,
+} from './audio.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
@@ -95,6 +99,19 @@ if (padRoot && touchActive) {
   padRoot.hidden = false;
   bindTouch(input, padRoot, { document });
 }
+
+/**
+ * Audio. A browser refuses to start an AudioContext before a user gesture, so
+ * the context is built on the first key or tap rather than at load — and
+ * `resumeAudio` is cheap to call repeatedly. M mutes.
+ */
+const audio = createAudio();
+for (const evt of ['keydown', 'pointerdown']) {
+  window.addEventListener(evt, () => resumeAudio(audio, window), { once: false });
+}
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'm' || e.key === 'M') toggleMute(audio);
+});
 
 const world = createWorld();
 
@@ -199,6 +216,8 @@ function resolveHits() {
         if (attacker.team === Team.PLAYER) {
           strikeToddler(game.run);
           game.gasp = 90;
+          // The only time the family reacts to anything all evening.
+          playSfx(audio, 'gasp', window);
         }
         attacker.hitThisSwing ??= new Set();
         attacker.hitThisSwing.add(target.id);
@@ -223,6 +242,7 @@ function resolveHits() {
           x: target.x, y: target.y, amount: result.damage, life: 40,
           kind: attacker.combo >= 4 ? 'critical' : 'hit',
         });
+        playSfx(audio, attacker.attackType === 'heavy' ? 'heavy' : 'light', window);
         if (attacker.team === Team.PLAYER) {
           recordDamage(game.run, result.damage);
           recordCombo(game.run, attacker.combo);
@@ -232,11 +252,15 @@ function resolveHits() {
       // Zero 力 sits them down. Nobody dies; nobody stays down.
       if (result.dazed && !wasDazed) {
         beginDaze(target);
+        playSfx(audio, 'knockdown', window);
         // Remembered only so he can bow at the end. Never scored.
         if (attacker.team === Team.PLAYER) recordDefeat(game.roster, target);
         // Every coin dropped off a man on the Lin payroll. It was always their
         // money, and it counts in his favour.
-        if (target.money) recordMoney(game.run, target.money);
+        if (target.money) {
+          recordMoney(game.run, target.money);
+          playSfx(audio, 'money', window);
+        }
       }
 
       // One connection per swing, or a three-frame active window would deal
@@ -467,6 +491,21 @@ function update() {
     game.boss = spawnBossFor(stage);
   }
 
+  /**
+   * Music follows the fight. `playMusic` ignores a request for the cue already
+   * playing, so calling it every step is safe and does not restart the bar.
+   *
+   * The one that matters is 林建國 standing up: PRD §11 asks for everything to
+   * drop out but a single drum, and that cue is one layer on purpose.
+   */
+  if (game.boss?.bossId === 'lin_jianguo' && game.boss.phase === Phase.STANDING) {
+    playMusic(audio, 'boss_final_phase2', window);
+  } else if (game.boss && !state.bossDefeated) {
+    playMusic(audio, 'boss', window);
+  } else {
+    playMusic(audio, cueForStage(stage.id), window);
+  }
+
   // Two bosses, nothing alike. She fights. He pours tea and cannot be beaten.
   let bossDone = false;
   if (game.boss && !state.bossDefeated) {
@@ -501,8 +540,11 @@ function update() {
     const target = game.prompt;
     if (helpUp(player, target, game.roster, game.run, DAZE_WINDOW_MS)) {
       // A bare gold +3 with a seal icon and NO LABEL. Its meaning is not
-      // revealed until the evaluation form. See SPEC.md §8.
+      // revealed until the evaluation form. See SPEC.md §8. The sound is
+      // deliberately small for the same reason — a fanfare here would announce
+      // the hidden column eleven minutes early.
       game.awards.push({ x: target.x, y: target.y, life: 60 });
+      playSfx(audio, 'help_up', window);
     }
   }
 
@@ -689,7 +731,19 @@ function render() {
  * the beats carrying the joke ignore the skip entirely.
  */
 function updateReveal() {
+  const before = currentBeat(game.reveal);
   advanceReveal(game.reveal, { skipPressed: justPressed(input, Action.CONTEXT) });
+  const beat = currentBeat(game.reveal);
+
+  // Warm, and it should hurt a little. Not during the stinger — three men come
+  // through the door and the room deals with it without the music noticing.
+  if (beat !== Beat.STINGER) playMusic(audio, 'reveal', window);
+
+  // 「那個是真的。」 One sting, on the beat he writes it down.
+  if (beat === Beat.STINGER && before !== Beat.STINGER) {
+    stopMusic(audio, window);
+    playStinger(audio, window);
+  }
 
   if (currentBeat(game.reveal) === Beat.DONE) {
     game.nameEntry = createNameEntry(game.run.name);
@@ -761,4 +815,6 @@ function frame(now) {
 
 requestAnimationFrame(frame);
 
-export { game };
+// `audio` is exported alongside `game` for the same reason: main.js cannot be
+// imported normally, and these are the only handles a test has on what it did.
+export { game, audio };

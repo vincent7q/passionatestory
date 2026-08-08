@@ -126,6 +126,30 @@ export function installDom({ now = 0, touch = false } = {}) {
     removeEventListener() {},
   };
 
+  /**
+   * Just enough Web Audio to let main.js take its real audio path. Nothing
+   * makes a sound; what is being checked is which cue got asked for, and that
+   * nothing throws on the way.
+   */
+  const param = () => ({
+    value: 0, setValueAtTime() {}, exponentialRampToValueAtTime() {}, linearRampToValueAtTime() {},
+  });
+  globalThis.window.AudioContext = class {
+    constructor() { this.state = 'running'; this.currentTime = 0; this.sampleRate = 48000; }
+    createGain() { return { gain: param(), connect() {}, disconnect() {} }; }
+    createOscillator() {
+      return { type: 'sine', frequency: param(), connect() {}, start() {}, stop() {} };
+    }
+    createBuffer(ch, frames) { return { getChannelData: () => new Float32Array(frames) }; }
+    createBufferSource() { return { buffer: null, connect() {}, start() {}, stop() {} }; }
+    resume() { this.state = 'running'; }
+    get destination() { return { connect() {} }; }
+  };
+  // The music transport uses these; keep them manual so no timer escapes a test.
+  handle.intervals = [];
+  globalThis.window.setInterval = (fn) => handle.intervals.push(fn);
+  globalThis.window.clearInterval = () => { handle.intervals = []; };
+
   globalThis.performance = { now: () => handle.now };
   globalThis.requestAnimationFrame = (fn) => { handle.pending = fn; return ++handle.frames; };
   globalThis.cancelAnimationFrame = () => {};
