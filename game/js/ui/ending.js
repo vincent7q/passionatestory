@@ -81,6 +81,15 @@ export function endingFor(tier) {
 }
 
 /**
+ * Across the table, without a sound, and only if he was approved.
+ *
+ * She is the one person all evening who is allowed to say what happened plainly
+ * — and she does not say it out loud either, because her father is sitting
+ * right there and he has just spent four minutes pretending this was a fight.
+ */
+export const SHE_MOUTHS = { zh: '你贏了', en: 'You won' };
+
+/**
  * The plate of cut fruit — the highest honour available in this game, and the
  * only thing a father of this kind will ever say out loud.
  *

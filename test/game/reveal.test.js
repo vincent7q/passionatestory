@@ -6,8 +6,9 @@ import {
   STINGER_INTRUDERS, STINGER_LINE, SOUP_LINE,
   createReveal, currentBeat, reached, advanceReveal, beatProgress,
   buildLineup, auntLine, fileEntriesShown, riderWaves,
-  intrudersDown, soupAsked, stingerLineShown,
+  intrudersDown, soupAsked, stingerLineShown, sheMouthsIt,
 } from '../../game/js/ui/reveal.js';
+import { ENDINGS, SHE_MOUTHS, POST_CREDITS } from '../../game/js/ui/ending.js';
 import { createRoster, addToRoster, recordDefeat } from '../../game/js/entities/ally.js';
 import { FATHER_SCORE } from '../../shared/scoring.js';
 import {
@@ -507,6 +508,103 @@ test('「那個是真的。」 lands only once all three are down', () => {
 test('the stinger is the last thing before the table resolves', () => {
   const i = (b) => BEAT_ORDER.indexOf(b);
   assert.equal(i(Beat.ENDING), i(Beat.STINGER) + 1);
+});
+
+// ── T84: the ending, then 第2次 ──────────────────────────────────────────────
+
+const TIERS = ['on_time', 'late', 'very_late'];
+
+test('every arrival tier reaches the post-credits card', () => {
+  for (const tier of TIERS) {
+    const s = reveal({ tier });
+    runTo(s, Beat.POST_CREDITS, { skipPressed: true });
+    assert.equal(currentBeat(s), Beat.POST_CREDITS, tier);
+  }
+});
+
+test('the table he walks into depends on when he got there', () => {
+  const scenes = TIERS.map((tier) => reveal({ tier }).ending.scene);
+  assert.equal(new Set(scenes).size, TIERS.length, 'each tier needs its own room');
+});
+
+test('the ending is paced by its own lines, not by a dwell', () => {
+  assert.equal(DWELL[Beat.ENDING], Infinity);
+
+  // very_late has the most to say, so it must take the longest to say it.
+  const steps = (tier) => {
+    const s = reveal({ tier });
+    runTo(s, Beat.ENDING, { skipPressed: true });
+    let n = 0;
+    while (currentBeat(s) === Beat.ENDING) { advanceReveal(s, {}); n += 1; }
+    return n;
+  };
+  assert.ok(steps('very_late') > steps('on_time'),
+    'five lines of disappointment cannot take the same time as two');
+});
+
+test('her lines land one at a time', () => {
+  const s = reveal({ tier: 'very_late' });
+  runTo(s, Beat.ENDING, { skipPressed: true });
+  assert.equal(s.endingLine, 0);
+
+  const seen = new Set([0]);
+  while (currentBeat(s) === Beat.ENDING) {
+    advanceReveal(s, {});
+    if (currentBeat(s) === Beat.ENDING) seen.add(s.endingLine);
+  }
+  assert.equal(seen.size, ENDINGS.very_late.lines.length + 1,
+    'every line must get its own moment, plus the verdict');
+});
+
+// ── The plate of cut fruit ───────────────────────────────────────────────────
+
+/** The highest honour available in this game, and he does not make eye contact. */
+test('the fruit is offered unless he missed the whole meal', () => {
+  assert.equal(reveal({ tier: 'on_time' }).fruit.offered, true);
+  assert.equal(reveal({ tier: 'late' }).fruit.offered, true);
+  assert.equal(reveal({ tier: 'very_late' }).fruit.offered, false);
+});
+
+test('spare her melon and the plate IS the melon', () => {
+  assert.equal(reveal({ spareFruitStall: true }).fruit.isTheMelon, true);
+  assert.equal(reveal({ spareFruitStall: false }).fruit.isTheMelon, false);
+});
+
+test('arrive after the plates are cleared and it has been cut and left', () => {
+  const s = reveal({ tier: 'very_late', spareFruitStall: true });
+  assert.equal(s.fruit.offered, false);
+  assert.equal(s.fruit.reason, 'already_cut_and_left');
+});
+
+// ── The verdict ──────────────────────────────────────────────────────────────
+
+test('on time and late are approved; very late gets no Sunday', () => {
+  assert.equal(reveal({ tier: 'on_time' }).ending.approved, true);
+  assert.equal(reveal({ tier: 'late' }).ending.approved, true);
+  assert.equal(reveal({ tier: 'very_late' }).ending.approved, false);
+  assert.equal(reveal({ tier: 'very_late' }).ending.verdict.zh, '再說吧。');
+});
+
+test('「你被批准了。下週日再來。」 only when he actually was', () => {
+  assert.match(reveal({ tier: 'on_time' }).ending.verdict.zh, /下週日再來/);
+  assert.doesNotMatch(reveal({ tier: 'very_late' }).ending.verdict.zh, /下週日/);
+});
+
+/** She does not say it out loud — her father is sitting right there. */
+test('she mouths it across the table, and only if he was approved', () => {
+  assert.equal(SHE_MOUTHS.zh, '你贏了');
+  assert.equal(sheMouthsIt(reveal({ tier: 'on_time' })), true);
+  assert.equal(sheMouthsIt(reveal({ tier: 'late' })), true);
+  assert.equal(sheMouthsIt(reveal({ tier: 'very_late' })), false);
+});
+
+// ── 第2次 ────────────────────────────────────────────────────────────────────
+
+test('it begins again, and he still does not know what is coming', () => {
+  assert.equal(POST_CREDITS.zh, '第2次');
+  const s = reveal();
+  runTo(s, Beat.POST_CREDITS, { skipPressed: true });
+  assert.ok(reached(s, Beat.ENDING), 'the card comes after the table, not instead of it');
 });
 
 test('mashing the reveal cannot skip the pause before the third line', () => {

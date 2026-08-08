@@ -57,7 +57,7 @@ You almost certainly cannot spare the time.
 ## Tests
 
 ```bash
-node --test test/
+npm test
 ```
 
 ## Deployment

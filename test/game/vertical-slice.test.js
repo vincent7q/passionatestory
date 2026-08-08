@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyRun, computeGrade, FATHER_SCORE, JUDGMENT } from '../../shared/scoring.js';
+import { emptyRun, computeGrade, FATHER_SCORE, JUDGMENT, arrivalTier }
+  from '../../shared/scoring.js';
 import { validateRun } from '../../shared/validation.js';
 import { CHARACTERS } from '../../shared/characters.js';
 import {
@@ -16,6 +17,8 @@ import { helpUp, beginDaze } from '../../game/js/daze.js';
 import { Kind, Team, createEntity, resetIds } from '../../game/js/entities/entity.js';
 import { createEvaluation, advanceEvaluation, currentBeat, Beat, BEAT_ORDER, DWELL }
   from '../../game/js/ui/evaluation.js';
+import { createReveal, advanceReveal, currentBeat as revealBeat, Beat as RevealBeat }
+  from '../../game/js/ui/reveal.js';
 import { createNameEntry, updateNameEntry, nameOf } from '../../game/js/ui/nameEntry.js';
 import { msBeforeDinner } from '../../game/js/ui/hud.js';
 import { STEP_MS } from '../../game/js/utils.js';
@@ -192,4 +195,75 @@ test('an award is worth what the scoring module says it is', () => {
   } else {
     assert.ok(withStall >= withoutStall);
   }
+});
+
+// ── Phase 11: the run all the way into the reveal ────────────────────────────
+
+/**
+ * main.js cannot be imported in Node — it touches `document` — and both runtime
+ * bugs found in this project so far have lived there. This mirrors exactly what
+ * advanceStage() constructs when 林建國 goes down, so the arguments the blind
+ * spot passes are at least proved to produce a coherent sequence.
+ *
+ * If this drifts from main.js it stops being worth anything, so keep the two
+ * side by side.
+ */
+function revealAsMainDoes(run, roster) {
+  return createReveal(computeGrade(run), {
+    candidateName: CHARACTERS[run.candidate].name.zh,
+    fatherScore: FATHER_SCORE,
+    tier: arrivalTier(run.judgment.arrivalMsBefore1800),
+    spareFruitStall: run.judgment.spareFruitStall,
+    roster,
+  });
+}
+
+test('a finished run drives the whole reveal through to DONE', () => {
+  const { run, roster } = playRun({ merciful: true });
+  const s = revealAsMainDoes(run, roster);
+
+  let steps = 0;
+  while (revealBeat(s) !== RevealBeat.DONE && steps < 100_000) {
+    advanceReveal(s, {});
+    steps += 1;
+  }
+  assert.equal(revealBeat(s), RevealBeat.DONE, `stuck on ${revealBeat(s)} after ${steps} steps`);
+});
+
+test('the reveal shows the recomputed grade, never a client-sent one', () => {
+  const { run, roster } = playRun({ merciful: true });
+  run.grade = 100;                                   // a tampered client value
+  const s = revealAsMainDoes(run, roster);
+  assert.notEqual(s.evaluation.grade.total, 100);
+  assert.equal(s.grade.total, s.grade.power + s.grade.money + s.grade.judgment);
+});
+
+test("the form quotes the father's score from shared/, not a copy", () => {
+  const { run, roster } = playRun({ merciful: true });
+  assert.equal(revealAsMainDoes(run, roster).evaluation.fatherScore, FATHER_SCORE);
+});
+
+/**
+ * C1 restated where the player actually meets it. A masher sees his own total
+ * on the same sheet of paper as 71, and it is lower.
+ */
+test('a masher reads his own number next to 71 and it is smaller', () => {
+  const { run, roster } = playRun({ merciful: false });
+  const s = revealAsMainDoes(run, roster);
+  assert.ok(s.grade.total < s.evaluation.fatherScore,
+    `masher scored ${s.grade.total} against ${s.evaluation.fatherScore}`);
+});
+
+test('a merciful run bows to more people than it beat into the ground', () => {
+  const { run, roster } = playRun({ merciful: true });
+  const s = revealAsMainDoes(run, roster);
+  assert.ok(s.lineup.total >= 4, 'the van crew and 二叔 are always in the room');
+});
+
+test('the melon decides both her line and what is on the plate', () => {
+  const merciful = playRun({ merciful: true });
+  const masher = playRun({ merciful: false });
+
+  assert.equal(revealAsMainDoes(merciful.run, merciful.roster).fruit.isTheMelon, true);
+  assert.equal(revealAsMainDoes(masher.run, masher.roster).fruit.isTheMelon, false);
 });

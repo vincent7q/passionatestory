@@ -26,7 +26,7 @@ import {
   createEvaluation, advanceEvaluation, drawEvaluation, currentBeat as formBeat,
   Beat as FormBeat,
 } from './evaluation.js';
-import { endingFor, fruitOffered, POST_CREDITS } from './ending.js';
+import { endingFor, fruitOffered, POST_CREDITS, SHE_MOUTHS } from './ending.js';
 import { STAGES } from '../stages/index.js';
 
 export const Beat = {
@@ -258,9 +258,23 @@ export function stingerLineShown(s) {
   return intrudersDown(s) >= STINGER_INTRUDERS;
 }
 
+// ── The ending ───────────────────────────────────────────────────────────────
+
 /** ENDING sub-pacing: one line at a time, then the verdict. */
 export const ENDING_LINE_STEPS = 110;
 export const ENDING_VERDICT_STEPS = 200;
+
+/** True once every line has been said and only the verdict is left. */
+export const verdictReached = (s) => s.endingLine >= s.ending.lines.length;
+
+/**
+ * She mouths it across the table without a sound — her father is sitting right
+ * there, and he has just spent four minutes pretending this was a fight.
+ *
+ * Only if he was approved. Arrive after the plates are cleared and there is
+ * nothing to mouth, which is the point of arriving then.
+ */
+export const sheMouthsIt = (s) => !!s.ending.approved;
 
 export function createReveal(grade, opts = {}) {
   const tier = opts.tier ?? 'on_time';
@@ -464,5 +478,47 @@ export function drawReveal(ctx, s) {
 
     // 小雨 does not look up.
     if (stingerLineShown(s)) speech(ctx, 200, STINGER_LINE.who, STINGER_LINE.zh);
+    return;
+  }
+
+  if (beat === Beat.ENDING) {
+    ctx.fillStyle = DIM;
+    ctx.font = '8px monospace';
+    ctx.fillText(s.ending.stage.zh, 40, 40);
+
+    // Lines land one at a time and stay up, so the room fills rather than flicks.
+    for (let i = 0; i < Math.min(s.endingLine, s.ending.lines.length); i += 1) {
+      const l = s.ending.lines[i];
+      ctx.fillStyle = DIM;
+      ctx.fillText(l.who, 60, 70 + i * 22);
+      ctx.fillStyle = INK;
+      ctx.fillText(`「${l.zh}」`, 96, 70 + i * 22);
+    }
+
+    if (verdictReached(s)) {
+      // The plate, slid across without eye contact. The highest honour in the
+      // game, and nobody will ever mention it.
+      if (s.fruit.offered) {
+        ctx.fillStyle = '#8FBF6A';
+        ctx.fillText(s.fruit.isTheMelon ? '切好的瓜' : '切好的水果', 96, 186);
+      }
+
+      // No sound. Her father is sitting right there.
+      if (sheMouthsIt(s)) {
+        ctx.fillStyle = DIM;
+        ctx.fillText(`小雨(無聲):「${SHE_MOUTHS.zh}」`, 96, 202);
+      }
+
+      ctx.fillStyle = INK;
+      ctx.fillText(`「${s.ending.verdict.zh}」`, 96, 224);
+    }
+    return;
+  }
+
+  if (beat === Beat.POST_CREDITS) {
+    // It begins again, it is harder, and he still does not know what is coming.
+    ctx.fillStyle = INK;
+    ctx.font = '16px monospace';
+    ctx.fillText(POST_CREDITS.zh, 210, 140);
   }
 }

@@ -509,18 +509,56 @@ counters, and a `durationMs` that exceeds the elapsed wall-clock since the token
 
 ## 12. Testing strategy, and where it honestly stops
 
-`node --test test/`. Node's built-in runner. No test framework dependency.
+`npm test`. Node's built-in runner. No test framework dependency.
+
+**Run it via `npm test`, not by hand.** The script is
+`node --test "test/**/*.test.js"`, and both halves of that matter:
+
+- **`node --test test/` silently runs nothing on Node ≥ 22.** It stops treating a bare directory as
+  a discovery root and tries to load it as a module, so the suite "fails" with one
+  `ERR_MODULE_NOT_FOUND` and zero tests — which reads like a broken checkout rather than a broken
+  command. That is what it did on 2026-08-08.
+- **The pattern stays quoted** so no shell expands it. Unquoted, a `sh` without `globstar` collapses
+  `**` to `*` and quietly drops `test/smoke.test.js`; the deploy target is Ubuntu, so this is not
+  hypothetical.
+- **It is a pattern rather than bare `node --test`** because Node's default discovery treats *every*
+  `.js` file under `test/` as a test file, including `test/helpers/`. Helpers are imported by tests;
+  they should never be executed as one.
 
 | Layer | Approach | Coverage expectation |
 |---|---|---|
 | `shared/` | Pure unit tests. Every branch. | **Complete.** This is where correctness lives. |
 | `server/` | Integration via `fastify.inject()` against a temp-file SQLite DB. | **Complete** for every endpoint and every rejection path. |
 | Game logic that is pure | Physics math, state transitions, AI decisions, timers extracted into functions that take state and return state. Tested in Node with no canvas. | **High.** |
+| `main.js` | Booted under a stub DOM (`test/helpers/dom-stub.js`) and stepped through real frames. | **Smoke only** — it loads, the loop turns over, every state renders. Never pixels. |
 | Rendering, input, audio | **Not unit tested.** Verified by playing it. | None — and say so rather than faking it. |
 
 The discipline this implies: **push game logic out of the render path into pure functions.** A
 collision resolver that takes two boxes and returns a boolean is testable; one that reads
 `ctx.canvas.width` is not. Structure for the former.
+
+### 12.1 `main.js`, and why it gets a stub browser
+
+`main.js` was for a long time the one module no test could reach: it touches `document` at import
+time, so importing it in Node threw. It is also the only file in the project that has ever shipped a
+runtime bug — **twice**, a missing `STEP_MS` import in Phase 5 and a deleted `BOUNDS` constant in
+Phase 6. Both were valid syntax, both passed `node --check`, and both would have surfaced only in a
+browser.
+
+`test/game/main-boot.test.js` closes that by actually running it, and two things make that possible:
+
+- **`test/helpers/dom-stub.js`** — a Proxy-backed 2D context that accepts any call, plus the handful
+  of globals boot needs. `requestAnimationFrame` **stores** the callback instead of invoking it, so a
+  test drives the loop one frame at a time rather than recursing forever.
+- **`test/helpers/shared-loader.js`** — a resolver hook doing for Node what the static server does
+  for the browser. `main.js` imports `/shared/…` absolutely, which is the only form that works in the
+  browser (§2.3) and resolves to nothing on disk. That single detail is the whole reason the file was
+  unreachable.
+
+**It is a smoke test and must stay one.** It asserts nothing about what anything looked like —
+rendering is verified by eye, and that has not changed. What it proves is that the module graph
+resolves, every name it references exists at runtime, the fixed timestep steps, and no state throws
+while drawing. Verified by sabotage: reintroducing the Phase 6 bug class fails it immediately.
 
 ---
 

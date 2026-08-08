@@ -29,7 +29,7 @@ discipline).
 1. Write the failing test.
 2. Run it. **Confirm it fails, and fails for the reason you expect.**
 3. Write the minimum code to pass.
-4. Run it. Confirm it passes. Run the whole suite: `node --test test/`.
+4. Run it. Confirm it passes. Run the whole suite: `npm test`.
 5. Update `progress.md`, then commit test + implementation + progress together.
 
 **Tasks marked `[no-test]`** are rendering, audio, or layout work that cannot be meaningfully unit
@@ -72,7 +72,7 @@ test('test runner works', () => {
 });
 ```
 
-**Step 3:** Run `node --test test/` — expect 1 pass.
+**Step 3:** Run `npm test` — expect 1 pass.
 
 **Step 4:** Commit.
 
@@ -145,7 +145,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 }
 ```
 
-**Step 4:** Run `node --test test/` — expect pass.
+**Step 4:** Run `npm test` — expect pass.
 
 **Step 5:** Commit as `T2: fastify server with static + healthz`.
 

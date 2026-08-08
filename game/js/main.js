@@ -39,8 +39,8 @@ import {
   startRun, recordDamage, recordMoney, recordCombo, recordPower, tickRun, finalizeRun,
 } from './run.js';
 import {
-  createEvaluation, advanceEvaluation, drawEvaluation, currentBeat, Beat,
-} from './ui/evaluation.js';
+  createReveal, advanceReveal, drawReveal, currentBeat, Beat,
+} from './ui/reveal.js';
 import {
   createNameEntry, updateNameEntry, drawNameEntry, nameOf,
 } from './ui/nameEntry.js';
@@ -49,14 +49,19 @@ import { startRunToken, submitRun } from './net.js';
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
 import { CHARACTERS, CANDIDATES } from '/shared/characters.js';
-import { emptyRun, DAZE_WINDOW_MS, computeGrade } from '/shared/scoring.js';
+import {
+  emptyRun, DAZE_WINDOW_MS, computeGrade, arrivalTier, FATHER_SCORE,
+} from '/shared/scoring.js';
 
 /**
  * Top-level state machine. See SPEC.md §4.2.
  *
- *   TITLE → CHARACTER_SELECT → CUTSCENE → PLAYING ⇄ PAUSED → STAGE_CLEAR
- *                                            ↓
- *                              NAME_ENTRY → LEADERBOARD  |  GAME_OVER
+ *   TITLE → CHARACTER_SELECT → CUTSCENE → PLAYING ⇄ PAUSED → REVEAL
+ *                                            ↓                  ↓
+ *                                      GAME_OVER    NAME_ENTRY → LEADERBOARD
+ *
+ * REVEAL covers the whole of PRD §8 — the bow line-up, the form, the file, the
+ * stinger and the ending — because ui/reveal.js sequences them internally.
  */
 export const States = {
   TITLE: 'TITLE',
@@ -64,7 +69,7 @@ export const States = {
   CUTSCENE: 'CUTSCENE',
   PLAYING: 'PLAYING',
   PAUSED: 'PAUSED',
-  STAGE_CLEAR: 'STAGE_CLEAR',
+  REVEAL: 'REVEAL',
   NAME_ENTRY: 'NAME_ENTRY',
   LEADERBOARD: 'LEADERBOARD',
   GAME_OVER: 'GAME_OVER',
@@ -364,8 +369,12 @@ function resolvePropHits() {
 }
 
 /**
- * Move to the next stage, or — once the last one is cleared — to the form.
- * Stage 3 and 林建國 join this in Phase 10.
+ * Move to the next stage, or — once 林建國 is down — into the reveal.
+ *
+ * The reveal is one state rather than several: it owns beats 1-7, the form, the
+ * stinger and the ending, and hands back only when it reaches DONE. main.js is
+ * this project's blind spot (it touches `document` and cannot be imported in
+ * Node), so the whole of Phase 11 deliberately costs it one branch.
  */
 function advanceStage() {
   const next = nextStage(game.stage);
@@ -383,10 +392,16 @@ function advanceStage() {
     return;
   }
 
-  game.evaluation = createEvaluation(computeGrade(game.run), {
+  // He wins. Nothing happens next, and that is where the reveal starts.
+  game.reveal = createReveal(computeGrade(game.run), {
     candidateName: CHARACTERS[game.run.candidate].name.zh,
+    fatherScore: FATHER_SCORE,
+    // Not scored — it only decides which room he walks into.
+    tier: arrivalTier(game.run.judgment.arrivalMsBefore1800),
+    spareFruitStall: game.run.judgment.spareFruitStall,
+    roster: game.roster,
   });
-  game.state = States.STAGE_CLEAR;
+  game.state = States.REVEAL;
 }
 
 function update() {
@@ -647,11 +662,14 @@ function render() {
   if (canCallAlly(game.roster)) drawAllyPrompt(ctx, getActive(game.roster), HEIGHT - 4);
 }
 
-/** The evaluation form. Pacing matters more than layout — see ui/evaluation.js. */
-function updateEvaluation() {
-  advanceEvaluation(game.evaluation, { skipPressed: justPressed(input, Action.CONTEXT) });
+/**
+ * The reveal. Pacing matters more than layout — see ui/reveal.js, and note that
+ * the beats carrying the joke ignore the skip entirely.
+ */
+function updateReveal() {
+  advanceReveal(game.reveal, { skipPressed: justPressed(input, Action.CONTEXT) });
 
-  if (currentBeat(game.evaluation) === Beat.DONE) {
+  if (currentBeat(game.reveal) === Beat.DONE) {
     game.nameEntry = createNameEntry(game.run.name);
     game.state = States.NAME_ENTRY;
   }
@@ -680,7 +698,7 @@ function updateNameEntryState() {
 
 function step() {
   switch (game.state) {
-    case States.STAGE_CLEAR: return updateEvaluation();
+    case States.REVEAL: return updateReveal();
     case States.NAME_ENTRY: return updateNameEntryState();
     case States.LEADERBOARD: return endFrame(input);
     default: return update();
@@ -702,7 +720,7 @@ function frame(now) {
   game.debug.stepsThisFrame = steps;
   game.frame += 1;
 
-  if (game.state === States.STAGE_CLEAR) drawEvaluation(ctx, game.evaluation);
+  if (game.state === States.REVEAL) drawReveal(ctx, game.reveal);
   else if (game.state === States.NAME_ENTRY) drawNameEntry(ctx, game.nameEntry, game.frame);
   else if (game.state === States.LEADERBOARD) drawNameEntry(ctx, game.nameEntry, game.frame);
   else render();

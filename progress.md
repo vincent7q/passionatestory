@@ -13,7 +13,7 @@ see your work.
 ### Before you stop working, on any machine
 
 ```bash
-node --test test/          # leave the suite green if you possibly can
+npm test          # leave the suite green if you possibly can
 git add -A
 git commit -m "T<n>: <what>"
 git push                   # ← THE STEP THAT MAKES THIS WORK. Do not skip it.
@@ -27,7 +27,7 @@ you documented is recoverable; uncommitted work on a machine you're not sitting 
 ```bash
 git pull
 npm install                # dependencies may have moved since you were last here
-node --test test/          # confirm you inherited a green suite
+npm test          # confirm you inherited a green suite
 ```
 
 Then read **Current status** below and continue from the first unchecked task.

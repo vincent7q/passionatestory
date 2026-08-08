@@ -85,7 +85,7 @@ The comedy only works if these hold. They are not stylistic preferences:
 npm install
 npm run dev          # Fastify on :8080 with --watch, serves game + dashboard + API
 npm start            # same, no watch
-node --test test/    # unit + API integration tests
+npm test             # unit + API integration tests
 ```
 
 Open <http://localhost:8080> to play, <http://localhost:8080/dashboard> for the leaderboard.
