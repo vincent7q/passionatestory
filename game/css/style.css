@@ -19,3 +19,83 @@ html, body {
   image-rendering: pixelated;
   display: block;
 }
+
+/* ── Touch pad ──────────────────────────────────────────────────────────────
+ *
+ * Sized in CSS pixels on purpose. The canvas is upscaled by an integer factor
+ * that changes with the window, so anything measured in game pixels would be
+ * 2-4x larger or smaller per device — and the 60px floor is a promise about a
+ * thumb, not about game pixels.
+ *
+ * It sits over the canvas rather than beside it: on a phone in landscape there
+ * is no room for both, and the action is in the middle of the screen while
+ * thumbs are at the edges.
+ */
+/*
+ * Visibility is decided ONCE, in JS, by touch.js `wantsTouch` — which asks
+ * whether the primary pointer is a finger. There is deliberately no media query
+ * here: two gates could disagree about a device and leave the pad bound to
+ * input but invisible, which is unplayable and very hard to see.
+ */
+#pad {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;      /* only the buttons take input, never the gaps */
+  z-index: 10;
+}
+
+#pad[hidden] { display: none; }
+
+.pad-area-dpad,
+.pad-area-actions,
+.pad-area-corner {
+  position: absolute;
+  display: grid;
+  gap: 6px;
+}
+
+.pad-area-dpad    { left: 12px;  bottom: 12px; }
+.pad-area-actions { right: 12px; bottom: 12px; }
+.pad-area-corner  { right: 12px; top: 12px; }
+
+.pad-btn {
+  pointer-events: auto;
+  /* min-* rather than a fixed size so a larger inline size still wins, and the
+     60px floor cannot be lost to a layout change. */
+  min-width: 60px;
+  min-height: 60px;
+  border: 2px solid rgba(242, 237, 226, 0.35);
+  border-radius: 14px;
+  background: rgba(26, 21, 32, 0.55);
+  color: #F2EDE2;
+  font: 20px/1 monospace;
+  display: grid;
+  place-items: center;
+  /* A gamepad must not select text, pop a magnifier, or fire a 300ms delayed
+     click. All three are default browser behaviour on a long press. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.pad-btn.is-down {
+  background: rgba(242, 199, 92, 0.30);
+  border-color: #F2C75C;
+}
+
+/* The button that helps someone up. It is the mechanic the whole game is built
+   around, it is pressed under time pressure, and it is the easiest to miss. */
+.pad-context {
+  border-color: rgba(242, 199, 92, 0.55);
+  font-size: 26px;
+}
+
+/* On a short landscape phone the clusters would collide with the canvas edges;
+   pull them in rather than letting them overlap the action. */
+@media (max-height: 420px) {
+  .pad-area-dpad    { left: 6px;  bottom: 6px; }
+  .pad-area-actions { right: 6px; bottom: 6px; }
+  .pad-btn { font-size: 17px; }
+}

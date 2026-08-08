@@ -60,14 +60,40 @@ function stubCanvas(width = 480, height = 270) {
  * requestAnimationFrame deliberately does NOT run the callback — it stores it,
  * so a test can step the loop one frame at a time instead of recursing forever.
  */
-export function installDom({ now = 0 } = {}) {
+/** A plain element, for everything on the page that is not the canvas. */
+function stubElement(id) {
+  const el = {
+    id,
+    hidden: true,
+    style: {},
+    children: [],
+    classList: { add() {}, remove() {}, contains: () => false },
+    listeners: new Map(),
+    addEventListener(t, fn) { el.listeners.set(t, [...(el.listeners.get(t) ?? []), fn]); },
+    appendChild(c) { el.children.push(c); return c; },
+    setAttribute() {},
+    remove() {},
+    querySelector: () => null,
+    fire(t, e = {}) { for (const fn of el.listeners.get(t) ?? []) fn(e); },
+  };
+  return el;
+}
+
+/**
+ * @param touch when true the stub reports a coarse pointer, so main.js takes
+ *   its touch-pad branch. Defaults to false — a desktop.
+ */
+export function installDom({ now = 0, touch = false } = {}) {
   const canvas = stubCanvas();
   const listeners = new Map();
+  const elements = new Map();
   const handle = {
     canvas,
     frames: 0,
     now,
     pending: null,
+    /** Elements main.js looked up by id, so a test can inspect the pad. */
+    elements,
     /** Fire the keyboard handlers main.js bound via bindKeyboard. */
     key(type, code) {
       for (const fn of listeners.get(type) ?? []) fn({ code, preventDefault() {} });
@@ -75,8 +101,13 @@ export function installDom({ now = 0 } = {}) {
   };
 
   globalThis.document = {
-    getElementById: () => canvas,
-    createElement: (tag) => (tag === 'canvas' ? stubCanvas() : { style: {} }),
+    hidden: false,
+    getElementById(id) {
+      if (id === 'screen') return canvas;
+      if (!elements.has(id)) elements.set(id, stubElement(id));
+      return elements.get(id);
+    },
+    createElement: (tag) => (tag === 'canvas' ? stubCanvas() : stubElement(tag)),
     addEventListener(type, fn) {
       listeners.set(type, [...(listeners.get(type) ?? []), fn]);
     },
@@ -87,6 +118,8 @@ export function installDom({ now = 0 } = {}) {
     innerWidth: 1920,
     innerHeight: 1080,
     devicePixelRatio: 1,
+    matchMedia: () => ({ matches: touch }),
+    navigator: { maxTouchPoints: touch ? 5 : 0 },
     addEventListener(type, fn) {
       listeners.set(type, [...(listeners.get(type) ?? []), fn]);
     },

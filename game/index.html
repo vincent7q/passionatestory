@@ -10,6 +10,19 @@
   <div id="frame">
     <canvas id="screen" width="480" height="270"></canvas>
   </div>
+
+  <!--
+    Touch pad. Buttons are built from the PAD table in js/touch.js rather than
+    written here, so the layout can be asserted by a test — a target that drifts
+    under 60px is a test failure, not something found on a phone. Hidden unless
+    the device actually has a coarse pointer.
+  -->
+  <div id="pad" hidden>
+    <div class="pad-area-dpad"></div>
+    <div class="pad-area-actions"></div>
+    <div class="pad-area-corner"></div>
+  </div>
+
   <script type="module" src="/js/main.js"></script>
 </body>
 </html>

@@ -45,6 +45,7 @@ import {
   createNameEntry, updateNameEntry, drawNameEntry, nameOf,
 } from './ui/nameEntry.js';
 import { startRunToken, submitRun } from './net.js';
+import { bindTouch, wantsTouch, nearestFacing } from './touch.js';
 
 // main.js is the ONLY module that may import shared/, and only absolutely.
 // See SPEC.md §2.3.
@@ -84,6 +85,17 @@ for (const id of CANDIDATES) buildCharacter(id, CHARACTERS[id].palette);
 buildCharacter('enemy', { hair: '#2B2B33', skin: '#E8B48E', shirt: '#4A5A6B', accent: '#C9CED6' });
 
 const input = bindKeyboard(createInput(), window);
+
+// The pad writes to the same input object the keyboard does, so nothing below
+// this line knows which one a press came from. Shown only on a coarse pointer —
+// a desktop must never lose a corner of the screen to it.
+const padRoot = document.getElementById('pad');
+const touchActive = wantsTouch(window);
+if (padRoot && touchActive) {
+  padRoot.hidden = false;
+  bindTouch(input, padRoot, { document });
+}
+
 const world = createWorld();
 
 const player = addEntity(world, createPlayer(CHARACTERS.felix, { x: 60, y: 210 }));
@@ -409,7 +421,17 @@ function update() {
   const section = sectionAt(stage, player.x);
   const state = game.stageState;
 
-  updatePlayer(player, readIntent());
+  const intent = readIntent();
+
+  // Aim assist, touch only. On a keyboard you hold a direction and swing; on
+  // glass the left thumb is walking and the right is on A, so an attack that
+  // fires in the last-held direction misses constantly and reads as a bug. It
+  // only turns him — it never moves him and never picks a target.
+  if (touchActive && (intent.light || intent.heavy) && !intent.dx) {
+    player.facing = nearestFacing(player, activeEntities(world));
+  }
+
+  updatePlayer(player, intent);
   if (!player.attacking) player.hitThisSwing = null;
 
   // Rain. Outside cover 力 bleeds; an awning or a 手帕 stops it, and nothing

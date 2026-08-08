@@ -50,19 +50,34 @@ export function createInput() {
   return { down: new Set(), pressed: new Set(), released: new Set() };
 }
 
-export function keyDown(input, key) {
-  const action = toAction(key);
+/**
+ * Press an action directly. THE ONLY PLACE A PRESS IS RECORDED.
+ *
+ * Both the keyboard and the touch pad come through here, so the edge detection
+ * that keeps E from firing twice exists once rather than once per input device.
+ * A touchscreen fires its own repeats — a finger resting on a button, a
+ * pointerdown re-sent after a scroll gesture is cancelled — and a second
+ * implementation would have to rediscover that, badly.
+ */
+export function actionDown(input, action) {
   if (action === undefined) return;
   // Only a transition from up to down is a press. Auto-repeat is not.
   if (!input.down.has(action)) input.pressed.add(action);
   input.down.add(action);
 }
 
-export function keyUp(input, key) {
-  const action = toAction(key);
+export function actionUp(input, action) {
   if (action === undefined) return;
   if (input.down.has(action)) input.released.add(action);
   input.down.delete(action);
+}
+
+export function keyDown(input, key) {
+  actionDown(input, toAction(key));
+}
+
+export function keyUp(input, key) {
+  actionUp(input, toAction(key));
 }
 
 /** Clear the edges. Call once per frame, after everything has read them. */
@@ -80,6 +95,14 @@ export function axis(input, negative, positive) {
   return (isDown(input, positive) ? 1 : 0) - (isDown(input, negative) ? 1 : 0);
 }
 
+/** Drop every held action. Used on blur, and when the touch pad is torn down. */
+export function releaseAll(input) {
+  input.down.clear();
+  input.pressed.clear();
+  input.released.clear();
+  return input;
+}
+
 /** Attach to the DOM. Browser-only; everything above is pure and testable. */
 export function bindKeyboard(input, target = globalThis) {
   target.addEventListener('keydown', (e) => {
@@ -88,10 +111,6 @@ export function bindKeyboard(input, target = globalThis) {
   });
   target.addEventListener('keyup', (e) => keyUp(input, e.key));
   // A lost focus must not leave a key stuck down forever.
-  target.addEventListener('blur', () => {
-    input.down.clear();
-    input.pressed.clear();
-    input.released.clear();
-  });
+  target.addEventListener('blur', () => releaseAll(input));
   return input;
 }
