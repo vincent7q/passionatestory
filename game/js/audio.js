@@ -100,7 +100,7 @@ export const MUSIC = {
     bpm: 132, root: 45, scale: 'minor',
     layers: [
       { id: 'bass', type: 'sawtooth', gain: 0.11, steps: [0, 0, -1, 3, -1, 0, 2, -1] },
-      { id: 'stab', type: 'square', gain: 0.05, octave: 2, steps: [-1, 7, -1, -1, 6, -1, -1, 4] },
+      { id: 'chord', type: 'square', gain: 0.05, octave: 2, steps: [-1, 7, -1, -1, 6, -1, -1, 4] },
       { id: 'hat', type: 'noise', gain: 0.05, steps: [1, -1, 1, -1, 1, -1, 1, 1] },
     ],
   },

@@ -56,10 +56,10 @@ HTTP. Always run through the server.
 |---|---|
 | **Date** | 2026-08-08 |
 | **Branch** | `main` — merged and **pushed** 2026-08-08, tagged `v0.9-content-complete` |
-| **Phase** | ✅ Phases 0-11 complete — next is **Phase 12, polish and ship** |
-| **Next task** | **T85** — touch controls |
-| **Suite** | 🟢 green — **601 tests** |
-| **Blocked on** | Nothing. |
+| **Phase** | Phases 0-11 complete; **Phase 12 code complete** — T85-T88, T91, T92 done |
+| **Next task** | **T89 / T90** — both blocked on tooling, see below |
+| **Suite** | 🟢 green — **693 tests** |
+| **Blocked on** | **Docker not installed** (C3 recycle) and **Firefox not checked** (C6). Neither is a code defect. |
 
 ### ⚠️ Read this before running anything — the test command changed
 
@@ -266,6 +266,50 @@ Then delete this section.
 
 ---
 
+## T91 — acceptance pass, 2026-08-08
+
+Against `SPEC.md` §1 and `docs/PRD.md` §16. **Verified means it was run today, not that it looks
+right in the code.**
+
+### `SPEC.md` §1 — the seven hard criteria
+
+| | Criterion | | Evidence |
+|---|---|---|---|
+| **C1** | A mashing player cannot beat 71 | ✅ | `scoring.masher.test.js`, 7 tests. Masher tops out at **60**. |
+| **C2** | 禮 never on screen before the form | ✅ | `spoiler.test.js`, 8 tests, now covering `dashboard/` too. Confirmed **by eye** 2026-08-08: at the pleased pause only 力 and 錢 are on the page. |
+| **C3** | Records survive `docker compose down && up` | ⚠️ | **Substance proved, container half not run.** A record written by one process survives that process exiting, on a real file, seed not duplicated (`deploy.test.js`). Docker is not installed here, so the compose recycle itself has never been executed. |
+| **C4** | A forged `curl` is rejected | ✅ | 21 automated tests, **plus a live check today**: token-less POST → 400, forged token → `token signature invalid`, board unchanged. |
+| **C5** | Server never trusts a client grade | ✅ | Automated. An inflated `grade: 100` is ignored; the stored value is the recomputed one. |
+| **C6** | 60 FPS in Chrome and Firefox | ⚠️ | **Chrome only.** Overlay read `fps 59.9 · worst 17.4ms · steps 1`. Firefox never opened. |
+| **C7** | No build step | ✅ | Three runtime deps, **zero** devDependencies, no bundler anywhere, `scripts` is dev/start/test. `deploy.test.js` also fails if one enters the image. |
+
+**Five of seven pass outright. Neither of the two gaps is a code defect** — both are "this machine
+has no Docker / no Firefox", and both are listed under *Blocked* below.
+
+### `docs/PRD.md` §16
+
+| Criterion | | |
+|---|---|---|
+| A mashing player cannot beat 71 | ✅ | C1. |
+| 禮 not on screen before the form | ✅ | C2. |
+| A forged `curl` is rejected | ✅ | C4. |
+| Nothing inappropriate for a child | ✅ | Now a **test**: no player-facing string suggests real violence. It caught one word — `stab`, a music-layer id — renamed to `chord`. |
+| All three candidates play distinctly | ✅ *(data)* | Every numeric stat differs across `felix`/`lucian`/`hilman` (100/80, 80/100, 140/60) and all nine specials are distinct. Whether they *feel* distinct still needs playing. |
+| Records survive a recycle | ⚠️ | C3. |
+| Stable 60 FPS, Chrome **and** Firefox | ⚠️ | C6. |
+| Touch controls playable on a phone | ⚠️ | Built and tested — 60px floor, every action mapped, aim assist, a cancelled gesture releases. **Never used on an actual phone.** |
+| Full playthrough in 15–25 minutes | ❌ | **Nobody has played it end to end.** |
+| Playtesters suspect during stage 2 but cannot confirm | ❌ | Needs playtesters. |
+| The reveal reads as a surprise, not a cheat | ❌ | Needs playtesters. |
+| Helping someone up feels like a real cost | ❌ | Needs a playtest. |
+| 二叔 teaches restraint without a text tutorial | ❌ | Needs a playtest. |
+
+**The five ❌ are all the same thing: nobody has played this game.** They are not defects and no test
+can settle them — they are the questions a build gets answered by putting it in front of a person.
+That is the honest state of the project.
+
+---
+
 ## The two things that must not break
 
 Check these whenever you touch scoring or UI. They are pass/fail for the whole project.
@@ -391,14 +435,16 @@ Tick a box only when its test passes **and** the change is committed. Full task 
 - [x] T84 — the ending → tagged `v0.9-content-complete`
 
 ### Phase 12 — Polish and ship
-- [ ] T85 — touch controls
-- [ ] T86 — audio
-- [ ] T87 — dashboard
-- [ ] T88 — Docker, **DB on a mounted volume**
-- [ ] T89 — ⚠️ C3 records survive a recycle
-- [ ] T90 — C6 60 FPS in Chrome and Firefox *(Chrome ✅ 59.9 fps 2026-08-08; Firefox outstanding)*
-- [ ] T91 — full acceptance pass
-- [ ] T92 — README
+- [x] T85 — touch controls *(never used on an actual phone)*
+- [x] T86 — audio
+- [x] T87 — dashboard
+- [x] T88 — Docker, **DB on a mounted volume** *(invariants pinned by `deploy.test.js`)*
+- [ ] T89 — ⚠️ C3 records survive a recycle — **BLOCKED: Docker not installed.** Substance proved
+      (a record survives its writing process exiting, seed not duplicated); the compose recycle has
+      not been run.
+- [ ] T90 — C6 60 FPS in Chrome and Firefox — **Chrome ✅ 59.9 fps; Firefox never opened**
+- [x] T91 — full acceptance pass *(see the table under **Current status**)*
+- [x] T92 — README
 
 ---
 

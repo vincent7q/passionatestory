@@ -128,3 +128,26 @@ test('internal identifiers are still allowed to name the concept', () => {
   const src = readFileSync('shared/scoring.js', 'utf8');
   assert.ok(src.includes('computeJudgment'), 'code may say judgment; the screen may not');
 });
+
+/**
+ * PRD §16: "Nothing in the game would be inappropriate for a child."
+ *
+ * Content rule 6 — cartoon violence only. Nobody bleeds, nobody is hurt, nobody
+ * stays down. Defeated opponents see stars, sit down, and rub their head.
+ *
+ * This scans player-facing STRINGS only. It is a blunt instrument and will
+ * occasionally catch an innocent word, which is the right trade: the fix is to
+ * rename the identifier, as `stab` → `chord` in audio.js already was.
+ */
+test('no player-facing string suggests real violence', () => {
+  const banned = /\b(blood|bleed|gore|corpse|kill|killed|dead|death|dying|stab|shoot|gun|knife|drunk)\b/i;
+  const offenders = [];
+
+  for (const p of [...walk('game'), ...walk('shared'), ...walk('dashboard')]) {
+    const bad = stringLiterals(readFileSync(p, 'utf8')).filter((s) => banned.test(s));
+    if (bad.length) offenders.push(`${p} (${bad.join(' / ')})`);
+  }
+
+  assert.deepEqual(offenders, [],
+    `this has to stay playable by kids: ${offenders.join(', ')}`);
+});
