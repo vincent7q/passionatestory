@@ -139,9 +139,17 @@ empty.
 
 Rendering tasks are verified by looking at them (`SPEC.md` §12), so these remain open:
 
-- **T3** — the canvas actually rendering, and staying crisp while the window resizes through
-  integer scale steps.
-- **T4/T5** — the loop holding 60 FPS with the debug overlay (backtick toggles it).
+- ~~**T3 — the canvas renders.**~~ ✅ **VERIFIED 2026-08-08 in Chrome.** The game boots at
+  <http://localhost:8080> with **no console errors**, draws the city, Felix and two enemies, and the
+  canvas is **480×270 internal upscaled to exactly 960×540 — a clean 2× integer step.** *Resizing*
+  through further scale steps is still unchecked.
+- ~~**#6 — the HUD matches `docs/1.jpg` / `docs/2.jpg`.**~~ ✅ **VERIFIED 2026-08-08.** 力 green bar
+  reading `100/100`, 氣 orange beneath at `0/80`, `Lv.1` far left, 錢 top right with its gold dot —
+  and **the clock centred, large, bare, starting at 17:20 with no label.** The joke is on screen.
+- **T4/T5** — the loop holding 60 FPS with the debug overlay (backtick toggles it). **Cannot be
+  checked from an automated tab:** Chrome freezes `requestAnimationFrame` in a hidden tab, so the
+  loop stalls whenever the window is not foreground. That is browser behaviour, not a bug — but it
+  means C6 needs a human with the window in front.
 - **T19/T20** — what the chibi rig actually *looks like*. The pose table and palettes are tested,
   but nobody has yet seen a sprite. Expect the first draw to need art tuning; that is normal and is
   why `POSES` is data rather than code.
@@ -211,13 +219,25 @@ specifically:
 14. **二叔 BAN cannot be beaten by fighting.** Knock him to zero and he pours another cup and gets
     straight back up. E accepts a cup; after three, E bows and he steps aside. This is the beat
     where the player is supposed to work it out — watch whether it lands.
-15. **The reveal, end to end** *(new 2026-08-08, never seen)*. Beat 林建國 and it should run: the
-    silence → 「你來得好慢。」 → the line-up bowing → the aunt sitting down → the form → the file →
-    the stinger → the table → 「第2次」. Every beat is proved to *draw*; none is proved to **read**.
+15. **The reveal, end to end** *(new 2026-08-08)*. Beat 林建國 and it should run: the silence →
+    「你來得好慢。」 → the line-up bowing → the aunt sitting down → the form → the file → the stinger
+    → the table → 「第2次」.
+
+    **Partly checked 2026-08-08 by pixel audit** — every beat was driven through the real
+    `drawReveal` on the real canvas and every one paints actual content, so no beat falls through
+    blank, and `FILE` correctly repaints on paper rather than the room. The line-up groups as
+    「上班族 ×2 / 阿姨 ×2 / 廂型車的三個人 ×3 / 二叔 ×1」 — thirteen people, reading as a family.
+
+    **None of it has been seen by an eye**, because a hidden Chrome tab does not composite, so no
+    screenshot of the reveal was possible. It draws; whether it *reads* is still open.
 16. **The `WIN` silence specifically.** 200 steps of almost nothing, and it cannot be skipped. It
     should feel like a man braced for consequences that are not coming. If it instead feels like the
     game has hung, `DWELL[WIN]` is the number to move — **but move it down, not away.** The silence
     is the beat the whole reveal starts from.
+
+    The pixel audit puts a number on "almost nothing": **six ink pixels**, against 1,578 for the
+    line-up. That is the intent taken literally, and it is the most likely thing in Phase 11 to read
+    as a crash rather than a pause. **Look at this one first.**
 
 Then delete this section.
 
