@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>林家 配偶評估 — 排行榜</title>
+  <link rel="stylesheet" href="/dashboard/style.css">
+</head>
+<body>
+  <header>
+    <h1>林家 配偶評估<span class="en">Lin Family Suitability Assessment</span></h1>
+    <p class="since">自 1994 年起 · Since 1994</p>
+  </header>
+
+  <!--
+    THE BOARD DELIBERATELY DOES NOT BREAK THE SCORE DOWN.
+
+    A leaderboard is the one screen likely to be on display BEFORE somebody
+    plays — at a party, on a second monitor, over someone's shoulder. A column
+    headed with the third criterion would hand them the twist for free, eleven
+    minutes before the game means to. Totals only. See dashboard.js.
+  -->
+  <main id="boards" aria-live="polite">
+    <p class="loading">載入中…</p>
+  </main>
+
+  <section id="stats" hidden>
+    <h2>統計 <span class="en">Stats</span></h2>
+    <dl id="stat-list"></dl>
+  </section>
+
+  <footer>
+    <p>
+      分數由伺服器重新計算 · Scores are recomputed server-side.
+      <a href="/">回到遊戲 · Back to the game</a>
+    </p>
+  </footer>
+
+  <script type="module" src="/dashboard/dashboard.js"></script>
+</body>
+</html>

@@ -63,6 +63,33 @@ test('C2: 禮 never appears outside the evaluation form', () => {
     `禮 leaked into: ${offenders.join(', ')} — the twist is on screen`);
 });
 
+/**
+ * The dashboard is guarded for the same reason game/ is, and arguably a
+ * stronger one.
+ *
+ * `GET /api/leaderboard` returns every column including the hidden one, and a
+ * leaderboard is the single screen most likely to be up BEFORE somebody plays:
+ * at a party, on a second monitor, over a shoulder while they wait for a turn.
+ * The HUD gets away with 力 and 錢 because every game has a power bar and a
+ * money counter. A named third criterion on a scoreboard invites exactly the
+ * question the game spends twenty minutes not answering.
+ */
+test('C2: the leaderboard does not name the hidden column', () => {
+  const offenders = walk('dashboard').filter((p) => readFileSync(p, 'utf8').includes('禮'));
+  assert.deepEqual(offenders, [],
+    `禮 leaked onto the leaderboard: ${offenders.join(', ')} — visible before anyone plays`);
+});
+
+test('C2: the leaderboard does not explain the scoring either', () => {
+  const banned = /\b(JUDGMENT|RESTRAINT|MERCY|COURTESY|MANNERS)\b/i;
+  const offenders = [];
+  for (const p of walk('dashboard')) {
+    const bad = stringLiterals(readFileSync(p, 'utf8')).filter((s) => banned.test(s));
+    if (bad.length) offenders.push(`${p} (${bad.join(' / ')})`);
+  }
+  assert.deepEqual(offenders, [], `the board must rank, not explain: ${offenders.join(', ')}`);
+});
+
 test('the evaluation form does show the third column — that is its job', () => {
   const src = readFileSync('game/js/ui/evaluation.js', 'utf8');
   assert.ok(src.includes('禮'), 'the payoff must actually name it');
