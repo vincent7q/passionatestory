@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import {
   Beat, BEAT_ORDER, DWELL, UNSKIPPABLE, PHONE_LINE, ALWAYS_PRESENT, AUNT_LINES,
   FILE_ENTRIES, FILE_OPENING, FILE_START,
+  STINGER_INTRUDERS, STINGER_LINE, SOUP_LINE,
   createReveal, currentBeat, reached, advanceReveal, beatProgress,
   buildLineup, auntLine, fileEntriesShown, riderWaves,
+  intrudersDown, soupAsked, stingerLineShown,
 } from '../../game/js/ui/reveal.js';
 import { createRoster, addToRoster, recordDefeat } from '../../game/js/entities/ally.js';
 import { FATHER_SCORE } from '../../shared/scoring.js';
@@ -411,6 +413,100 @@ test('the delivery rider waves, having been fought in stage 1', () => {
 test('a rider never met does not wave from a room he is not in', () => {
   const r = rosterWith([[1, 'office_worker']]);
   assert.equal(riderWaves(createReveal(GRADE, { roster: r })), false);
+});
+
+// ── T83: the stinger ─────────────────────────────────────────────────────────
+
+test('three men kick the door in, and there are three of them', () => {
+  assert.equal(STINGER_INTRUDERS, 3);
+});
+
+test('four seconds, taken literally from PRD §8.2', () => {
+  assert.equal(DWELL[Beat.STINGER], 4 * 60);
+});
+
+/**
+ * THE CANDIDATE DOES NOT MOVE. He has just learned nothing tonight was real, he
+ * cannot tell any more, and he is not going to be made a fool of twice.
+ *
+ * This is the one fight in the game he takes no part in, and that is the joke —
+ * so it must resolve on its own clock no matter what the player does with the
+ * pad. Mashing every button has to produce the identical sequence.
+ */
+test('he does not move — the stinger ignores the player entirely', () => {
+  const still = reveal();
+  const mashing = reveal();
+  runTo(still, Beat.STINGER, { skipPressed: true });
+  runTo(mashing, Beat.STINGER, { skipPressed: true });
+
+  for (let i = 0; i < DWELL[Beat.STINGER]; i += 1) {
+    assert.equal(intrudersDown(mashing), intrudersDown(still),
+      `input changed the stinger at step ${i}`);
+    advanceReveal(still, {});
+    advanceReveal(mashing, { skipPressed: true });
+  }
+  assert.equal(currentBeat(still), currentBeat(mashing));
+});
+
+test('the family takes all three down, one at a time, inside the four seconds', () => {
+  const s = reveal();
+  runTo(s, Beat.STINGER, { skipPressed: true });
+  assert.equal(intrudersDown(s), 0, 'the door has only just come in');
+
+  const seen = new Set();
+  for (let i = 0; i < DWELL[Beat.STINGER] - 1; i += 1) {
+    advanceReveal(s, {});
+    seen.add(intrudersDown(s));
+  }
+  assert.deepEqual([...seen].sort(), [0, 1, 2, 3], 'they go down one at a time, not together');
+  assert.equal(intrudersDown(s), STINGER_INTRUDERS);
+});
+
+test('nobody leaves the table, so nobody can be taken down twice', () => {
+  const s = reveal();
+  runTo(s, Beat.STINGER, { skipPressed: true });
+  let previous = 0;
+  for (let i = 0; i < DWELL[Beat.STINGER] - 1; i += 1) {
+    advanceReveal(s, {});
+    const n = intrudersDown(s);
+    assert.ok(n >= previous && n <= STINGER_INTRUDERS, `count went ${previous} → ${n}`);
+    previous = n;
+  }
+});
+
+/** She does one of them one-handed. The soup question is not rhetorical. */
+test('the soup is asked about mid-fight, not after it', () => {
+  const s = reveal();
+  runTo(s, Beat.STINGER, { skipPressed: true });
+
+  let askedWhileFighting = false;
+  for (let i = 0; i < DWELL[Beat.STINGER] - 1; i += 1) {
+    advanceReveal(s, {});
+    if (soupAsked(s) && intrudersDown(s) < STINGER_INTRUDERS) askedWhileFighting = true;
+  }
+  assert.ok(askedWhileFighting, 'asking after it is over is just a question');
+  assert.equal(SOUP_LINE.who, '水果店老闆娘');
+});
+
+test('「那個是真的。」 lands only once all three are down', () => {
+  const s = reveal();
+  runTo(s, Beat.STINGER, { skipPressed: true });
+  for (let i = 0; i < DWELL[Beat.STINGER] - 1; i += 1) {
+    advanceReveal(s, {});
+    if (stingerLineShown(s)) {
+      assert.equal(intrudersDown(s), STINGER_INTRUDERS,
+        'he would not say it while it was still going on');
+    }
+  }
+  assert.ok(stingerLineShown(s), 'the line has to actually arrive');
+  assert.equal(STINGER_LINE.zh, '那個是真的。');
+  assert.equal(STINGER_LINE.who, '林建國');
+});
+
+/** The last thing he learns is that the evening had one real moment in it. */
+test('the stinger is the last thing before the table resolves', () => {
+  const i = (b) => BEAT_ORDER.indexOf(b);
+  assert.equal(i(Beat.ENDING), i(Beat.STINGER) + 1);
 });
 
 test('mashing the reveal cannot skip the pause before the third line', () => {

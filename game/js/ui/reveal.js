@@ -206,6 +206,58 @@ export function riderWaves(s) {
   return (s.lineup?.rows ?? []).some((r) => r.enemyType === 'delivery_rider' && r.total > 0);
 }
 
+// ── The stinger, PRD §8.2 ────────────────────────────────────────────────────
+
+/**
+ * Three men in black kick the door in. Real ones.
+ *
+ * THE CANDIDATE DOES NOT MOVE, and that is the joke — this is the one fight all
+ * evening he takes no part in. He has just learned nothing tonight was real, he
+ * cannot tell any more, and he is not going to be made a fool of twice.
+ *
+ * So the beat runs entirely on its own clock. It reads no input at all, it is
+ * in UNSKIPPABLE, and a test mashes every button through it to prove the
+ * sequence is identical either way. Give the player agency here and the last
+ * gag in the game stops working.
+ *
+ * The family handles it without leaving the table. 小雨 does not look up.
+ */
+export const STINGER_INTRUDERS = 3;
+
+/** One second each. Three of them, and then a beat to write on the form. */
+export const STINGER_TAKEDOWN_STEPS = 60;
+
+/** She does one of them one-handed, and the question is not rhetorical. */
+export const SOUP_LINE = {
+  who: '水果店老闆娘',
+  zh: '還有人要湯嗎?',
+  en: 'Does anyone want more soup?',
+};
+
+/** He writes it on the form first. It is the only note he shows the candidate. */
+export const STINGER_LINE = {
+  who: '林建國',
+  zh: '那個是真的。',
+  en: 'That one was real.',
+};
+
+/** How many of the three are down. Never decreases; nobody gets back up. */
+export function intrudersDown(s) {
+  if (currentBeat(s) !== Beat.STINGER) return reached(s, Beat.STINGER) ? STINGER_INTRUDERS : 0;
+  return Math.min(STINGER_INTRUDERS, Math.floor(s.beatSteps / STINGER_TAKEDOWN_STEPS));
+}
+
+/** Asked mid-fight. Asking once it is over would just be a question. */
+export function soupAsked(s) {
+  if (currentBeat(s) !== Beat.STINGER) return false;
+  return intrudersDown(s) >= 1;
+}
+
+export function stingerLineShown(s) {
+  if (currentBeat(s) !== Beat.STINGER) return reached(s, Beat.ENDING);
+  return intrudersDown(s) >= STINGER_INTRUDERS;
+}
+
 /** ENDING sub-pacing: one line at a time, then the verdict. */
 export const ENDING_LINE_STEPS = 110;
 export const ENDING_VERDICT_STEPS = 200;
@@ -390,5 +442,27 @@ export function drawReveal(ctx, s) {
       ctx.fillStyle = '#8A8296';
       ctx.fillText('外送員向他揮手。', 96, 196);
     }
+    return;
+  }
+
+  if (beat === Beat.STINGER) {
+    const down = intrudersDown(s);
+
+    // Three figures at the door. They go out one at a time and nobody at the
+    // table stands up.
+    ctx.font = '8px monospace';
+    for (let i = 0; i < STINGER_INTRUDERS; i += 1) {
+      ctx.fillStyle = i < down ? '#4A4458' : '#F2EDE2';
+      ctx.fillRect(150 + i * 60, i < down ? 150 : 120, 12, i < down ? 6 : 36);
+    }
+
+    // She is doing one of them one-handed.
+    if (soupAsked(s) && down < STINGER_INTRUDERS) {
+      ctx.fillStyle = DIM;
+      ctx.fillText(`${SOUP_LINE.who}:「${SOUP_LINE.zh}」`, 96, 210);
+    }
+
+    // 小雨 does not look up.
+    if (stingerLineShown(s)) speech(ctx, 200, STINGER_LINE.who, STINGER_LINE.zh);
   }
 }
