@@ -26,6 +26,17 @@ The new direction is `docs/develop_workflow.md`: a **Godot**, data-driven conten
 means there are currently no build, lint, or test commands. Once a Godot project exists, update this
 file with how to run it, run tests, and run the data validator.
 
+**`docs/plan.md` is the plan and progress tracker; `docs/roadmap/phase-*.md` holds each phase's
+design and steps.** Work one step at a time, in order; check where the Progress table says we are
+before starting, and tick steps off as they land.
+
+Agreed decisions (details in `docs/plan.md`): Godot 4 standard build with **GDScript**; content as
+custom `Resource` classes in text **`.tres`**; tests with **GUT**, run headless; develop on
+desktop, keep the web export working. **Display:** 1920×1080 window; the game world is 480×270
+pixel art scaled by a whole number (4× at 1080p), and the HUD, dialogue and all text are drawn
+at native resolution in a separate UI layer. Gameplay units are world pixels in the 480×270
+space; gameplay timing is in frames at the fixed 60 Hz tick.
+
 ### Documents and which one wins
 
 | File | Governs |
@@ -33,6 +44,8 @@ file with how to run it, run tests, and run the data validator.
 | `docs/story.md` | Narrative bible. **Outranks the PRD on anything story-related.** Read before writing any content. |
 | `docs/PRD.md` | Mechanics, rosters, numbers. Read the relevant section before inventing values. |
 | `docs/develop_workflow.md` | Engine (Godot), content architecture, project layout, build order. |
+| `docs/plan.md`, `docs/roadmap/` | That workflow turned into concrete phases and steps for this game, with progress. |
+| `docs/storyboard/`, `docs/game_bible/` | (Phase 0A, once written) Beat-by-beat storyboard, bible pages and registries derived from story.md. They are the content spec; where they disagree with story.md, story.md wins and they get corrected. |
 | `docs/styles/1.jpg`, `2.jpg` | HUD layout reference — match them. (The PRD still cites the old path `docs/1.jpg`.) |
 | `docs/images/*.png` | Character design references. **Filename is the character id.** |
 
