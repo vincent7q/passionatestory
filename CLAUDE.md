@@ -8,12 +8,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Girls, built around a twist.
 
 **What the player experiences:** his girlfriend 林小雨 CLORIS is dragged into a black van. He chases
-it across a city, up a mountain, and into a fortified estate to get her back.
+it across a city, through his university at night, up a private mountain, into a garage and a
+mansion to get her back. Five stages.
 
-**What is actually happening:** every opponent is on the Lin family payroll. The estate is a house
-with dinner going cold on the table. The family stages this for every suitor, because they need to
-know who a man is when he believes the stakes are real. He is not rescuing her. He is meeting her
-parents.
+**What is actually happening:** every opponent is Lin family or staff, and the mansion is a house
+with dinner on the table at 19:00. The family stages this to learn who a man is when he believes the
+stakes are real. **His own parents are in on it too:** his father sat the same test in 1994 and lost
+to 小雨's father, 71 to 70. He is not rescuing her. He is meeting her parents.
 
 ## Current state of the repo — read this first
 
@@ -41,11 +42,14 @@ space; gameplay timing is in frames at the fixed 60 Hz tick.
 
 | File | Governs |
 |---|---|
-| `docs/story.md` | Narrative bible. **Outranks the PRD on anything story-related.** Read before writing any content. |
-| `docs/PRD.md` | Mechanics, rosters, numbers. Read the relevant section before inventing values. |
+| `docs/storyboard/` (`README.md` first) | **FINAL storyboard, approved 2026-10-04.** The content spec: story, cast, every beat, dialogue, scoring, endings, flags. **Outranks the PRD and everything in `docs/_bak/`** on story, content, scoring and endings. Earlier drafts are archived in `docs/_bak/`; don't build from them. |
+| `docs/PRD.md` | Combat feel, player stats, controls. Its story, stage and scoring sections are superseded by the storyboard. |
+| `docs/_bak/` | Archive only: the original concept (`story.md`) and the storyboard drafts v2–v4. Superseded; never build from it. |
 | `docs/develop_workflow.md` | Engine (Godot), content architecture, project layout, build order. |
 | `docs/plan.md`, `docs/roadmap/` | That workflow turned into concrete phases and steps for this game, with progress. |
-| `docs/storyboard/`, `docs/game_bible/` | (Phase 0A, once written) Beat-by-beat storyboard, bible pages and registries derived from story.md. They are the content spec; where they disagree with story.md, story.md wins and they get corrected. |
+| `docs/project_checklist.md` | One-page rollup of every step and milestone. When a step lands, tick it in its phase page **and** here. |
+| `docs/game_bible/` | (Phase 0A, once written) Bible pages and registries derived from the storyboard. |
+| `docs/art/` (`README.md` first) | Art briefs for every character, enemy, background, prop, effect and UI piece, written as prompts for AI image tools: style guide, sizes, naming, art rules. |
 | `docs/styles/1.jpg`, `2.jpg` | HUD layout reference — match them. (The PRD still cites the old path `docs/1.jpg`.) |
 | `docs/images/*.png` | Character design references. **Filename is the character id.** |
 
@@ -55,11 +59,11 @@ implementation and are superseded on *technology* by `develop_workflow.md`. The 
 scoring, and content sections remain authoritative. Whether the leaderboard backend and HTML5
 delivery survive the Godot move is undecided — ask rather than assume.
 
-Character reference images: `felix`, `lucian`, `hilman` (the three playable candidates), `rain` →
-林小雨 CLORIS, `vincent` → 林建國, her father and the final boss. **`vincent` is not a playable
-candidate id.** They are head-and-shoulders portraits only (face, hair, glasses, palette); body
-proportions and costume are undefined, and there is no reference yet for 二叔 BAN or the fruit shop
-owner.
+Character reference images: `felix`, `lucian`, `hilman` (the three playable **looks**: there is one
+candidate, the player, who picks a look and fighting style), `rain` → 林小雨 CLORIS, `vincent` →
+林建國, her father and the final boss. **`vincent` is not a playable id.** They are head-and-shoulders
+portraits only; body and costume are undefined, and every other character has no reference yet (see
+`docs/storyboard/ledgers.md` §5).
 
 ## Architecture direction (from `develop_workflow.md`)
 
@@ -92,34 +96,37 @@ on `z`. Gravity acts on `z`, never `y`.
 
 The twist lives or dies on what the interface reveals.
 
-- Nothing on the HUD is disguised. 力 POWER (green bar, doubles as health) and 錢 MONEY (counter)
-  *are* two of the three criteria, in plain sight. Do not "improve" this by relabelling anything.
-- **The character 禮 must not appear on screen before the evaluation form** — not in the HUD, pause
-  menu, tutorial, or tooltip. Restraint awards pop as a bare gold `+3` with a seal icon and no label.
-  Internal identifiers may use `li`/`REI`; player-facing strings may not.
-- The clock counting to 18:00 is dinner. Never label it. **It is not scored** — it only picks which
-  ending he walks into.
+- Nothing on the HUD is disguised. 力 POWER (green bar, doubles as health), 錢 MONEY (counter) and
+  the clock *are* three of the four criteria, in plain sight. Do not relabel anything.
+- **The character 勇 (BRAVE) must not appear on screen before the evaluation form (beat R-07)**:
+  not in the HUD, pause menu, tutorial or tooltip. Awards pop as a bare gold `+2`/`+8` with a seal
+  icon and no label. Internal identifiers may use `brave`/`yong`; player-facing strings may not.
+- The clock counting to 19:00 is dinner. Never label it or explain it.
 - Nothing explains the scoring. The pause menu has no scoring page.
+- **The candidate never recognises his disguised parents** (the Lunch Lady, the Straw-Hat Uncle) or
+  suspects anything, until the reveal.
 
 ## Scoring invariants
 
-Grade = 力 (0–40) + 錢 (0–20) + 禮 (0–40, clamped) out of 100. Track the three separately.
+Full spec: `docs/storyboard/README.md` §3. Form = 力 (0–25) + 錢 (0–15) + 時 (0–20) + 勇 (0–40,
+clamped) out of 100. **Pass mark 70; 72+ beats both fathers.** Track the four separately.
 
-- 禮 set-pieces total **37**, short of the cap on purpose: a full column needs at least one help-up.
-- **"A mashing player cannot beat 71"** (林建國's 1994 score) is the single most important success
-  criterion. A masher should land around 56–60. If a change lets mashing reach 71, it is wrong.
+- 勇 set pieces total **36**, short of the cap on purpose: a full column needs help-ups.
+- **"A mashing player cannot pass (70)"** is the single most important success criterion. A masher
+  should land around 48–56. If a change lets mashing reach 70, it is wrong.
 - The **ten-second window**: a defeated opponent sits dazed with slowing stars; pressing **E** beside
-  them helps them up, records them on the run's roster, and they switch sides. 林建國's summon checks
-  that roster. Striking a dazed/downed opponent is the heaviest penalty.
-- **E** (context action) is the most important button and nothing ever says so.
+  them helps them up and records them on the run's roster. Rostered people refuse 林建國's summon.
+  Striking a dazed or downed opponent costs 勇.
+- **E** (context action) is the most important button and nothing ever says so. It is a trap exactly
+  once: the money suitcase at S4-07 (picking it up ends the run in ending E0).
 
 ## Writing content
 
-The comedy only works if these hold (story.md, *Content rules*). They are not style preferences:
+The comedy only works if these hold (storyboard README §3.8). They are not style preferences:
 
 1. No character is ever rude. Hostility is expressed entirely through hospitality.
 2. Nobody acknowledges that the fighting is strange.
-3. The wealth is shown, never stated.
+3. The wealth is shown big (private mountain, supercars, a suitcase of cash), never said.
 4. Every enemy has a reason to like you. They fight you anyway.
 5. **The candidate never suspects.** Not once, not for a frame. The player may; he may not.
 6. Cartoon violence only — nobody bleeds, nobody is hurt, nobody stays down. Keep it playable by kids.

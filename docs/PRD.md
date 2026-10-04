@@ -1,7 +1,8 @@
 # PRD: 熱血物語:見家長 — *Meeting the Parents*
 
-**Narrative authority is `docs/story.md`.** This document covers mechanics, content rosters, and
-technical requirements. Where the two disagree about story, story.md wins.
+**Narrative authority is `docs/storyboard/` (final storyboard, 2026-10-04); its story, stage and
+scoring sections supersede this document's.** This document covers mechanics, content rosters, and
+technical requirements. Where the two disagree, the storyboard wins.
 
 ---
 
@@ -192,7 +193,7 @@ line on the form reads 「這些是我們的錢。」*
 **Arrival is NOT scored.** It was worth +8 in an earlier draft, which turned the clock into a
 countdown and made the run stressful — and a countdown is exactly the wrong feeling for a game whose
 thesis is that stopping to help someone is always correct. A player racing a timer does not stop.
-Lateness lands as dialogue at the table instead; see `docs/story.md`, *If he is late*.
+Lateness lands as dialogue at the table instead; see `docs/storyboard/06-reveal-endings.md` (D-01 table states, E3).
 
 **The set-pieces total 37, deliberately short of the 40 cap.** A full hidden column is therefore
 unreachable without helping at least one person up. You cannot be graded perfect on courtesy alone —
@@ -645,5 +646,5 @@ test/
   `shared/` or stage data, never inline. All will be revised after playtesting.
 - Boss AI: state machines, `IDLE → CHASE → ATTACK → RECOVER → STUN`.
 - Object-pool particles and projectiles from the start; retrofitting is painful.
-- Write every line of enemy dialogue against the six content rules in `docs/story.md`. The candidate
+- Write every line of enemy dialogue against the six content rules in `docs/storyboard/README.md` §3.8. The candidate
   never suspects — not once, not for a frame.

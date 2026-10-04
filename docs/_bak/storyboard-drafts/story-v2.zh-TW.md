@@ -36,6 +36,15 @@
 | H7 | **時鐘不合理。** 第三關 18:00 開始,晚餐也是 18:00 開始,所以他永遠都會遲到 | 「準時/遲到」的結局因此失效 |
 | H8 | **只有一個真正的結局**(批准,或遲到的變化版)。你想要的是**意想不到的結局** | 缺少重玩的理由;揭曉之後就沒有驚喜了 |
 
+Answer:
+H1: i would like to correct as : 他將來能不能保護她 and provide girl better future in parents point of view. therefore, Power, Money and Brave are key factors in  consideration.
+H2: 最後的彩蛋 is a funny ending in my idea. but, you are right. let's remove it.
+H3: i cannot remember this point. let's remove it from the story.
+H4: let's add a stage for girl's mother as boss in testing story.
+H5: no. i think you misunderstand this point. player just need to select a character from beginning. it does not mean there are 3 候選人. actually, there is 1 候選人 (player) only. but, player need to pick a face(skill) in coming testing only.
+H6: it is a game but not happening in real world. but, your question is interesting, you can explain mobile was broken if  need...
+H7: I think you can adjust the timing for dinner. actually, player need to overcome all stage on time because dinner cannot be late. if player is too late to finish  all stages, timing  will be a factor to decide endings (Power, Money and Brave and timing  are the factors for parents to decide this 候選人 can be husband of the girl)
+
 ### v2 的修改
 
 | 原版 | v2 | 修補 |
@@ -62,6 +71,8 @@
 ### 家族的問題
 
 小雨真的被綁架過三次——七歲、十一歲、十四歲。沒有一次上過新聞。
+
+Answer: it is a game. you can highlight that this family is very rich. therefore, parents cover those with large amount.
 
 **每一次,都是她爸爸去把她帶回來的。** 他今年五十四歲了。
 
@@ -112,7 +123,7 @@
 
 **二叔 BAN — 泡茶的叔叔。** 打不倒。奉上三杯茶。敬重一個鞠躬。
 
-**三叔 — 交通警察。** 真的警察。接到候選人的 110 電話:「我們已經在處理了,你先追。」
+**三叔 Ken — 交通警察。** 真的警察。接到候選人的 110 電話:「我們已經在處理了,你先追。」
 在最後一題時,真正的逮捕由他執行。
 
 **水果店老闆娘 — 小雨的姑姑。沒人通知她。** 攤子是真的,怒氣也是真的。第一關頭目。

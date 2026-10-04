@@ -1,5 +1,8 @@
 # 熱血物語:見家長 — *Meeting the Parents*
 
+> **Superseded (2026-10-04).** The final story is the storyboard in `docs/storyboard/` (start with
+> `README.md`). This file is kept as the original concept only — do not build from it.
+
 **Selected story.** This is the narrative bible. `docs/PRD.md` covers mechanics; where the two
 disagree about story, this file wins.
 

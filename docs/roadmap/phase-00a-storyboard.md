@@ -4,7 +4,7 @@
 
 ## Goal
 
-Turn `docs/story.md` and `docs/PRD.md` into the top of the workflow's pipeline:
+Turn `docs/story.md` (now archived in `docs/_bak/`) and `docs/PRD.md` into the top of the workflow's pipeline:
 
 ```text
 STORYBOARD ─► GAME DESIGN BIBLE ─► REGISTRIES ─► (Phase 1+) data in Godot
@@ -34,24 +34,31 @@ mechanics.
 ## Deliverables
 
 ```text
-docs/storyboard/
-  README.md                  beat format + the beat index (whole game, in order)
-  00-title-prologue.md       title, prologue (the van), candidate select
-  01-stage1-city.md          城市「追」 17:20
-  02-stage2-forest.md        森林「山路」 17:45
-  03-stage3-castle.md        城堡「城堡」 18:00
-  04-dining-room.md          the door, 林建國 phase 1 and 2
-  05-reveal-endings.md       the reveal, the evaluation form, stinger, the three arrival
-                             endings, ending, post-credits 「第2次」
-  ledgers.md                 clue ledger + setup/payoff ledger
+docs/storyboard/                       ✅ FINAL (2026-10-04)
+  README.md                  premise, cast, scoring & systems, beat format, beat index,
+                             ending logic, story flags, decisions
+  00-title-prologue.md       title, look select, prologue 16:30–17:10
+  01-stage1-city.md          城市「追」 17:10 — the Fruit Aunt
+  02-stage2-campus.md        校園 17:35 — the Lunch Lady (his mother)
+  03-stage3-mountain.md      山路 18:00 — 二叔 + the Straw-Hat Uncle (his father)
+  04-stage4-garage.md        司機 18:25 — the Driver (林媽媽); the suitcase choice
+  05-stage5-estate.md        城堡 18:40 — Howard; the dining room, 林建國
+  06-reveal-endings.md       reveal, the form, endings E0–E3, game over, post-credits,
+                             the 1994 bonus stage
+  ledgers.md                 clue ledger, setup/payoff ledger, draft ids, music, art gaps
 docs/game_bible/
-  README.md                  overview; links to PRD/story sections rather than copying them
+  README.md                  overview; links to storyboard sections rather than copying them
   characters/*.md            §18 template
   enemies/*.md               §19 template
   locations/*.md             §20 template
   registries.md              the 17 registries of §31
   asset_list.md              sprites, animations, VFX, SFX, music — all marked placeholder (D7)
 ```
+
+> **Superseded below this line:** the beat-format example, draft beat index, ledgers and slice ids
+> in *Design* were written for the original three-stage story. The final versions are in
+> `docs/storyboard/` (README §4 beat format, §5 beat index; `ledgers.md`). The registries step (A7)
+> starts from `ledgers.md` §3.
 
 ## Design
 
@@ -169,16 +176,16 @@ Draft ids for the vertical slice (to be confirmed in A7):
 
 ## Steps
 
-- [ ] **A0** Revise the story: `docs/storyboard/story-v2.en.md` and `story-v2.zh-TW.md` (same
+- [x] **A0** *(done 2026-10-04: option B 「一九九四復仇戰」 approved, with the suitcase change; final storyboard in `docs/storyboard/`)* Revise the story: `docs/storyboard/story-v2.en.md` and `story-v2.zh-TW.md` (same
   sections and beat ids). Review rounds until approved; the approved version replaces
   `docs/story.md`, and its beat list supersedes the draft index above.
-- [ ] **A1** Beat index: confirm the list above (add, cut, reorder) and the clock time of each
+- [x] **A1** Beat index: confirm the list above (add, cut, reorder) and the clock time of each
   beat.
-- [ ] **A2** Storyboard **prologue + Stage 1** in full detail — this is the vertical slice.
-- [ ] **A3** Storyboard Stage 2, Stage 3 and the dining room.
-- [ ] **A4** Storyboard the reveal, the evaluation form, stinger, the three arrival endings,
+- [x] **A2** Storyboard **prologue + Stage 1** in full detail — this is the vertical slice.
+- [x] **A3** Storyboard Stage 2, Stage 3 and the dining room.
+- [x] **A4** Storyboard the reveal, the evaluation form, stinger, the three arrival endings,
   ending and post-credits.
-- [ ] **A5** Clue ledger and setup/payoff ledger; resolve or cut every open payoff.
+- [x] **A5** Clue ledger and setup/payoff ledger; resolve or cut every open payoff.
 - [ ] **A6** Game bible: character, enemy and location pages; art gaps listed.
 - [ ] **A7** Registries (all 17) and the asset list; id convention agreed and written into
   `CLAUDE.md`.

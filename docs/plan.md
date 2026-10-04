@@ -43,7 +43,7 @@ What D4 means in practice:
 
 | Phase | | Detail | Size | Status |
 |---|---|---|---|---|
-| 0A | Storyboard, game bible & registries | [phase-00a](roadmap/phase-00a-storyboard.md) | M | ⏳ next |
+| 0A | Storyboard, game bible & registries | [phase-00a](roadmap/phase-00a-storyboard.md) | M | 🔄 storyboard final (A0–A5); bible & registries next |
 | 0B | Project setup | [phase-00b](roadmap/phase-00b-setup.md) | S | ⏳ needs Godot |
 | 1 | Core data architecture | [phase-01](roadmap/phase-01-core-data.md) | S | |
 | 2 | CharacterData & SkillData | [phase-02](roadmap/phase-02-character-skill-data.md) | M | |
@@ -64,13 +64,13 @@ Sizes are relative effort, not time: S is a handful of steps, XL is the rest of 
 |---|---|---|---|
 | M0a | The game on paper | Phase 0A | The whole game storyboarded beat by beat; bible pages; every id fixed |
 | M0b | Hello Godot | Phase 0B | An empty 1920×1080 project that runs, a passing headless test, a web build that loads |
-| M1 | Felix punches someone | Phase 3 | Felix fights an office worker; defeat → dazed → help up; 力/錢/禮 tracked |
+| M1 | Felix punches someone | Phase 3 | Felix fights an office worker; defeat → dazed → help up; 力/錢/時/勇 tracked |
 | M2 | Skills are data | Phase 4 | Felix's three specials, each built only from `.tres` |
 | M3 | Tools | Phase 6 | New characters and skills made and tested in the editor |
 | M4 | **Vertical slice** | Phase 8 | Prologue → short Stage 1 → fruit shop owner → evaluation form |
 | M5 | Safe content | Phase 9 | A validator that blocks broken or spoiler-leaking content |
 | M6 | Stage 1 complete | Phase 10 | The full first stage, playtested |
-| M7 | The whole game | Phase 10 | All three stages, the dining room, the reveal, the endings |
+| M7 | The whole game | Phase 10 | All five stages, the dining room, the reveal, the endings, the 1994 bonus |
 
 ## Dependencies
 
@@ -106,13 +106,18 @@ Work **one step at a time, in order.** A step is finished when:
 
 ## Hard success criteria — carried through every phase
 
+> **The final storyboard (`docs/storyboard/`, 2026-10-04) supersedes the story and scoring details in
+> the phase pages.** Phases 1, 3, 7, 8, 9 and 10 still quote the old 禮 values (37, 71, 18:00, three
+> stages, three candidates). When a phase starts, take its numbers and content from the storyboard
+> (README §3 scoring, §6 endings) and update that phase page first.
+
 From PRD §16, the old `SPEC.md` and the story bible. These must never regress:
 
 | # | Criterion | Enforced by |
 |---|---|---|
-| C1 | **A mashing player cannot beat 71.** A max-violence, zero-restraint run lands around 56–60 | Automated test from Phase 3; validator from Phase 9 (scoring values are data, so a data edit can break it) |
-| C2 | **The character 禮 never appears on screen before the evaluation form** | String-table scan from Phase 1; validator from Phase 9; playthrough |
-| C3 | A full 禮 column needs at least one help-up (set-pieces total 37 < 40) | Test from Phase 3; validator from Phase 9 |
+| C1 | **A mashing player cannot pass (70).** A max-violence, zero-restraint run lands around 48–56 | Automated test from Phase 3; validator from Phase 9 (scoring values are data, so a data edit can break it) |
+| C2 | **The character 勇 never appears on screen before the evaluation form (R-07)** | String-table scan from Phase 1; validator from Phase 9; playthrough |
+| C3 | A full 勇 column needs help-ups (set pieces total 36 < 40) | Test from Phase 3; validator from Phase 9 |
 | C4 | The clock is unlabelled and unscored; the pause menu explains nothing | Phase 8 review; playthrough |
 | C5 | Adding a character, skill, enemy or level needs no core-code change (§29) | Each phase's done-when |
 | C6 | Stable 60 FPS | Profiling in Phase 8 and Phase 10 |
@@ -123,8 +128,8 @@ Answered questions move into the relevant phase page. Owner: you.
 
 | # | Question | Needed by | Proposal |
 |---|---|---|---|
-| Q1 | How fast does the in-game clock run? (Stage 1 starts 17:20, dinner 18:00) | Phase 8 | 1 game-minute per 30 real seconds → 40 min of clock ≈ 20 min of play |
-| Q2 | When does "late" become "very late"? | Phase 10 | Keep the old value: 4 game-minutes after 18:00 |
+| Q1 | How fast does the in-game clock run? | Phase 8 | ✅ Decided in the storyboard (README §3.5): 17:10 → 19:00, 15 real s per game-minute, ≈ 27.5 min of play |
+| Q2 | When does "late" become "very late"? | Phase 10 | ✅ Decided: late 19:01–19:09, very late ≥ 19:10 |
 | Q3 | Can a knocked-down (lying, not yet defeated) opponent be hit? | Phase 3 | Yes, and it counts as striking a downed opponent (−4). That is the temptation |
 | Q4 | How does 氣 refill, apart from tea? | Phase 3 | Slow regen while not attacking, plus on landing hits |
 | Q5 | Coins: collected by walking over them, or with E? | Phase 3 | Walk over. E is kept for people and items |
