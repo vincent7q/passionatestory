@@ -1,27 +1,13 @@
-## Summary
+## Change
 
-Brief description of what this PR does.
+Describe the game, art, or workflow change and link the relevant task or asset ID.
 
-## Type of Change
+## Validation
 
-- [ ] New agent
-- [ ] New skill
-- [ ] New hook or rule
-- [ ] Bug fix
-- [ ] Documentation improvement
-- [ ] Other:
+State the commands or manual checks actually run and their results. Include
+Godot screenshots for visible changes and note any remaining limitations.
 
-## Changes
+## Handoff
 
--
--
--
-
-## Checklist
-
-- [ ] I've tested this in a Claude Code session
-- [ ] New agents include the Collaboration Protocol section
-- [ ] New skills use the subdirectory format (`.claude/skills/<name>/SKILL.md`)
-- [ ] Reference docs are updated (agent-roster, skills-reference, hooks-reference, rules-reference)
-- [ ] Hooks use `grep -E` (POSIX) and fail gracefully without jq/python
-- [ ] No hardcoded paths or platform-specific assumptions
+For artwork, update `docs/art/asset-manifest.json` with export checks, source
+information, integration evidence, and approval status as applicable.

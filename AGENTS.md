@@ -1,41 +1,31 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
+## Project State & Authority
 
-This repository combines the Passionate Story game planning with the Claude Code Game Studios framework. The game is awaiting a Godot rewrite; `src/` contains guidance, not an implementation. No `project.godot`, game tests, or asset directory exists yet.
+Passionate Story V2 restarts the game from its story idea, using Godot. No game project, production art, or executable game tests exist yet. Old architecture, balance values, resolution, art style, and task completion are not V2 decisions.
 
-- `.claude/`: agents, skills, Bash hooks, rules, and document templates.
-- `design/` and `docs/`: design registries, technical documentation, and engine references.
-- `CCGS Skill Testing Framework/`: framework catalogs, behavioral specs, and quality rubrics.
-- `production/`: local session state; generated session artifacts are ignored.
-- `project.yaml`: shared configuration; use ignored `project.local.yaml` for personal overrides.
+Read `design/game-brief.md`, `docs/plan.md`, and `docs/art/README.md` before working. `idea/storyboard/` preserves historical source material; its original FINAL labels and technical instructions do not approve V2 requirements. Follow current user decisions and active project documents over historical references or generic skill examples.
 
-Read the game-specific section of `CLAUDE.md` for the intended architecture. Several referenced game documents are absent from this checkout; verify paths before relying on them.
+## Responsibilities & Structure
 
-## Build, Test, and Development Commands
+- **Claude:** Godot code, scenes, resources, import settings, animation integration, tests, and builds. Use CCGS as the development workflow in `minimal` mode.
+- **Codex:** visual proposals, image generation, art preparation, and `docs/art/asset-manifest.json`. Use the selected asset-production skill; do not start another development workflow.
+- **User:** story, creative direction, scope, and final approval.
 
-There are currently no game build, run, lint, or test commands. Do not assume the removed JavaScript implementation or local `node_modules/` provides a working application.
+`.claude/` holds CCGS tooling; `.agents/skills/` holds selected art tooling. `design/` contains the brief, `docs/plan.md` tracks development, `docs/art/` coordinates art, and `production/` holds workflow artifacts. Claude establishes runtime directories during engine setup.
 
-For framework development:
+## Development & Verification
 
-- `claude`: start Claude Code from the repository root.
-- `/skill-test static <name>`: check a skill's structure within Claude Code.
-- `/skill-test spec <name>`: check behavioral assertions.
-- `/skill-test audit`: report framework test coverage.
-- `bash -n .claude/hooks/validate-commit.sh`: check a hook's Bash syntax.
+Start `claude` from the repository root. `/settings` displays CCGS configuration. The next development task is `/setup-engine godot`, using the existing brief. Verify the installed editor and record the exact version before using engine APIs.
 
-Document executable game commands when the Godot project is introduced.
+There are no game build, run, lint, or test commands yet. Document working commands after scaffolding; never report placeholder commands as passing checks. Verify visible changes in Godot and retain evidence under `production/qa/evidence/`.
 
-## Coding Style & Naming Conventions
+## Style & Asset Handoffs
 
-For new GDScript, use tabs, explicit types, `snake_case` files/functions/variables, `PascalCase` classes, and `SCREAMING_SNAKE_CASE` constants. Keep gameplay values in data resources and content IDs stable. Use English identifiers and Traditional Chinese for Chinese text.
+Use readable Markdown and two-space YAML indentation. For GDScript, use tabs, typed interfaces, `snake_case` files/functions, and `PascalCase` classes. Preserve LF endings in shell scripts. Use English identifiers and Traditional Chinese for Chinese dialogue.
 
-Skills belong in `.claude/skills/<name>/SKILL.md` with required YAML frontmatter. Preserve LF endings for shell scripts. Hooks must support Windows Git Bash, macOS, and Linux; use `grep -E`. No formatter is configured.
+Agree on asset IDs, dimensions, viewpoint, scale, transparency, pivots, and animation requirements before production. Keep editable sources separate from runtime exports. Art becomes accepted only after technical checks, inspection in Godot, and user approval; the manifest records those separately.
 
-## Testing Guidelines
+## Commits & Pull Requests
 
-GUT with headless execution is the game's planned framework; bundled generic rules also mention gdUnit4. Resolve that mismatch when scaffolding tests. Put tests in `tests/`, with descriptive functions such as `test_damage_reduces_health`. Cover formulas, edge cases, and regressions. No numeric coverage threshold is configured. Exercise framework changes in Claude Code and record observed results.
-
-## Commit & Pull Request Guidelines
-
-History uses short descriptive subjects, sometimes prefixed with task IDs. `CONTRIBUTING.md` requests Conventional Commits, e.g. `docs: clarify Godot setup`; reference relevant story IDs for source changes. Use `.github/PULL_REQUEST_TEMPLATE.md`, explain changes and validation, and update matching reference docs when changing framework components.
+Use concise Conventional Commits, such as `docs: define art handoff`. Explain the change and validation; include screenshots for visible changes. Do not commit, push, or publish without user instruction. Preserve third-party licenses and notices.
