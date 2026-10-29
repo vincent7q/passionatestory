@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="熱血物語：合格女婿。六關、八位親屬頭目與三種結局；五名援軍每隔10秒依序進場，沈雅芳在60秒後帶第二條血量返場。完整故事第四稿。">
+  <title>合格女婿｜六關三結局完整故事草稿</title>
+  <!-- Source: codex_idea.md | SHA-256: 3411c7c4b63bc9fd71f4ad10a3b1ec09b575abe59dc826b786a3c5c7f0714777 -->
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f1e9; --surface: #fffdf8; --ink: #292721; --muted: #746d61;
+      --line: #ded7cb; --accent: #8b3d35; --accent-soft: #f3e6de;
+      --gold: #967025; --sage: #426353; --sage-soft: #eaf0e9;
+      --reader-font: 18px;
+      --sans: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+      --serif: "Noto Serif TC", "Source Han Serif TC", "PMingLiU", serif;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #1b1d1c; --surface: #242725; --ink: #ece7de; --muted: #b6b0a5;
+      --line: #41453f; --accent: #e3a094; --accent-soft: #3b2b28;
+      --gold: #d5b471; --sage: #a1c6ae; --sage-soft: #28362e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+    button, summary, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--accent); text-underline-offset: .23em; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+    [hidden] { display: none !important; }
+    ::selection { background: var(--accent-soft); color: var(--ink); }
+    .skip-link { position: fixed; top: -80px; left: 1rem; z-index: 20; background: var(--surface); padding: .8rem 1rem; }
+    .skip-link:focus { top: 1rem; }
+    .shell { width: min(1240px, calc(100% - 80px)); margin-inline: auto; }
+    .masthead { padding-block: 28px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); gap: 20px; }
+    .publication { font-size: 12px; letter-spacing: .17em; font-weight: 700; }
+    .document-status { color: var(--muted); font-size: 12px; letter-spacing: .06em; }
+    .hero { padding-block: 65px 42px; }
+    .eyebrow { color: var(--accent); font-size: 13px; letter-spacing: .17em; margin-bottom: 20px; font-weight: 700; }
+    h1 { margin: 0; max-width: 980px; font-family: var(--serif); font-weight: 700; font-size: clamp(38px, 4.8vw, 65px); line-height: 1.48; letter-spacing: .025em; }
+    h1 span { display: block; }
+    .hero-description { max-width: 620px; color: var(--muted); font-size: 17px; line-height: 1.9; margin: 22px 0 28px; }
+    .hero-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 12px; }
+    .status-pill { border: 1px solid var(--line); border-radius: 99px; padding: 5px 10px; }
+    .story-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-block: 1px solid var(--line); margin-bottom: 42px; }
+    .story-card { padding: 20px 22px; color: var(--ink); text-decoration: none; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background .15s; }
+    .story-card:nth-child(3n + 1) { padding-left: 0; }
+    .story-card:nth-child(3n) { border-right: 0; }
+    .story-card:nth-last-child(-n + 3) { border-bottom: 0; }
+    .story-card:hover { background: var(--accent-soft); }
+    .card-number { color: var(--accent); font-family: Georgia, serif; font-size: 28px; display: block; margin-bottom: 8px; }
+    .story-card:nth-child(2) .card-number { color: var(--gold); }
+    .story-card:nth-child(3) .card-number { color: var(--sage); }
+    .card-title { display: block; font-family: var(--serif); font-size: 23px; font-weight: 700; margin-bottom: 10px; }
+    .card-note { display: block; font-size: 13px; line-height: 1.7; color: var(--muted); }
+    .layout { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 65px; align-items: start; }
+    .sidebar { position: sticky; top: 28px; max-height: calc(100vh - 45px); overflow-y: auto; padding-bottom: 20px; scrollbar-width: thin; }
+    .nav-label { font-size: 11px; letter-spacing: .15em; color: var(--muted); margin: 0 0 16px; }
+    .toc { display: grid; gap: 4px; }
+    .toc a { text-decoration: none; padding: 7px 10px; border-left: 2px solid transparent; font-size: 14px; line-height: 1.5; color: var(--muted); }
+    .toc a:hover, .toc a[aria-current="location"] { border-left-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .toc small { display: block; font-size: 10px; letter-spacing: .08em; margin-bottom: 3px; opacity: .8; }
+    .reader-tools { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 20px; }
+    .tool-row { display: flex; gap: 7px; align-items: center; margin-bottom: 10px; }
+    .tool-row button { border: 1px solid var(--line); color: var(--ink); background: var(--surface); border-radius: 5px; min-height: 42px; padding: 8px 12px; font-size: 13px; }
+    .tool-row button:hover { border-color: var(--accent); }
+    .tool-row button:disabled { opacity: .4; cursor: default; }
+    .font-output { min-width: 34px; text-align: center; font-size: 12px; color: var(--muted); }
+    .source-link { font-size: 12px; display: inline-block; margin-top: 10px; }
+    main { min-width: 0; max-width: 850px; padding-bottom: 45px; }
+    .prose { font-size: var(--reader-font); line-height: 1.95; overflow-wrap: anywhere; }
+    .prose h2 { font-family: var(--serif); font-size: 1.65em; line-height: 1.6; margin: 0 0 1em; letter-spacing: .015em; }
+    .prose h3 { font-size: 1.07em; font-weight: 700; line-height: 1.7; margin: 2em 0 .7em; }
+    .prose h4, .prose h5, .prose h6 { font-size: 1em; line-height: 1.7; margin: 1.8em 0 .7em; }
+    .prose p { margin: 0 0 1.25em; }
+    .prose ul, .prose ol { padding-left: 1.45em; margin: 1em 0 1.5em; }
+    .prose li { padding-left: .25em; margin-bottom: .65em; }
+    .prose li > p { margin-bottom: .5em; }
+    .prose strong { font-weight: 700; }
+    .prose code { font-size: .85em; padding: .1em .3em; background: var(--accent-soft); border-radius: 3px; }
+    .prose blockquote { margin: 1.6em 0; padding: 6px 0 6px 23px; border-left: 3px solid var(--accent); font-family: var(--serif); font-size: 1.07em; line-height: 1.9; }
+    .prose blockquote p { margin-bottom: .65em; }
+    .prose blockquote p:last-child { margin-bottom: 0; }
+    .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }
+    .table-wrap { overflow-x: auto; margin: 1.5em 0 1.8em; border: 1px solid var(--line); border-radius: 6px; }
+    table { border-collapse: collapse; width: 100%; min-width: 530px; font-size: .85em; line-height: 1.8; }
+    th, td { padding: 13px 15px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { font-weight: 700; background: var(--accent-soft); }
+    tbody tr:last-child td { border-bottom: 0; }
+    td + td, th + th { border-left: 1px solid var(--line); }
+    .overview { padding: 30px 34px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+    .overview h2 { font-size: 1.35em; }
+    .story { padding-block: 54px 42px; border-bottom: 1px solid var(--line); scroll-margin-top: 28px; }
+    .story-eyebrow { display: flex; gap: 15px; align-items: center; font-size: 12px; color: var(--muted); margin-bottom: 15px; letter-spacing: .05em; }
+    .story-number { color: var(--accent); font: 32px/1.1 Georgia, serif; }
+    #story-two .story-number { color: var(--gold); }
+    #story-three .story-number { color: var(--sage); }
+    .story-jumps { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .story-jumps a { text-decoration: none; font-size: 12px; border: 1px solid var(--line); padding: 3px 10px; border-radius: 99px; color: var(--muted); }
+    .story-jumps a:hover { color: var(--accent); border-color: var(--accent); }
+    .disclosure { border: 1px solid var(--line); border-radius: 7px; margin: 24px 0; background: var(--surface); scroll-margin-top: 28px; }
+    .disclosure summary { cursor: pointer; display: flex; align-items: center; gap: 18px; list-style: none; padding: 19px 22px; }
+    summary::-webkit-details-marker { display: none; }
+    .disclosure summary h2, .disclosure summary h3 { flex: 1; margin: 0; font-family: var(--sans); font-size: 1em; }
+    .disclosure-icon { color: var(--muted); flex-shrink: 0; font: 25px/1 var(--sans); transition: transform .15s; }
+    details[open] > summary .disclosure-icon { transform: rotate(45deg); }
+    .disclosure-body { padding: 7px 25px 10px; }
+    .reveal { border-left: 4px solid var(--gold); }
+    .ending-one { border-left: 4px solid var(--accent); }
+    .ending-two { border-left: 4px solid var(--sage); }
+    .ending-two > summary { background: var(--sage-soft); }
+    .ending-three { border-left: 4px solid var(--gold); }
+    .endings { padding-block: 42px 18px; scroll-margin-top: 28px; }
+    .ending-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+    .ending-links a { border: 1px solid var(--line); border-radius: 99px; padding: 5px 13px; font-size: 13px; text-decoration: none; }
+    .story-note { font-size: .88em; color: var(--muted); margin-top: 1.8em !important; }
+    .comparison { padding-block: 46px 18px; scroll-margin-top: 28px; }
+    .archive { margin-block: 25px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); scroll-margin-top: 28px; }
+    .archive > summary { cursor: pointer; display: flex; gap: 20px; align-items: center; padding: 25px 0; list-style: none; }
+    .archive > summary > span:first-child { flex: 1; }
+    .archive-label { display: block; font-size: 16px; font-weight: 700; }
+    .archive-note { display: block; font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .archive-body { padding-block: 12px 25px; }
+    .footer { padding-block: 24px 35px; border-top: 1px solid var(--line); color: var(--muted); display: flex; justify-content: space-between; gap: 15px; font-size: 12px; }
+    @media (max-width: 1000px) { .layout { gap: 35px; grid-template-columns: 170px minmax(0, 1fr); } .shell { width: calc(100% - 48px); } }
+    @media (max-width: 760px) {
+      html { scroll-padding-top: 105px; }
+      .shell { width: calc(100% - 36px); }
+      .masthead { padding-block: 20px 16px; } .publication { font-size: 10px; letter-spacing: .12em; }
+      .document-status { font-size: 10px; } .hero { padding-block: 38px 30px; }
+      h1 { font-size: clamp(30px, 7.9vw, 46px); line-height: 1.5; letter-spacing: 0; }
+      .hero-description { font-size: 15px; margin-block: 18px 22px; }
+      .story-cards { margin-bottom: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .story-card, .story-card:nth-child(3n + 1) { display: block; padding: 14px 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .story-card:nth-child(2n) { border-right: 0; }
+      .story-card:nth-last-child(-n + 2) { border-bottom: 0; }
+      .card-number { font-size: 22px; margin-bottom: 6px; }
+      .card-title { font-size: 18px; line-height: 1.6; margin: 0 0 5px; } .card-note { font-size: 11px; }
+      .layout { display: block; }
+      .sidebar { top: 0; z-index: 5; max-height: none; overflow: visible; padding: 10px 0; background: var(--paper); border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+      .nav-label, .toc small, .source-link { display: none; }
+      .toc { display: flex; gap: 2px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; scrollbar-width: none; }
+      .toc::-webkit-scrollbar { display: none; }
+      .toc a { padding: 7px 10px; font-size: 12px; border-left: 0; border-bottom: 2px solid transparent; }
+      .toc a:hover, .toc a[aria-current="location"] { border-left: 0; border-bottom-color: var(--accent); }
+      .reader-tools { border: 0; padding: 0; margin-top: 5px; display: flex; justify-content: space-between; gap: 10px; }
+      .tool-row { margin: 0; } .tool-row button { min-height: 36px; font-size: 12px; padding: 5px 11px; }
+      .overview { padding: 25px 20px 12px; }
+      .prose h2 { font-size: 1.4em; } .prose { line-height: 1.95; }
+      .story { padding-block: 38px 28px; scroll-margin-top: 112px; }
+      .comparison, .archive, .disclosure, .endings { scroll-margin-top: 112px; }
+      .disclosure summary { padding: 16px; gap: 10px; } .disclosure-body { padding: 5px 17px 8px; }
+      .prose blockquote { padding-left: 16px; }
+      .footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+    @media print {
+      :root { color-scheme: light; --paper: white; --surface: white; --ink: #111; --muted: #444; --line: #ccc; --accent: #63342c; --accent-soft: #f5f0eb; --sage-soft: #f3f6f2; --reader-font: 11pt; }
+      body { background: white; color: #111; } .shell { width: 100%; }
+      .sidebar, .story-cards, .story-jumps, .skip-link, .archive, .footer a { display: none !important; }
+      .layout { display: block; } .hero { padding: 20px 0; } h1 { font-size: 28pt; }
+      .hero-description { font-size: 11pt; } .overview { border: 0; padding: 0; }
+      .story { padding-block: 24px; } .table-wrap { overflow: visible; } table { min-width: 0; }
+      .disclosure summary { padding: 12px; } .disclosure-icon { display: none; }
+      h2, h3, summary { break-after: avoid; } blockquote, tr { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; } @page { margin: 18mm; }
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip-link" href="#story-overview">跳至故事內容</a>
+  <div class="shell">
+    <header class="masthead">
+      <span class="publication">PASSIONATE STORY / 故事討論</span>
+      <span class="document-status">完整故事第四稿 · 2026.10.29</span>
+    </header>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="eyebrow">八位親屬 · 六道考驗 · 三種人生</div>
+      <h1 id="page-title"><span>合格女婿</span><span>你會簽下這一生嗎？</span></h1>
+      <p class="hero-description">他終於通過所有考驗，卻在證書背面，<br>看見了自己從未答應過的一輩子。</p>
+      <div class="hero-meta"><span class="status-pill">故事方向已選定 · 全文待審閱</span><span>作者 Codex</span><span>繁體中文</span></div>
+    </section>
+    <nav class="story-cards" aria-label="六個關卡導覽"><a class="story-card" href="#stage-one"><span class="card-number">01</span><span class="card-title">有我在</span><span class="card-note">哥哥 · 保護能力</span></a><a class="story-card" href="#stage-two"><span class="card-number">02</span><span class="card-title">帶得出去</span><span class="card-note">二姑 · 外貌與體面</span></a><a class="story-card" href="#stage-three"><span class="card-number">03</span><span class="card-title">誠意先付</span><span class="card-note">舅舅 · 財力</span></a><a class="story-card" href="#stage-four"><span class="card-number">04</span><span class="card-title">三姊妹的規矩</span><span class="card-note">三姊妹 · 三位頭目</span></a><a class="story-card" href="#stage-five"><span class="card-number">05</span><span class="card-title">別走我的路</span><span class="card-note">父親林建國 · 警告與考驗</span></a><a class="story-card" href="#stage-six"><span class="card-number">06</span><span class="card-title">誰說了算</span><span class="card-note">母親沈雅芳 · 最終頭目</span></a></nav>
+    <div class="layout">
+      <aside class="sidebar" aria-label="閱讀導覽">
+        <p class="nav-label">CONTENTS / 目錄</p>
+        <nav class="toc" aria-label="文件章節"><a href="#story-overview" aria-current="location"><small>OVERVIEW</small>故事總覽</a><a href="#characters"><small>CAST</small>主要角色</a><a href="#prologue"><small>PROLOGUE</small>序章</a><a href="#stage-one"><small>哥哥 · 保護能力</small>01 · 有我在</a><a href="#stage-two"><small>二姑 · 外貌與體面</small>02 · 帶得出去</a><a href="#stage-three"><small>舅舅 · 財力</small>03 · 誠意先付</a><a href="#stage-four"><small>三姊妹 · 三位頭目</small>04 · 三姊妹的規矩</a><a href="#stage-five"><small>父親林建國 · 警告與考驗</small>05 · 別走我的路</a><a href="#stage-six"><small>母親沈雅芳 · 最終頭目</small>06 · 誰說了算</a><a href="#verdict"><small>AFTER THE TEST</small>真相與選擇</a><a href="#endings"><small>THREE ENDINGS</small>三種結局</a><a href="#review-notes"><small>REVIEW</small>伏筆與審閱筆記</a><a href="#proposal-history"><small>ARCHIVE</small>歷次提案</a></nav>
+        <div class="reader-tools" hidden>
+          <div class="tool-row"><button type="button" id="font-smaller" aria-label="縮小字級">A−</button><output class="font-output" id="font-size" aria-live="polite" aria-label="目前字級">18</output><button type="button" id="font-larger" aria-label="放大字級">A＋</button></div>
+          <div class="tool-row"><button type="button" id="theme-toggle" aria-pressed="false">夜間</button><button type="button" id="print-document">列印</button></div>
+        </div>
+        <a class="source-link" href="codex_idea.md">閱讀 Markdown 原稿 ↗</a>
+      </aside>
+      <main id="document">
+        <section class="overview prose" id="story-overview" aria-labelledby="overview-heading-1"><h2 id="overview-heading-1">故事總覽：他終於合格了，然後呢？</h2>
+<p>陳以安第一次正式見女友林小雨的家人。出門之前，他還在反覆練習該怎樣稱呼長輩。
+他相信，只要表現得夠好，這一晚就會成為兩人共同未來的開始。</p>
+<p>但在約定地點，一輛黑色廂型車把小雨帶走。他追了出去，闖過八位親屬主持的六道關卡，
+一次次證明自己的能力，也逐漸察覺：這場危機有太多事先安排好的痕跡。</p>
+<p>起初，他只想救她。知道她安全後，他仍想證明自己值得被接納。
+後來，他繼續走，是要當面問清楚：她究竟把他當成伴侶，還是等待驗收的供應者？</p>
+<p>終點是一張飯桌、一份「合格女婿」證書，以及一整套沒有終點的婚後要求。
+六關全部通過之後，他終於可以決定，接下來要把自己的能力用在哪裡。</p>
+<p>在終點之前，他還會先看見一個活生生的未來：林建國的本事和付出，沒有替他換來家中的尊重。
+多年來，妻子沈雅芳掌握金錢與話語權，連在別人面前也毫不留情地責罵他。
+他看得懂以安即將踏進甚麼生活，卻一直沒有勇氣正面阻止妻子的安排。</p>
+<h3 id="overview-heading-2">六個關卡，八位親屬頭目</h3>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">關卡</th>
+<th scope="col">主持考驗的親屬</th>
+<th scope="col">場景</th>
+<th scope="col">表面要求</th>
+<th scope="col">背後想確認的事</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一關：〈有我在〉</td>
+<td>哥哥林家豪</td>
+<td>商業街後方的物流站</td>
+<td>打贏保鑣，追上廂型車</td>
+<td>能否保護她、替家族扛下衝突</td>
+</tr>
+<tr>
+<td>第二關：〈帶得出去〉</td>
+<td>二姑林秀蘭</td>
+<td>百貨商場與禮服展示廳</td>
+<td>整理外表，通過形象考驗</td>
+<td>身高、外貌、穿著能否替家族長面子</td>
+</tr>
+<tr>
+<td>第三關：〈誠意先付〉</td>
+<td>舅舅沈世榮</td>
+<td>貨運倉與維修工場</td>
+<td>處理費用，證明賺錢能力</td>
+<td>財力是否能持續供應她的生活</td>
+</tr>
+<tr>
+<td>第四關：〈三姊妹的規矩〉</td>
+<td>大姊林雅婷、二姊林婉晴、三姊林可欣</td>
+<td>商務會所與宴會準備區</td>
+<td>依次通過三人的比較、情緒與家務考驗</td>
+<td>能否在互相衝突的要求下，仍然服從與付出</td>
+</tr>
+<tr>
+<td>第五關：〈別走我的路〉</td>
+<td>父親林建國</td>
+<td>山上宅邸的舊練武庭院</td>
+<td>擊敗父親，證明承受壓力的能力</td>
+<td>父親私下想確認：以安會不會也只懂得低頭忍受</td>
+</tr>
+<tr>
+<td>第六關：〈誰說了算〉</td>
+<td>母親沈雅芳</td>
+<td>主宴會廳與最後的活動區</td>
+<td>擊敗真正掌權的最終頭目</td>
+<td>是否能看清貪婪與控制，拒絕把自己的能力全交出去</td>
+</tr>
+</tbody>
+</table></div>
+<p>第四關包含三場頭目對決，三人都要面對；其餘每關各一位，合計八位頭目。
+評核文件仍是六個關卡欄位，第四格留下三姊妹各自的簽記，不把三人拆成額外關卡。</p>
+<p>故事主要發生在同一個下午到晚上。商業街、工場、會所與山上宅邸都與林家生意或親屬有關。
+參與攔路的人是受安排的成年演出者或家族人員；街上的普通人不是玩家需要攻擊的對象。
+武打採誇張喜劇表現，沒有人死亡。</p>
+<p>這份草稿以完整故事供審閱，尚未把六關全數排成開發工作，也未設定數值、鏡頭、素材規格或遊戲長度。</p>
+</section>
+        <section class="story prose" id="characters" aria-labelledby="characters-heading-1"><div class="story-eyebrow"><span class="story-number">CAST</span><span>他們各自想得到甚麼</span></div><h2 id="characters-heading-1">主要角色</h2>
+<h3 id="characters-heading-2">陳以安，暱稱阿安——玩家主角</h3>
+<p>二十六歲，做設備維修，收入普通，工作認真，也很擅長把壞掉的東西修好。
+他有朋友、有興趣，也想過將來開一間自己的小工場。</p>
+<p>他把愛情看得很單純：答應的事要做到，喜歡的人遇上困難就應該幫忙。
+他的弱點是太容易把「我還可以做得更好」，當成一切問題的答案。
+遇到不合理要求時，他往往先責怪自己不夠有本事。</p>
+<h3 id="characters-heading-3">林小雨——女友，也是考核的共同策劃者</h3>
+<p>二十五歲，在家族的活動生意裡協助宣傳。她喜歡阿安，也享受他凡事先考慮自己的體貼。
+但她把「結婚後生活應該更好，而且主要由男方負責」看成理所當然。</p>
+<p>兩人曾有真心開心的日子，所以阿安才會在乎。他們的問題，是她很少把相同的體貼放回他身上。
+本稿不把她寫成被父母迫使配合的人。假危機、部分考題與婚後要求，都有她主動參與。</p>
+<h3 id="characters-heading-4">八位考官與家中的權力</h3>
+<ul>
+<li><strong>哥哥林家豪：</strong> 管保全與活動現場，認為男人不夠強，就沒有資格說自己可靠。</li>
+<li><strong>二姑林秀蘭：</strong> 經營服飾相關生意，最在意親友眼中的體面，習慣把人和商品一起打量。</li>
+<li><strong>舅舅沈世榮：</strong> 負責部分家族帳目，相信對方願意付款，才算拿出誠意。</li>
+<li><strong>大姊林雅婷：</strong> 小雨的姊姊，最愛拿別人的伴侶作比較，把社交面子當成衡量付出的標準。</li>
+<li><strong>二姊林婉晴：</strong> 小雨的姊姊，要求對方隨叫隨到，卻不容許對方有自己的時間與情緒。</li>
+<li><strong>三姊林可欣：</strong> 小雨的姊姊，把家務與照顧全交出去，還要求對方做得開心、不能喊累。</li>
+<li><strong>父親林建國：</strong> 第五關考官。有本事也肯做，卻長期被妻子掌控收入、責罵與當眾貶低，習慣把話吞回去。他明白以安若接受這套婚姻安排，可能像自己一樣一生抬不起頭；想提醒，卻還沒有勇氣徹底抗命。</li>
+<li><strong>母親沈雅芳：</strong> 第六關最終頭目，也是整套考核與「合格顧問」生意的實際決策者。她貪財、強勢，習慣把丈夫的收入和勞動當成自己的資源；對建國的責罵與羞辱不會因有旁人在場而收斂。她希望女兒延續同樣的生活方式，也要把新女婿變成下一個收入與服務來源。</li>
+</ul>
+<p>三姊妹分別承接母親的一部分做法，小雨也主動認同並參與考核。
+林建國的受壓處境，會透過他的退讓、未說完的話與當眾遭受的對待表現。
+他知道這套規則會傷人，卻仍曾參與執行；他的同情與沉默造成的後果，都會留在故事裡。</p>
+<h3 id="characters-heading-5">許知夏——路上的普通人</h3>
+<p>二十七歲，是社區修理店的共同經營者。她有自己的工作、生活和想做的事。
+她願意在阿安需要時伸手，但會把時間、費用與自己能做到的範圍說清楚。
+她的存在先呈現一種正常、可以商量的相處方式；戀情只會在第二結局的後續日子裡慢慢建立。</p>
+<p>三姊妹的具體姓名、年齡與細節仍屬暫定；父母的關卡位置與核心性格依你本次指定。</p>
+</section>
+<section class="story prose" id="prologue" aria-labelledby="prologue-heading-1"><div class="story-eyebrow"><span class="story-number">00</span><span>出門之前</span></div><h2 id="prologue-heading-1">序章：今晚要見家長</h2>
+<h3 id="prologue-heading-2">P-01｜他準備得太認真</h3>
+<p>阿安下班後，在工場的鏡子前試穿一件新襯衫。他拿起禮盒，又放下，
+檢查小雨說過她父親喜歡的茶有沒有買錯。</p>
+<p>同事問他只是吃飯，為甚麼像去面試。他笑著回答：「第一次嘛，想讓她有面子。」</p>
+<p>手機裡，小雨傳來一張餐廳照片，問他將來能不能常帶自己去這樣的地方。
+他看看價目，沒有立刻答應，只說可以一起慢慢安排。
+她回了一句：「你對我好一點，我爸媽自然就喜歡你。」</p>
+<p>他把原本想講的工場計畫刪掉，改回：「今晚我會好好表現。」</p>
+<h3 id="prologue-heading-3">P-02｜那輛黑色廂型車</h3>
+<p>兩人在商業街會面。小雨替他調整領口，笑他太緊張。
+這是親暱的一刻，讓玩家看見他真正想保護的感情。</p>
+<p>黑色廂型車停下，幾名穿深色衣服的人走來，把她帶上車。
+阿安衝過去，被一個精準的推擋摔開。手機撞上路邊石墩，螢幕熄滅。</p>
+<p>她喊了一聲：「不要傷到他！」門便關上了。
+一枚她常戴的手鏈掉在地上，旁邊是一張印著物流站地址的接待卡。</p>
+<p>阿安拾起手鏈，追向車子轉入的後街。車內，小雨看著窗外，並沒有掙扎。
+鏡頭不多作解釋，故事進入第一關。</p>
+</section>
+<article class="story prose stage" id="stage-one" aria-labelledby="stage-one-heading-1"><div class="story-eyebrow"><span class="story-number">01</span><span>哥哥 · 保護能力</span></div><h2 id="stage-one-heading-1">第一關：〈有我在〉——哥哥的保護能力考驗</h2>
+<h3 id="stage-one-heading-2">S1-01｜比車先到的路障</h3>
+<p>物流站外，鐵閘落下。穿制服的人封住通道，說裡面正在處理「林家的事」。
+阿安說有人被帶走，請他們讓路。對方卻先問他的姓名，像是在核對名單。</p>
+<p>車子的尾燈就在另一邊。他沒有時間細想，從搬運通道突破。
+路上是推車、貨箱與攔路者的輪番進逼。有人還沒被打倒，就先回頭問：「這段好了沒有？」</p>
+<h3 id="stage-one-heading-3">S1-02｜哥哥站在出口</h3>
+<p>林家豪擋在最後一道閘門前，沒有先說自己是誰。</p>
+<blockquote>
+<p>家豪：「連我都過不了，你還想帶她走？」</p>
+<p>阿安：「我要找她。你有話，等她安全再說。」</p>
+</blockquote>
+<p>頭目戰圍繞封路、重推與近身壓制。家豪喜歡把人逼到角落，再質疑他為甚麼後退。
+阿安看穿他的重心，在逼近中找出空隙，終於將他擊退。</p>
+<p>家豪倒坐在貨箱上，第一句不是咒罵，而是：「小雨說你做維修，身手倒不差。」
+阿安立刻問他怎樣認識小雨。家豪只把一道閘門打開，叫他先去商場。</p>
+<h3 id="stage-one-heading-4">S1-03｜一個沒有考題的人</h3>
+<p>離開物流站，阿安看見旁邊還亮著燈的修理店，進去借電話。
+知夏看見他手臂的擦傷，先拿來店裡的急救用品，讓他坐一下。</p>
+<p>他急著解釋自己不是沒有能力，只是突然遇到很多人。她沒有問他為甚麼沒打贏。</p>
+<blockquote>
+<p>知夏：「我只是問你要不要坐下。這個不用先證明甚麼。」</p>
+</blockquote>
+<p>他先撥小雨的電話，準備確認情況、再求助。小雨親自接起視訊，畫面裡沒有受傷，也沒有被限制行動。
+她說家人已經在安排見面，剛才只是「他們想了解你」，還說自己沒想到哥哥會動手。</p>
+<p>知夏檢查了他的壞手機，先說明能處理的部分與維修費。他同意後把手機留下，
+暫借店裡的備用機，移入自己的通訊卡，方便繼續聯絡。費用和歸還方式，都由兩人事先說好。</p>
+<p>阿安生氣了，問她為甚麼不早說。她小聲回答：「你現在走，我真的不知道怎樣跟他們解釋。」
+他決定到她面前把話說清楚，先記下見面的地址。此後，他知道她安全，行動不再靠持續的假求救推動。</p>
+<h3 id="stage-one-heading-5">S1-04｜第一枚印章</h3>
+<p>回到物流站的一小段鏡頭：家豪在「保護能力」欄蓋章。
+他把阿安說過的「等她安全再說」也記在旁邊，沒有記阿安問了甚麼。</p>
+<p>接待卡被推到鏡頭前：下一站，商場禮服廳。</p>
+<p><strong>這關的轉變：</strong> 救援危機暫時解除。阿安第一次察覺自己正在被評估，也第一次表達不滿。</p>
+</article>
+<article class="story prose stage" id="stage-two" aria-labelledby="stage-two-heading-1"><div class="story-eyebrow"><span class="story-number">02</span><span>二姑 · 外貌與體面</span></div><h2 id="stage-two-heading-1">第二關：〈帶得出去〉——二姑的外貌與體面考驗</h2>
+<h3 id="stage-two-heading-2">S2-01｜請你先換一身</h3>
+<p>商場正在準備一場只接待林家賓客的活動。小雨傳訊息說，二姑會帶他上樓見面。
+他到達後，二姑卻先把他從頭到腳看了一遍，問他這身衣服花了多少錢。</p>
+<p>她拿來一件借用的禮服外套和不合腳的皮鞋，說這樣才不會讓小雨丟臉。
+阿安表示自己是來談剛才的事。她打斷：「你先像個樣子，我才好帶你去。」</p>
+<h3 id="stage-two-heading-3">S2-02｜一把永遠量不準的尺</h3>
+<p>展示廳被安排成誇張的形象考場。有人拿身高尺，有人舉親戚兒子的照片，
+有人連他襯衫的袖口都要檢查。旁邊的標準不停更換：剛說要穩重，轉頭又嫌不夠年輕。</p>
+<p>阿安發現身高尺根本沒有放平，便伸手調正。二姑不看讀數，反而說他太計較。</p>
+<blockquote>
+<p>二姑：「男人高一點、好看一點，帶出去總是比較好。」</p>
+<p>阿安：「那妳現在看的是我，還是一個能擺在旁邊的位置？」</p>
+</blockquote>
+<p>她示意活動人員過來，說他連小場面都應付不了。比試從展示台一路打到佈景之間。
+阿安把不合腳的鞋還回去，換回自己的工作鞋，動作終於恢復俐落。</p>
+<h3 id="stage-two-heading-4">S2-03｜他穿回自己的衣服</h3>
+<p>二姑親自出場，用衣架、布料與快速換位阻攔。她擅長用眩目的外表掩飾實際空隙。
+阿安不再追著佈景與評語走，穩穩突破她的攔截。</p>
+<p>她不甘心地拿來一張「形象整理費」，說帳先交給舅舅。
+阿安指出自己沒有答應購買那些服務，把借來的衣服完整放回台上。</p>
+<p>二姑最後仍替他蓋章。她承認他在壓力下還站得穩，卻忍不住補一句：「只是衣服真該換。」
+小雨的新訊息又來了：「我二姑嘴巴就是這樣，你讓一下她嘛。」她沒有回應他剛才受了甚麼對待。</p>
+<h3 id="stage-two-heading-5">S2-04｜帳單早就印好了</h3>
+<p>阿安離開前，看見桌上有一疊姓名已印好的接待文件。
+自己的姓名、衣服尺寸與今晚日期，都在他來之前準備好了。</p>
+<p>他把沒有同意的費用圈出來，帶走屬於自己的那一份，開始保留紀錄。
+文件角落有個不顯眼的印記：「合格顧問」。</p>
+<p><strong>這關的轉變：</strong> 他發現「表現不好」有時只是對方可以隨時改動的說法，也開始拒絕替未同意的安排埋單。</p>
+</article>
+<article class="story prose stage" id="stage-three" aria-labelledby="stage-three-heading-1"><div class="story-eyebrow"><span class="story-number">03</span><span>舅舅 · 財力</span></div><h2 id="stage-three-heading-1">第三關：〈誠意先付〉——舅舅的財力考驗</h2>
+<h3 id="stage-three-heading-2">S3-01｜你到底願意花多少</h3>
+<p>貨運倉裡，舅舅坐在一張過分整潔的桌子後，把幾張費用單排開。
+阿安問可不可以現在就見小雨。舅舅反問他的月薪、存款、住哪裡，有沒有買車的打算。</p>
+<blockquote>
+<p>舅舅：「小雨長這麼大，我們可沒讓她吃過苦。」</p>
+<p>阿安：「我不是來跟她過苦日子。我也想知道，兩個人可以一起做些甚麼。」</p>
+<p>舅舅：「先別談兩個人。你一個人能付多少？」</p>
+</blockquote>
+<p>他把剛才的費用推過來，說付款就能看出誠意。阿安只承認自己真正造成的損失，要求對清其餘項目。
+舅舅露出失望的表情，好像核對帳目本身就是吝嗇。</p>
+<h3 id="stage-three-heading-3">S3-02｜他的本事不只會付款</h3>
+<p>倉裡一台設備故障，後方準備宴會的貨物無法移動。舅舅順勢要他證明自己能處理。
+阿安檢查後找出問題，和現場工人一起恢復搬運。</p>
+<p>但每做完一件事，又有人塞來另一張單。進場費、整理費、安排費，連他的勞動也被寫成家族給的機會。
+他發現有些所謂損壞，在自己到達之前就已經列進文件。</p>
+<p>他停下來，把單據逐張擺好。搬運人員過來搶回文件，衝突變成一場在貨架與推車之間的戰鬥。
+他護住自己的紀錄，也護住剛完成的工作，沒有把工人的成果當成可以隨便砸毀的東西。</p>
+<h3 id="stage-three-heading-4">S3-03｜會賺，不等於任你拿</h3>
+<p>舅舅操控活動用的搬運機具親自攔路，拋來一疊疊帳單。
+他每喊一次「將來還有更多」，場內就加上一件更誇張的負擔。</p>
+<p>阿安看準機具轉向的空隙，讓擋路的貨物錯開，再把考官逼離控制位，完成這場對決。</p>
+<blockquote>
+<p>阿安：「我有能力賺錢。但你們不能把沒問過我的開支，全部當成我的承諾。」</p>
+</blockquote>
+<p>舅舅收起費用單，改口說剛才只是測他會不會理財。阿安沒有接受這種事後改寫，
+要求把他墊付卻不應承擔的部分退回。舅舅為了不延誤整場活動，只能照單處理。</p>
+<p>退錢時，舅舅低聲說這件事還要向雅芳交代，隨即把收據拍照傳出去。
+手機那端只回了一句：「誰准你自己決定少收？」他立刻把聲音壓得更低。</p>
+<p>他得到「財務能力」印章，卻沒有因此變成可以無限供應金錢的人。</p>
+<h3 id="stage-three-heading-5">S3-04｜一句只對他說的鼓勵</h3>
+<p>知夏剛好有送件行程，與他約在工場外，交還臨時修好的手機、換回備用機；
+維修內容與費用，先前都已經說清楚。
+她問他接下來要去哪裡。他說去見女友，卻第一次沒說「再努力就可以」。</p>
+<p>小雨打來，稱讚他連舅舅都應付得了，接著又請他順路把文件交給會所裡的三位姊姊。
+他問她為甚麼不自己出來見面。她說親戚們還想多了解他，請他不要讓大家難堪。</p>
+<p>電話掛斷。知夏要回店裡收工，沒有替他決定，只說：「你也可以想一想，自己想怎樣。」
+他把手機放好，朝會所走去。此刻，他要的已經是當面得到一個答案。</p>
+<p><strong>這關的轉變：</strong> 他把能力與付款義務分開，也不再相信每一次被加碼，都是自己尚未做得夠好。</p>
+</article>
+<article class="story prose stage" id="stage-four" aria-labelledby="stage-four-heading-1"><div class="story-eyebrow"><span class="story-number">04</span><span>三姊妹 · 三位頭目</span></div><h2 id="stage-four-heading-1">第四關：〈三姊妹的規矩〉——三位姊姊的連續考驗</h2>
+<h3 id="stage-four-heading-2">S4-01｜第一位頭目：大姊林雅婷，永遠有人比你好</h3>
+<p>商務會所裡，三位姊姊坐在同一張長桌後，接過阿安送來的文件。
+她們說小雨是家裡疼大的妹妹，想和她走下去，當然要讓姊姊們放心。
+這一關有三位不同的頭目，各自主持一場對決，全部完成才算過關。</p>
+<p>大姊雅婷先把阿安帶進展示廳。牆上是親友旅行、豪車與婚宴的照片，
+她不斷拿照片中的人與他相比：這個送過更貴的禮物，那個帶女友住過更大的房子。</p>
+<p>阿安說自己和小雨可以一起安排將來，雅婷卻只問：「你準備讓她等多久？」
+旁邊每有人附和，她便換一個更高的比較對象。</p>
+<p>她親自擋住出口，開始第一場頭目戰。她的攻勢俐落、講究排場，
+喜歡用展示物和身旁的聲勢引人分心，再從正面突進。
+阿安看清她本人和那些展示物的差別，不再追著每一張照片轉，穩穩贏下對決。</p>
+<blockquote>
+<p>雅婷：「你打贏我，也不代表你比人家好。」</p>
+<p>阿安：「我沒有答應，拿自己的一生去追妳下一個比較對象。」</p>
+</blockquote>
+<p>她不滿地在第四格的第一個位置簽記。二姊的門隨即打開。</p>
+<h3 id="stage-four-heading-3">S4-02｜第二位頭目：二姊林婉晴，真正愛她就該隨時在</h3>
+<p>婉晴把他帶進另一間接待室，要他替大家接電話、找東西，還要隨時回答她的問題。
+她故意把不同要求排在一起：他去處理事情，便說他不陪人；他留下聽，便說他只會站著。</p>
+<p>阿安停下來問先做哪一件。她認為他不夠體貼，因為「真正有心，不用人開口就知道」。</p>
+<p>第二場頭目戰由她親自出手。她用呼喚和突然換位牽動阿安的注意，
+剛要他靠近，便迎面攻擊；他後退，又立刻指責他不肯付出。
+他逐漸掌握她真正的出手節奏，清楚回應自己能做的事，沒有再被每一次指責帶走。</p>
+<blockquote>
+<p>阿安：「妳可以把需要說清楚。我也可以說，現在做不到。」</p>
+</blockquote>
+<p>阿安突破她連續的假動作，完成第二場對決。婉晴還想用他的語氣當作扣分理由，
+他指向已經結束的比試，請她把實際結果記下來。她最後留下第二個簽記。</p>
+<h3 id="stage-four-heading-4">S4-03｜第三位頭目：三姊林可欣，你做得來就全交給你</h3>
+<p>第三間是宴會準備區。可欣先稱讚阿安會修東西、身手又好，接著把餐具、椅子、接待與收拾全交過去。
+她自己坐著看手機，說男人多做一點，女人才會幸福。</p>
+<p>他提出讓現場的人分擔，她立即反問：「你不是都會嗎？為甚麼一定要我做？」
+手機上，小雨與她的對話剛好跳出一行：「記得看他累了會不會變臉。」
+阿安看見了。這些要求不只有姊姊們參與。</p>
+<p>第三場頭目戰裡，可欣把日常指揮變成連續攻勢：用活動道具封住走位，
+再一面出手，一面增加要他處理的工作。她本人一直參與戰鬥，並非只由手下代打。
+阿安把互相衝突的要求停下來，看清她忙著指揮時露出的空隙，贏下最後一場對決。</p>
+<p>他先替自己倒了一杯水。可欣正要說還有事情沒做，他回答：「我知道。我先喝完。」
+她替第四格留下第三個簽記。三位頭目全部擊敗，這一關才正式結束。</p>
+<h3 id="stage-four-heading-5">S4-04｜她們學會的是同一套規矩</h3>
+<p>三姊妹不甘心地把文件交還，說最終仍要讓母親過目。
+阿安問她們，為甚麼沒有一張紙寫著小雨將來願意替他做甚麼。
+三人沒有回答，雅婷只說：「我們家都是這樣，爸爸也是。」</p>
+<p>小雨接起視訊，認得姊姊們做過的每一項安排。她仍說阿安不要只記住不開心的部分，
+還認為姊姊們願意花時間考他，就是重視他。</p>
+<p>她身後忽然傳來母親的聲音：「林建國，你連這點事都做不好？別站在這裡丟人！」
+鏡頭一晃，阿安看見一名端著茶盤的男人低下頭，連一句解釋都沒有說完。
+小雨把鏡頭轉回來，只說：「我媽等你。你先上來。」</p>
+<p><strong>這關的轉變：</strong> 三場對決把比較、情緒要求與家務責任疊在一起。
+阿安也第一次看見，家中那個最早學會低頭的人，可能就是他即將見到的父親。</p>
+</article>
+<article class="story prose stage" id="stage-five" aria-labelledby="stage-five-heading-1"><div class="story-eyebrow"><span class="story-number">05</span><span>父親林建國 · 警告與考驗</span></div><h2 id="stage-five-heading-1">第五關：〈別走我的路〉——父親林建國的考驗與警告</h2>
+<h3 id="stage-five-heading-2">S5-01｜很能打，卻不敢把話說完</h3>
+<p>阿安抵達山上宅邸，被帶到舊練武庭院。林建國獨自等著，桌旁仍放著剛才的茶盤。
+他身形沉穩，手上有長年做事留下的痕跡，說話卻很輕，先問阿安有沒有受傷。</p>
+<p>阿安提到視訊裡的責罵，建國下意識看向門口，說雅芳今天忙，叫他不要放在心上。
+但話才說完，他自己也沒有再笑。</p>
+<p>他仔細看過前四格的結果，尤其看了三姊妹留下的三個簽記。
+他知道阿安有能力做很多事；正因如此，他才更擔心妻子會把更多事交給這個年輕人。</p>
+<h3 id="stage-five-heading-3">S5-02｜他知道婚後會變成甚麼樣</h3>
+<p>建國先問：「如果她們一直要，你打算一直做嗎？」
+阿安原本以為這又是一道要自己表忠心的題目，抬頭時卻發現父親沒有在等標準答案。</p>
+<p>建國慢慢說，自己年輕時也相信多賺一點、多忍一點，妻子就會滿意。
+後來收入變多，要求也跟著變多；不順她的意思，就是沒用、不負責任，還會在親戚面前被罵。
+錢和勞動總是先交出去，他想做的事則一年年往後推。</p>
+<blockquote>
+<p>建國：「我以為撐過這一次就好了。後來，日子裡只剩下一次又一次。」</p>
+<p>阿安：「你知道這樣不好，為甚麼還讓我走到這裡？」</p>
+</blockquote>
+<p>建國低下頭，承認自己一直沒敢正面反對。他知道受苦是甚麼樣子，卻仍替這場考核站了崗。
+他不是不知道阿安將來可能過得多悲慘，而是不敢為了阻止它，面對妻子的怒氣。</p>
+<h3 id="stage-five-heading-4">S5-03｜第五場對決：不要只學會忍</h3>
+<p>建國仍然站到場中。他受到安排必須完成這一關，也想知道阿安是否有能力守住自己的位置。
+他不會假裝輸掉，更不以阿安答應婚約作為過關條件。</p>
+<p>這場頭目戰的身手紮實，重心和防守都比先前更穩。
+建國會把人逼到退路，讓阿安面對「一味硬接」的代價；阿安則要判斷何時避開、何時站穩，再主動突破。</p>
+<p>兩人交手間，屋內傳來沈雅芳催促收拾的聲音。建國的肩膀突然縮了一下，明明還能接招，卻先回了一聲「知道了」。
+阿安沒有把這個瞬間當成笑話，也沒有趁他回話偷襲。他等父親重新站好，再完成最後一輪交手。</p>
+<p>阿安確實擊敗建國。父親退到場邊，抬手認輸，親自在第五格蓋章。</p>
+<blockquote>
+<p>阿安：「我繼續往前，是要她們回答。我還沒有答應，把一輩子都交出去。」</p>
+</blockquote>
+<p>建國看著他，終於說出一句清楚的話：「那就記住這句。到了她面前，也不要改口。」</p>
+<h3 id="stage-five-heading-5">S5-04｜門裡的那個人，才說了算</h3>
+<p>兩人走進主廳門口。建國說這一關已經完成，想替阿安拉開椅子，讓他先坐。
+沈雅芳當著家人與賓客的面打斷他：「誰叫你替我下結論？你連個晚輩都攔不住，還有臉在這裡作主？」</p>
+<p>建國剛抬起的頭又低了下去。他把椅子放回原位，站到旁邊。
+小雨和三位姊姊都沒有替父親說話，像是已經習慣這樣的場面。</p>
+<p>阿安伸手扶住那張椅背，沒有跟著把頭低下去。
+他這才真正看清：林建國不是坐在最後面掌控一切的人，而是一個早已被壓到不敢出聲的人。</p>
+<p><strong>這關的轉變：</strong> 父親成為阿安可能遭遇的未來。他的同情不會抹去參與考核的責任，
+但他的警告讓「不要一直忍下去」有了具體重量。</p>
+</article>
+<article class="story prose stage" id="stage-six" aria-labelledby="stage-six-heading-1"><div class="story-eyebrow"><span class="story-number">06</span><span>母親沈雅芳 · 最終頭目</span></div><h2 id="stage-six-heading-1">第六關：〈誰說了算〉——母親沈雅芳，真正的最終頭目</h2>
+<h3 id="stage-six-heading-2">S6-01｜她不是在等女婿，她在驗收下一個收入來源</h3>
+<p>沈雅芳坐在主位，面前是帳目、流程本與阿安的評核文件。其他人都先看她的表情，才敢開口。
+林建國仍站在旁邊，連自己的茶都沒有端起。</p>
+<p>她先追問舅舅為甚麼退了那些費用，再問三姊妹有沒有記下阿安不肯配合的地方。
+談到阿安修好設備、應付多人與整理工作的能力，她的反應是算這些本事以後能帶來多少收入。</p>
+<blockquote>
+<p>沈雅芳：「有這麼多本事，就應該多賺一點拿回家。小雨跟著你，生活只能越過越好。」</p>
+</blockquote>
+<p>阿安問這裡的「家」包括誰。她把另一疊開支推過來，說女婿也要替全家分擔。
+每當他問上限，她就指責他還沒結婚便開始計較。</p>
+<h3 id="stage-six-heading-3">S6-02｜她說話時，別人只能聽</h3>
+<p>建國試著說，阿安今天已經做了很多，至少讓他先喝口水。
+沈雅芳當眾斥責：「我說話的時候，你閉嘴。這個家甚麼時候輪到你教我？」
+他看向桌上，沒有再接。那個在庭院裡能穩穩接下重擊的人，在妻子一句話面前卻幾乎縮成一團。</p>
+<p>阿安沒有加入嘲笑。他替建國把水放到能拿到的位置，再回頭問母親：
+「他不是沒有付出，為甚麼妳還可以這樣對他？」</p>
+<p>她回答，林建國吃住都在這個家，就應該讓她滿意。接著又說小雨是自己疼大的，
+男方如果連同樣的安排都接受不了，就沒有資格談責任。</p>
+<p>阿安要求把能力、金錢和是否願意接受她的規則分開談。
+她站起來，親自擋在活動區前：「你還沒過我這一關，就想先談條件？」</p>
+<h3 id="stage-six-heading-4">S6-03｜第一條血量：她只接受自己贏</h3>
+<p>賓客與餐桌退到場外。沈雅芳的身手比她看起來更強，起手便把阿安逼退，
+沉重的帳冊、金色算盤與收款箱，成為這場誇張武打裡的道具。
+第一條血量由她親自上場。她起初相信，自己一個人就足以把阿安壓回去。</p>
+<p>她以強硬的正面壓制封住空間，像她平日不容人插話的作風。
+血量下降後，攻勢愈來愈急，反覆喊著收入、房子、開支與下一項要求，永遠沒有「已經夠了」。</p>
+<p>阿安逐漸分清她真正的攻擊和用來讓人慌亂的指責，不再每聽見「不夠愛」就衝回去硬接。
+他用前五關累積的判斷守住位置，一次次突破她的控制。</p>
+<p>建國在場邊抬起頭，低聲提醒：「先站穩。你可以不用退。」
+沈雅芳立刻回頭罵他不要多嘴。這一次，他沒有把剛說過的話收回去，雖然聲音還很小。</p>
+<p>阿安看準她強攻後的空隙，完成一次突破，將第一條血量打至零。
+她退到場邊，家人以為這場對決已經結束，才剛要出聲，就被她一掌拍桌的聲音打斷。</p>
+<blockquote>
+<p>沈雅芳：「誰說結束了？我還沒輸！」</p>
+</blockquote>
+<h3 id="stage-six-heading-5">S6-03A｜她改口叫全家一起上</h3>
+<p>她轉身命令家人留在場邊，等自己叫名便上場。第一條血量歸零的時刻，作為這一分鐘的第 0 秒。
+她隨即退到飯桌進食，開始回復第二條血量，接著每隔 10 秒叫來一人。</p>
+<blockquote>
+<p>沈雅芳：「都別走！我叫誰，誰就過來攔住他！」</p>
+</blockquote>
+<p>第 10 秒，大姊林雅婷先進場；第 20 秒，二姊林婉晴加入；第 30 秒，三姊林可欣加入。
+前三人依次加入，不會在同一刻全部衝進活動區。</p>
+<p>第 40 秒輪到林建國。他站在原地，想說阿安已經打完了，沈雅芳立刻當眾斥責：
+「看著我輸，你很高興是不是？我叫你上！」他低下頭，終究也站進場中。
+第 50 秒，林家豪最後加入。</p>
+<p>五人都會在自己的進場時間後實際攻擊阿安；父親的猶豫不會自動取消他的參戰。
+他明知這樣不公平，仍被長年的恐懼推著替妻子執行命令，這份矛盾繼續留在角色身上。</p>
+<blockquote>
+<p>阿安：「剛才不是說，一關一關考？」</p>
+<p>沈雅芳：「我說怎樣考，就怎樣考。你有本事，就一起過！」</p>
+</blockquote>
+<p>她拒絕接受單挑失敗，便用自己掌握的家族權力臨時改規則。</p>
+<h3 id="stage-six-heading-6">S6-03B｜每十秒多一人，她坐著吃滿一分鐘</h3>
+<p>沈雅芳坐在飯桌旁，一邊按時叫人上場，一邊拿起食物吃，第二條血量逐步回復。
+從第 0 秒到第 60 秒，她暫不參與攻擊；前 10 秒還沒有援軍入場，阿安可以先調整位置。</p>
+<p>前面她連丈夫替阿安求一口水都不肯，現在卻讓所有人替自己拖時間，好好坐下吃東西。
+鏡頭短暫交代她開始回血，就把注意力還給仍可操作的戰鬥，不把整段清場窗口變成不能操作的過場。</p>
+<p>三姊妹、建國與家豪都已在前面的關卡被擊敗，此時只是帶著尚未完全恢復的體力再次上場。
+<strong>五人的援軍血量都明顯低於各自原本的頭目戰</strong>，不是把五場完整頭目戰一起重打。
+血量較低的原因也要在外觀與動作裡看得出來：衣服還亂著、站姿疲累，出場時沒有像先前那樣從容。</p>
+<p>阿安在這一分鐘裡，可以利用地形、走位與對手的破綻，盡量在下一人進場前擊退眼前的對手。
+沒有及時擊退的人會繼續留下來，和之後的援軍一起戰鬥，人數才逐步累積。
+玩家越有效減少人數，沈雅芳回來時要同時面對的敵人就越少；不要求玩家一定能在這段時間清光五人。</p>
+<p>即使阿安暫時清空場地，下一位仍按原定時間進場，不會立刻補人，也不提前讓沈雅芳返回。</p>
+<p>建國雖然不願意，仍會真正出手。阿安可以選擇先對付誰，沒有「打了父親就失去某個結局」的隱藏懲罰。</p>
+<h3 id="stage-six-heading-7">S6-03C｜第二條血量：最多六對一</h3>
+<p><strong>第 60 秒，沈雅芳準時離開飯桌，帶著回復的第二條血量返回活動區。</strong>
+她的返場時間不受援軍有沒有被清光影響，也不因食物提早吃完而縮短。</p>
+<blockquote>
+<p>沈雅芳：「五個人還拖成這樣？讓開，我來！」</p>
+</blockquote>
+<p>如果五人都還在，場上就是<strong>沈雅芳加五名援軍，六對一</strong>。
+如果玩家已擊退幾人，就只剩沈雅芳與仍在場的人；已退場的不再補進來，尚在場的也保留已受的傷。
+如果五人都已退場，最後便回到阿安與沈雅芳的第二條血量對決。</p>
+<p>她這一輪更急躁，既要贏，又不肯承認自己先改規則、再靠家人爭取恢復時間。
+家族人數帶來壓力，但攻勢必須讓玩家有判讀、閃避與還手空間，不能讓多人接力把角色控制到完全無法操作。</p>
+<p>阿安一邊減少剩餘援軍，一邊抓住她強攻後的空隙。自己的走位與前面成功擊退的人，都會在這裡產生實際效果。
+最後，沈雅芳的第二條血量也被打至零。她踉蹌停下，還想喊人，卻已沒有下一輪召集或第三條血量。</p>
+<p>尚未退場的家人看見她這次確實無法再戰，也停下攻擊。整場最終戰到此結束，沒有接著追加無止境的圍攻。
+沒有人重傷，她的失敗也沒有令她立刻放下貪婪與控制慾。</p>
+<h3 id="stage-six-heading-8">S6-04｜她承認本事，仍想把他收進規矩裡</h3>
+<p>六個關卡欄位全部完成，第四格上有三個清楚的簽記。阿安真正擊敗了八位頭目，成功通關。
+沈雅芳連單挑、召人拖延、進食恢復與返場圍攻都用過，仍然被阿安擊敗。
+她不能抹去所有人親眼見過的結果，最後在第六格蓋章。</p>
+<p>她喘著氣整理衣服，很快又把話拉回錢：「既然你做得到，以後就別找藉口。」
+她沒有因為輸掉比試，就放棄掌控金錢與要求別人付出的習慣。</p>
+<p>母親親手拿出「婚約」文件夾，又把另一份印著「合格顧問」的文件壓在旁邊。
+建國看見那個封面，像是想提醒阿安，卻先被妻子的目光壓住。</p>
+<p>阿安沒有接筆。他把手鏈放到小雨面前，等著自己的問題被回答。</p>
+<p><strong>這關的轉變：</strong> 沈雅芳的貪婪、強勢與對丈夫的羞辱，都在玩家面前具體發生。
+她寧可臨時改成全家圍攻，也不肯承認自己會輸。阿安真正完成這場不公平的考驗，
+接下來仍要親自決定，要不要接受她提出的那種生活。</p>
+<h3 id="stage-six-heading-9">最終戰流程與難度註記</h3>
+<h4 id="stage-six-heading-10">援軍進場時間表</h4>
+<p>計時從沈雅芳第一條血量歸零開始；以下採戰鬥進行時間，遊戲暫停時，進場與回血計時一起暫停。</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">時間</th>
+<th scope="col">新的進場者或事件</th>
+<th scope="col">若先前無人被擊退，場上最多幾名對手</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 0 秒</td>
+<td>沈雅芳退到飯桌，開始進食回血</td>
+<td>0，沈雅芳暫不進攻</td>
+</tr>
+<tr>
+<td>第 10 秒</td>
+<td>大姊林雅婷</td>
+<td>1</td>
+</tr>
+<tr>
+<td>第 20 秒</td>
+<td>二姊林婉晴</td>
+<td>2</td>
+</tr>
+<tr>
+<td>第 30 秒</td>
+<td>三姊林可欣</td>
+<td>3</td>
+</tr>
+<tr>
+<td>第 40 秒</td>
+<td>林建國</td>
+<td>4</td>
+</tr>
+<tr>
+<td>第 50 秒</td>
+<td>林家豪</td>
+<td>5</td>
+</tr>
+<tr>
+<td>第 60 秒</td>
+<td>沈雅芳帶著第二條血量返場</td>
+<td>6，包含沈雅芳與尚未退場的援軍</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="stage-six-heading-11">各階段的目標</h4>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">階段</th>
+<th scope="col">沈雅芳的狀態</th>
+<th scope="col">場上的對手</th>
+<th scope="col">玩家的眼前目標</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一條血量</td>
+<td>親自進攻，第一條血量降至零</td>
+<td>沈雅芳一人</td>
+<td>看穿攻勢，完成第一輪對決</td>
+</tr>
+<tr>
+<td>第 0–60 秒的進食回血窗口</td>
+<td>退到飯桌吃東西，回復第二條血量，暫不攻擊</td>
+<td>第 10、20、30、40、50 秒各加入一名低血量援軍</td>
+<td>利用進場間隔削減人數，避免對手累積</td>
+</tr>
+<tr>
+<td>第 60 秒起，第二條血量</td>
+<td>準時回到場中進攻，不再重新召集</td>
+<td>沈雅芳加上仍在場的援軍，最多六人</td>
+<td>依剩餘人數調整走位與目標，將她的第二條血量打至零</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>只召集一次。</strong> 三姊妹、建國、家豪各出場一次；被擊退後不再復活，不補新的一波。</li>
+<li><strong>固定時間，不依擊倒人數改動。</strong> 五名援軍依次在第 10–50 秒進場；沈雅芳固定第 60 秒返場，計時不從第一名援軍進場時重新起算。</li>
+<li><strong>血量從低處驗證。</strong> 五人採低於原頭目戰的援軍血量，目標是讓一般熟悉操作的玩家在進食窗口有機會擊退數人。</li>
+<li><strong>進度不倒退。</strong> 母親返場不替援軍補血、不重置他們的位置與存活人數，也不把第二條血量再補成第三條。</li>
+<li><strong>多人同場仍可操作。</strong> 出招有提示，限制同時命中的壓制與連續控制，保留迴避和還手機會；低血量之外也要驗證傷害與攻擊頻率。</li>
+<li><strong>第二條歸零便結束。</strong> 尚存援軍停止攻擊，不另要求再打完一輪，也不以清光援軍作為傷害母親的前置條件。</li>
+<li><strong>時間已指定，平衡仍待驗證。</strong> 10 秒進場間隔與 60 秒返場是本輪指定設計；援軍血量比例、傷害與第二條血量上限仍交由原型實測，本稿沒有聲稱這場六對一已經平衡或驗證可玩。</li>
+</ul>
+</article>
+<section class="story prose" id="verdict" aria-labelledby="verdict-heading-1"><div class="story-eyebrow"><span class="story-number">AFTER</span><span>六關完成，選擇開始</span></div><h2 id="verdict-heading-1">通關之後：證書的背面</h2>
+<h3 id="verdict-heading-2">V-01｜她不是坐在考場外的人</h3>
+<p>沈雅芳承認，廂型車、八位親屬主持的六關、所有攔路的人，都屬於事先安排的考核。
+小雨並沒有遇險。她知道開場會怎樣發生，也參與修改了後面的題目。</p>
+<p>建國想說自己當初不該讓事情這樣開始，母親立刻叫他別在客人面前說那些「沒用的話」。
+他沒有再辯解，但阿安已經聽見：父親知道問題，卻一直沒能阻止這套安排。</p>
+<p>阿安把前面拿到的流程本放到桌上，翻到她改過的一頁：
+「如果他想停下來，提醒他不要讓我失望。」</p>
+<p>他問她，為甚麼明知道自己害怕，還要這樣做。</p>
+<blockquote>
+<p>小雨：「我也要為自己的未來負責呀。你今天肯做到，以後我才放心。」</p>
+<p>阿安：「妳那時候看著我追車，知道我以為發生了甚麼嗎？」</p>
+<p>小雨：「可是我真的沒事。你不是也都做到了？」</p>
+</blockquote>
+<p>她的答案沒有碰到他的恐懼，只回到他最後有沒有完成要求。
+他終於確定，這件事不能再只用「家人太擔心」解釋。</p>
+<h3 id="verdict-heading-3">V-02｜合格的，到底是甚麼</h3>
+<p>母親把「合格女婿」證書遞給他。正面很漂亮，列出他通過的六關，第四格有三姊妹各自的簽記。
+他翻到背面，看見密密麻麻的婚後安排：</p>
+<ul>
+<li>收入應持續增加，滿足妻子與家庭不斷更新的生活期望。</li>
+<li>房屋、交通、日常開支與額外消費，主要由他承擔。</li>
+<li>家族另有孝敬、應酬或體面支出時，也應隨時提供金錢，不以個人計畫為先。</li>
+<li>家務、照顧與親屬需要，應在提出後盡快完成。</li>
+<li>不應因疲勞、工作壓力或個人興趣，降低對伴侶的投入。</li>
+<li>過往付出不作為日後免除要求的理由，婚後繼續接受不定期考核。</li>
+</ul>
+<p>最下面一行是：「試用期限：終身。」</p>
+<p>這是家族提出的婚姻條件，不是故事世界裡一份能剝奪他離開權利的魔法契約。
+他仍然可以拒絕。真正壓住他的，是大家一直說「都走到這裡了」。</p>
+<h3 id="verdict-heading-4">V-03｜他也有一個問題</h3>
+<p>阿安沒有立刻撕掉文件。他先把問題說清楚：</p>
+<blockquote>
+<p>阿安：「如果我有一天生病，或者工作出了問題，妳願不願意和我一起撐一段時間？」</p>
+<p>小雨：「所以你才要更努力，不要讓那些事發生。你不能現在就想好退路。」</p>
+</blockquote>
+<p>他又問家務和照顧可不可以共同安排。她說她不想婚後過得比現在辛苦，
+還說其他朋友的男友都很願意付出，為甚麼他偏要在這裡算得那麼清楚。</p>
+<p>母親替女兒接話，大姊拿其他丈夫作比較，舅舅說他的前途很好，不必太擔心花費。
+大家都能描述他可以做多少事，卻沒有人回答，他累的時候能向誰伸手。</p>
+<p>建國再想開口，沈雅芳先指著他說：「你自己做得多好？少在這裡教人。」
+阿安看見父親把話吞回去，也看見小雨對這一幕毫不驚訝。</p>
+<h3 id="verdict-heading-5">V-04｜第三張椅子</h3>
+<p>沈雅芳注意到阿安的目光落在另一個文件夾上，便把它翻開。
+裡面是她掌管的婚前考核服務，以及邀請他加入的合作提案。
+原來同樣的佈景與流程，也會用在其他家庭身上。六關裡那些整理得過分整齊的表格，現在有了解釋。</p>
+<p>母親認為阿安已證明自己有能力主持流程，可以替這門生意帶來收入。
+合作文件寫明，他能參與出題與執行，但收費、分成和最後決策仍由沈雅芳掌握。
+這份邀請會在所有通關路線的選擇前提出，沒有需要暗中達成的特殊條件。</p>
+<p>建國低聲提醒：「她當年也說，將來的事可以慢慢商量。」沈雅芳瞪過來，他又停了口。
+桌邊留著三個位置：婚約前的一張椅子、通往大門的空隙，以及母親主位旁的工作椅。</p>
+<h3 id="verdict-heading-6">V-05｜玩家的三個選擇</h3>
+<ol>
+<li><strong>「我還是願意和妳結婚。」</strong> 接受這段關係，進入第一結局。</li>
+<li><strong>「我不接受這樣的相處。我們到這裡。」</strong> 結束關係，進入第二結局。</li>
+<li><strong>「婚約不簽。我想談接手考核的合作。」</strong> 閱讀合作內容並確認接受後，進入第三結局。</li>
+</ol>
+<p>三條路都在六關成功完成之後開放。看過合作文件，可以返回選擇；
+不會只因好奇點開第三個選項，就被當成已同意合作。
+選項不先貼上好壞標籤，結局由後續發生的生活呈現。</p>
+</section>
+        <section class="endings prose" id="endings" aria-labelledby="ending-selector-title">
+          <h2 id="ending-selector-title">三種結局，三次選擇</h2>
+          <p>六關全部完成後，三條路線都可以選擇。點開閱讀各自的完整尾聲。</p>
+          <nav class="ending-links" aria-label="結局導覽"><a href="#ending-one">結局一 · 與她結婚</a><a href="#ending-two">結局二 · 結束關係</a><a href="#ending-three">結局三 · 另一份合約</a></nav>
+          <details class="disclosure ending-one" id="ending-one"><summary><h2 id="ending-one-heading-1">結局一：〈合格丈夫，尚待努力〉</h2><span class="disclosure-icon" aria-hidden="true">+</span></summary><div class="disclosure-body">
+<h3 id="ending-one-heading-2">E1-01｜他相信自己還可以做得更好</h3>
+<p>阿安看著小雨，又想起兩人剛認識時的笑容。他告訴自己，今晚也許只是長輩把事情說得太重。
+既然自己有能力做到，婚後慢慢溝通，應該就會不一樣。</p>
+<p>他簽下婚約。小雨抱住他，說：「我就知道你最愛我。」
+家族重新鼓掌。那句話，終於像他整晚一直等待的獎勵。</p>
+<p>婚禮辦得很漂亮。新照片裡，他穿著筆挺的衣服，站在所有人期待的位置。
+鏡頭停在他笑著的臉上，再切到翌日清晨的鬧鐘。</p>
+<p>婚宴上，建國曾看著他欲言又止，沈雅芳卻當眾催丈夫去處理下一件事，嫌他站著沒有用。
+阿安當時還相信，自己和小雨也許會不一樣。</p>
+<h3 id="ending-one-heading-3">E1-02｜每天都是試用第一天</h3>
+<p>白天，他趕工；晚上，他接額外工作。回家之前買菜，進門之後洗衣、煮飯、收拾。
+妻子的父母需要處理事情，他請假去；家裡出了問題，也先打給他。
+需要照顧人的日子，他把自己的休息排到最後。</p>
+<p>小雨每天都有新的行程：購物、聚餐、朋友的旅行。她把照片傳給他，問下次能不能住更好的地方。
+他說最近工作太滿，她回：「你再努力一點，我們就不用一直計較。」</p>
+<p>他多賺到一筆，原本想存作工場基金。她卻已替那筆錢安排了用途，說朋友的丈夫都會主動準備。
+他把工場計畫再次收進抽屜。這次沒有刪掉，只是一直沒有再打開。</p>
+<h3 id="ending-one-heading-4">E1-03｜那杯已經冷掉的水</h3>
+<p>一晚，他發燒，坐在床邊。小雨整理外出用的袋子，他請她幫忙倒杯水。
+她說自己快遲到了，叫他先把一筆費用處理好，免得影響明天的行程。</p>
+<p>他看著房門關上，自己慢慢走去廚房。
+手機亮起：「你以前追我的時候，明明甚麼都願意。」</p>
+<p>玻璃上，他看見自己低著頭、先把想說的話吞回去的樣子，和那晚的林建國越來越像。
+父親當初提醒的生活，已經一點一點落在他身上。</p>
+<p>桌上還放著合格證書。背面朝上，最後一行是「試用期限：終身」。
+旁邊那杯水冷了，他的工作鬧鐘又響。</p>
+<p>片尾浮出一行很像遊戲評語的字：「今日表現：尚待努力。」
+沒有再安排一場更強的頭目戰。最初的勝利，已經被拆成了他每天都要重新完成的日常。</p>
+</div></details>
+<details class="disclosure ending-two" id="ending-two"><summary><h2 id="ending-two-heading-1">結局二：〈今天，我自己回家〉</h2><span class="disclosure-icon" aria-hidden="true">+</span></summary><div class="disclosure-body">
+<h3 id="ending-two-heading-2">E2-01｜把證書留下，把自己帶走</h3>
+<p>阿安把筆放下，將手鏈推回小雨面前。</p>
+<blockquote>
+<p>阿安：「我愛過妳，也真的想和妳一起過日子。可是妳要我答應的，沒有我們一起的部分。」</p>
+</blockquote>
+<p>小雨問他，是不是連今天付出的努力都不要了。家族也勸他，所有事情已經準備好，不要意氣用事。</p>
+<blockquote>
+<p>阿安：「就是因為那些努力真的很重要，我才不想繼續這樣用掉自己。」</p>
+</blockquote>
+<p>他明確說出分手。母親拿起合格證書，問他要不要帶走。他搖頭：
+「你們看得到的本事，我自己也知道。不用靠這張紙，才算有。」</p>
+<p>他走出大門。哥哥仍站在門旁，這次卻沒有再問他能不能過。
+他已經完成所有考驗。離開，是他在成功之後作的決定。</p>
+<p>建國跟到門邊，低聲說：「路上小心。」屋內沈雅芳又叫他的名字，他的肩膀仍下意識縮了一下。
+阿安向他點頭，說：「你剛才提醒我的，我記住了。」
+建國看著他走出去，第一次沒有立刻轉身去回應妻子的催促，只在門邊多站了一會。</p>
+<h3 id="ending-two-heading-3">E2-02｜沒有人催他趕下一關</h3>
+<p>離開宅邸，城市的聲音重新變得普通。公車到站，商店收工，有人和朋友坐在路邊吃東西。
+手機沒有新的考核通知。他一開始還會反覆拿出來看。</p>
+<p>故事讓這段失落存在。他難過，也會想念舊日的親密，不是跨出門口便立刻痊癒。
+他找朋友吃飯，向同事坦白發生了甚麼，慢慢把原本放掉的生活接回來。</p>
+<p>他去修理店補領維修單據，向知夏道謝，也聊起那個荒唐的晚上。
+她沒有替他宣布自己作對了，只問：「現在有沒有甚麼事，是你自己想做的？」</p>
+<p>他第一次把工場計畫講完。她聽完，提出一些實際問題，也分享自己開店時遇過的麻煩。
+這不是入場測驗，兩人可以說不知道，也可以不同意。</p>
+<h3 id="ending-two-heading-4">E2-03｜兩個人的日子</h3>
+<p>幾個月過去，他們因工作和興趣逐漸熟悉，成為朋友，之後才開始交往。
+知夏不必知道他的收入數字，才肯在他生病時送餐；他也不需要等到一張評核表，才知道她辛苦時應該幫忙。</p>
+<p>她有忙到沒空赴約的時候，會直接解釋，再一起改時間。
+他有不想做的事，也會說出來，兩人商量怎樣安排。沒有假危機、假情敵或突然出現的忠誠測驗。</p>
+<p>一天，他們一起做飯。知夏問明天去哪裡，他正想照舊回答「妳說甚麼都可以」，卻停了一下。
+他說自己想去看一個展。她說自己也有想去的地方，兩人把時間排好，誰也沒有因此不開心。</p>
+<p>飯好了。她伸手把他的手機移開：「先吃，待會再看。」
+鏡頭裡，他不是穿得最體面的那個人，也不是坐在最大的房子裡，卻很自在。</p>
+<p>片尾，他終於重新打開工場計畫，替它寫上下一步。旁邊還有另一份屬於知夏的計畫。
+兩個人都有自己的未來，也願意替對方留出位置。</p>
+</div></details>
+<details class="disclosure ending-three" id="ending-three"><summary><h2 id="ending-three-heading-1">結局三：〈另一份合約〉</h2><span class="disclosure-icon" aria-hidden="true">+</span></summary><div class="disclosure-body">
+<h3 id="ending-three-heading-2">E3-01｜他換了一張椅子</h3>
+<p>阿安拒絕婚約，結束與小雨的戀愛關係，卻沒有離開。
+他翻開沈雅芳的合作文件，看見那套「合格顧問」服務，正在替其他家族設計相同的考核。
+今天的八位考官，平日各自提供場地、包裝、帳務、接待與活動安排；真正掌握收款和規則的人，始終是母親。</p>
+<p>沈雅芳說他能打、能處理事，也知道被考的人會怎樣想，加入之後可以替生意增加收入。
+阿安問規則可不可以由自己改。她指向主位旁的工作椅，回答：「題目你可以擬，收費和分成我管。」</p>
+<p>建國望向他，沒有替妻子勸說。阿安看見了，卻告訴自己：只要坐到出題的一邊，應該就不會再像他那樣受壓。</p>
+<p>合作文件已說明分工與決策權，他知道這份工作仍然要別人不斷證明自己。
+玩家確認接受後，他簽下另一份合約，坐到母親指定的位置。</p>
+<h3 id="ending-three-heading-3">E3-02｜他第一次不用追著候選人跑</h3>
+<p>後來，阿安穿著合身西裝，坐在乾淨的辦公室裡。門外有人替他安排接待，
+家族稱讚他終於找到適合自己的位置。他開始拿到服務分成，也逐漸習慣由別人來等待自己點頭。</p>
+<p>起初，他主張把要求說清楚，刪掉一些過分的安排。沈雅芳拿出帳目，問刪掉的項目少收了多少。
+他解釋自己想把流程改得公平一點，她當著其他人說：「我讓你來做事，不是叫你教我少賺錢。」</p>
+<p>他停頓了一下，最後把題目放回流程。後來有客戶加錢要求再考一輪，他開始不用人提醒，也會替對方安排。
+他給自己的理由，是別人自願付費，自己只是提供服務。</p>
+<p>小雨和三姊妹拍攝宣傳片，笑著說：「我們只是想知道，他是不是真的有誠意。」
+這句話替他們帶來收入。林建國站在旁邊收拾拍完的道具，仍然先看沈雅芳的臉色。</p>
+<p>阿安終於不再拿著考卷奔跑，卻握起紅印章，開始決定下一個人的付出夠不夠。</p>
+<h3 id="ending-three-heading-4">E3-03｜下一位，而上頭還有一位</h3>
+<p>一個年輕男人帶著禮盒進來。襯衫很新，袖口卻留著工作的痕跡。
+他緊張地整理衣領，像序章裡的阿安一樣，先問自己做得會不會不夠好。</p>
+<blockquote>
+<p>年輕人：「請問，我要做到甚麼，才算合格？」</p>
+</blockquote>
+<p>阿安抬起頭，手停在紅印章上。鏡頭給他一個足夠長、可以改變做法的瞬間。
+門外傳來沈雅芳的聲音，催他不要讓下一場耽誤收款。</p>
+<p>他收起猶豫，翻開流程本。</p>
+<blockquote>
+<p>阿安：「先讓我們看看，你有多少誠意。」</p>
+</blockquote>
+<p>印章落下。黑色廂型車再次準備出發，坐在出題位置的人，變成玩家剛才一路幫助的主角。
+片尾標題先浮出：「合格考官。下一位。」</p>
+<p>字還沒有完全淡去，沈雅芳已從畫面外斥責：「阿安，收款單呢？別只會坐著，沒看見還有事要做？」
+他下意識低下頭，回了一聲：「知道了。」那個姿勢，和第五關的林建國一樣。</p>
+<p>鏡頭最後拉遠。阿安坐的椅子上方，仍是沈雅芳的主位。
+他開始靠別人的考驗獲利，也繼續接受她的控制；換了一個位置，沒有讓這套規則結束。</p>
+</div></details>
+        </section>
+        <section class="comparison prose" id="review-notes" aria-labelledby="notes-heading-1"><h2 id="notes-heading-1">伏筆、節奏與審閱筆記</h2>
+<h3 id="notes-heading-2">前面埋下甚麼，後面回收甚麼</h3>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">伏筆</th>
+<th scope="col">初次出現</th>
+<th scope="col">後面的回收</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阿安刪去沒講完的工場計畫</td>
+<td>序章 P-01</td>
+<td>結局一再次收起；結局二重新打開；結局三投入仍由沈雅芳控制的生意</td>
+</tr>
+<tr>
+<td>小雨說「不要傷到他」，卻沒有掙扎</td>
+<td>序章 P-02</td>
+<td>第一關確認安全；通關時承認開場也是安排</td>
+</tr>
+<tr>
+<td>對手核對姓名、倒下後先看流程</td>
+<td>第一關</td>
+<td>六關原來都有預排工作與評核</td>
+</tr>
+<tr>
+<td>沒放平的身高尺、事先印好的費用</td>
+<td>第二、三關</td>
+<td>標準與費用不全是對他實際行為的反應</td>
+</tr>
+<tr>
+<td>表格的「合格顧問」與退費要經雅芳批准</td>
+<td>第二、三關</td>
+<td>第六關及通關後確認，母親同時掌握考核與收款</td>
+</tr>
+<tr>
+<td>三姊妹的比較、雙重標準和家務要求</td>
+<td>第四關三場頭目戰</td>
+<td>母親把同樣做法集中成婚後規矩；小雨也認同它們</td>
+</tr>
+<tr>
+<td>小雨熟悉題目，傳訊要看阿安累了會不會變臉</td>
+<td>第四關</td>
+<td>真相揭曉時，不能把她寫成只受家人影響的局外人</td>
+</tr>
+<tr>
+<td>視訊裡建國端著茶盤，被妻子當眾責罵</td>
+<td>第四關結尾</td>
+<td>第五關說出長年處境；第六關重現公開羞辱，讓玩家看清真正權力</td>
+</tr>
+<tr>
+<td>建國說「一次又一次」，聽到妻子聲音便縮肩</td>
+<td>第五關</td>
+<td>結局一阿安重走這條路；結局三連回話和低頭姿勢都相同</td>
+</tr>
+<tr>
+<td>水杯、主角說「我先喝完」、父親替他求一口水</td>
+<td>第一、四、六關</td>
+<td>結局一需要得不到回應；結局二可以互相照顧；父親的關心也被母親壓下</td>
+</tr>
+<tr>
+<td>母親不准丈夫替阿安求一口水，自己卻坐下進食回血</td>
+<td>第六關第一條血量後</td>
+<td>五人替她拖時間，具體表現她的雙重標準與不肯認輸</td>
+</tr>
+<tr>
+<td>新襯衫、禮盒、整理衣領的動作</td>
+<td>序章</td>
+<td>第三結局的新候選人重現當年的他</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="notes-heading-3">本輪已採納的角色與關卡調整</h3>
+<ul>
+<li><strong>第四關有三位真正的頭目。</strong> 大姊、二姊、三姊各自出戰，全部完成才結束第四關；六關合計八位頭目。</li>
+<li><strong>第五關是林建國。</strong> 他明白以安婚後可能像自己一樣悲慘，不把這種「可憐」只寫成收入不足。
+他受妻子長期責罵與壓制，想提醒又畏懼；對決與對白都圍繞這份矛盾。</li>
+<li><strong>第六關是沈雅芳。</strong> 她貪財、強勢，會在親屬和賓客面前羞辱丈夫；她親自進行最強的最後對決，也是考核和生意的決策者。</li>
+<li><strong>最終戰有兩條血量。</strong> 第一條歸零後，三姊妹、林建國、林家豪依序在第 10、20、30、40、50 秒進場；她在飯桌進食，固定第 60 秒帶著第二條血量返場，連同尚存援軍最多六對一。第二條歸零，整場結束。</li>
+<li><strong>父親不再被寫成最終掌權者。</strong> 婚約、評核與合作邀請都由母親提出；他的受壓經歷貫穿後段和三個結局。</li>
+<li><strong>女友仍有主動責任。</strong> 母親的影響沒有取消小雨自己的參與與選擇。</li>
+</ul>
+<h3 id="notes-heading-4">故事與玩家選擇的銜接</h3>
+<ul>
+<li><strong>主角會知道女友安全。</strong> 第一關後確認情況，後段以問清楚關係和自己是否願意接受為動機。</li>
+<li><strong>父親的警告不鎖定結局。</strong> 看見他的處境、聽過提醒後，三條路線仍全部開放，不增加隱藏人格分數。</li>
+<li><strong>玩家真正完成六關。</strong> 拒付未同意的費用、表達不滿、喝水休息，都不作為隱藏扣分。</li>
+<li><strong>父親受壓與參戰並存。</strong> 建國雖猶豫，仍在母親命令下加入五人圍攻；不自動放水或離場，也不把玩家擊退他當成結局扣分。</li>
+<li><strong>第三結局保留清楚確認。</strong> 玩家知道沈雅芳仍掌握收費與最後決策，才選擇合作；後續演出他如何一面利用下一個人，一面重現建國的低頭。</li>
+<li><strong>第二結局的新戀情有時間與互相選擇。</strong> 不把知夏當成離開小雨就能立即領取的獎勵。</li>
+</ul>
+<h3 id="notes-heading-5">你可以優先評論的地方</h3>
+<ol>
+<li>三姊妹暫定為小雨的三位姊姊；關係、姓名及三種分工是否需要修改？</li>
+<li>建國在第五關私下直說、公開場合仍不敢抬頭，這個強度是否符合你想要的父親？</li>
+<li>沈雅芳的貪婪、公開責罵和最終戰，還需要更誇張，還是保留現在較貼近日常的壓迫？</li>
+<li>第一關後就知道小雨安全、逐步揭露她參與考核的節奏，是否仍合意？</li>
+<li>第三結局加入「換了位置，仍受沈雅芳控制」的回收，是否保留？</li>
+<li>最終戰已確立兩條血量、10 秒援軍間隔與 60 秒返場；援軍血量和多人攻勢的具體平衡，留待原型驗證。</li>
+</ol>
+<h3 id="notes-heading-6">文件與下一步</h3>
+<p>《合格女婿》、六關與三結局，以及本輪第四關三姊妹、第五關父親、第六關母親的安排，依照你的決定更新。
+三姊妹的具體身分與姓名、各段台詞及結局細節仍可繼續修改。章節代號用來方便討論，尚未作為正式遊戲資源 ID。</p>
+<p>此時維持故事審閱。Claude 的遊戲開發仍依 CCGS 進行，不因改完故事就展開整個六關製作。
+歷史 <code>idea/storyboard/</code> 保持原樣，待你確認新稿後，再討論正式分鏡的整理方式。</p>
+<hr/>
+</section>
+        <details class="archive" id="proposal-history">
+          <summary><span><span class="archive-label">歷次提案 · 三案比較及早期中英文稿</span><span class="archive-note">保留供比較；目前選定方向為《合格女婿》，上方全文仍待審閱。</span></span><span class="disclosure-icon" aria-hidden="true">+</span></summary>
+          <div class="archive-body prose"><h4 id="archive-heading-1">歷次提案存檔</h4>
+<p>以下保留選定《合格女婿》之前的三案比較與更早的中英文提案。
+目前的故事草稿是本文件上方的六關三結局版本；下方舊稿供比較，不再作為當前候選方向。</p>
+<h3 id="archive-heading-2">Codex 新故事提案：通關之後，你還要證明甚麼？</h3>
+<p><strong>作者：</strong> Codex</p>
+<p><strong>日期：</strong> 2026-10-29</p>
+<p><strong>狀態：</strong> 第二輪討論草稿。依照你最新說明，重新提出三個故事；角色、場景與台詞仍待你挑選及修改。</p>
+<p><a href="#current-direction">本輪創作方向</a> · <a href="#story-one">故事一：合格女婿</a> ·
+<a href="#story-two">故事二：滿分男友</a> · <a href="#story-three">故事三：最後一個考官</a> ·
+<a href="#comparison">三案比較</a> · <a href="#previous-proposal">前版中英文提案</a></p>
+<p><a id="current-direction"></a></p>
+<h4 id="archive-heading-3">本輪創作方向</h4>
+<p>上一版把故事導向家庭誤會與和解，沒有抓準你想批判的核心。
+這一輪保留「女友及其家族測試男方」作為主要衝突，讓玩家親身經歷條件審核、
+反覆證明，以及單方面承擔責任的壓力。</p>
+<p>主角是真心相信「只要我夠努力，就能讓她幸福」的人。他願意付出，
+卻沒有及早問清楚：對方是否也願意為這段關係付出？</p>
+<p>故事會把諷刺落在具體行為上：以愛為名設局、用財力與地位衡量價值、
+把忍受委屈當成人品測驗，以及每當男方達成要求就再加碼。
+女友與家族都會主動參與這套規則，並用自己的選擇展現問題。</p>
+<p>三案都可以放在虛構的華人城市，透過見家長飯局、身高與外貌評比、房車與收入比較、
+親戚之間的面子競爭，具體呈現你想批判的婚戀觀念。</p>
+<h5 id="archive-heading-4">三個故事共同保留的設定</h5>
+<ul>
+<li><strong>通關是真正成功：</strong> 玩家確實完成所有關卡與最終考驗，已經證明自己的能力。</li>
+<li><strong>成功之後仍有選擇：</strong> 最後兩個結局都向成功通關的玩家開放，不由隱藏分數決定。</li>
+<li><strong>選擇前揭露關鍵真相：</strong> 玩家知道女友及家人的做法，也看見婚後仍會繼續考驗的跡象，再決定去留。</li>
+<li><strong>結局一——結婚，繼續證明：</strong> 主角承擔賺錢、家務與家庭責任；妻子持續購物、與朋友玩樂，
+並要求他賺得更多。諷刺來自她拒絕分擔、也不關心他的耗損，卻一直要求他證明愛。</li>
+<li><strong>結局二——分手，重新生活：</strong> 主角厭倦被設局與審核，主動結束關係；
+他先找回生活，再與願意互相尊重、共同付出的人建立感情，過上幸福的日子。</li>
+<li><strong>新戀情不設考驗：</strong> 雙方有需要便直接說，也會照顧對方的需要；不假裝遇險、不製造情敵，
+不以突然加碼的條件逼對方表忠心。</li>
+</ul>
+<p>兩條選項可以直接寫成「與她結婚」和「結束關係，離開」。
+不在按鈕上預先寫「壞結局」或「好結局」，讓後續生活把差別演出來。</p>
+<p>以下三案是三種不同的故事方向，不代表要全部製作，也未指定關卡數、引擎版本或美術規格。
+所有主要戀愛角色均設定為成年人。</p>
+<p><a id="story-one"></a></p>
+<h4 id="archive-heading-5">故事一：《熱血物語：合格女婿》</h4>
+<p><strong>一句話：</strong> 男孩以為自己闖過全城、救回女友，終於獲得家族認可；
+到了終點才知道，所謂婚姻獎勵，是一份沒有下班時間的終身試用通知。</p>
+<p><strong>調性：</strong> 荒唐武打、家庭黑色喜劇，最後轉為清醒而帶苦味的選擇。</p>
+<h5 id="archive-heading-6">開場：只要她沒事就好</h5>
+<p>主角與女友約好第一次正式見家長。見面前，一輛黑色廂型車突然出現，把女友帶走。
+主角追上前，被攔路的人打退，手機也摔壞了。</p>
+<p>地上留下她的飾物，以及一張寫著目的地的卡片。
+他沒有多想，握著飾物追了出去。</p>
+<blockquote>
+<p>主角：「等我。我一定帶妳回來。」</p>
+</blockquote>
+<p>玩家先得到一個直接、容易投入的目標：救人。
+主角的真誠要透過行動建立，讓玩家願意陪他走這一程。</p>
+<h5 id="archive-heading-7">中段：每一種好，都要付出代價</h5>
+<p>追逐途中，主角遇見的阻攔者，都在測試不同條件：</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">表面遭遇</th>
+<th scope="col">家族真正檢查的條件</th>
+<th scope="col">玩家開始感到不對勁的地方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保鑣封路、武館高手攔截</td>
+<td>力量、保護能力、能否替家族處理麻煩</td>
+<td>對手倒下後，竟先查看一張評分紙</td>
+</tr>
+<tr>
+<td>被迫籌措費用、支付各種損失</td>
+<td>財力、收入潛力、願意為她花多少</td>
+<td>每付清一次，就出現另一張更大的帳單</td>
+</tr>
+<tr>
+<td>親戚一邊擋路，一邊要求送東西、搬重物</td>
+<td>服從程度、耐性、會不會抱怨</td>
+<td>主角越願意幫忙，交到他手上的工作就越多</td>
+</tr>
+<tr>
+<td>打扮考官與「成功人士」輪番比較</td>
+<td>外貌、體面、社會地位</td>
+<td>評語只談他帶得出去與否，沒有一句問他是怎樣的人</td>
+</tr>
+</tbody>
+</table></div>
+<p>女友偶爾傳來語音，讓他繼續前進。第一次像安慰，之後越聽越像催促：</p>
+<blockquote>
+<p>女友：「我知道你一定做得到。」</p>
+<p>女友：「再努力一點，不要讓我失望。」</p>
+</blockquote>
+<p>他受傷時，一名在附近工作的女子先替他簡單處理傷口。
+她不知道他有沒有錢，也不認識那個家族，只看見有人需要幫忙。
+她有自己的工作要忙，沒有立刻成為陪他冒險的人。
+這個短場景先讓玩家見到另一種相處方式。</p>
+<h5 id="archive-heading-8">最終戰：他真的全部做到了</h5>
+<p>主角闖進宴會廳，擊敗最後的家族考官。女友安然坐在桌旁，所有人起立鼓掌。
+被帶走、攔路、催費、臨時加工作，全部都是女友與家族安排的測試。</p>
+<p>女友沒有被迫配合。她親自挑選了部分項目，認為這是挑選丈夫應有的程序。</p>
+<blockquote>
+<p>女友：「又沒有真的出事。你連考驗都受不了，以後怎麼照顧我？」</p>
+</blockquote>
+<p>父親宣布他已通過所有標準。玩家看到真正的通關畫面，獎章與掌聲都已經到手。</p>
+<h5 id="archive-heading-9">驚喜反轉：獎狀的背面</h5>
+<p>父親遞來一張「合格女婿」證書。主角把它翻過來，背面印著：</p>
+<p><strong>婚後考核事項：收入逐年增加、家務隨時支援、家庭支出全額承擔、不得以疲累作為拒絕理由。</strong></p>
+<p>最後一行是：「試用期限：終身。」</p>
+<p>主角問女友，如果有一天自己生病、失業，或只是想休息，她會怎樣。</p>
+<blockquote>
+<p>女友：「所以你更加不能讓這些事情發生啊。」</p>
+</blockquote>
+<p>他這才知道，自己通過的是「有沒有資格一直付出」，而不是兩人是否願意共同生活。
+此時開放兩個選項。</p>
+<h5 id="archive-heading-10">結局一：〈合格丈夫，尚待努力〉</h5>
+<p>婚禮非常漂亮，畫面一度像傳統的大團圓。
+接著，時間快速跳過：主角白天上班、晚上兼職，回家買菜、煮飯、洗衣，
+還要處理雙方家人的大小事。妻子忙著購物、旅行、與朋友聚會。
+每當他完成一筆支出，她便拿出下一個願望，稱讚別人的丈夫賺得更多。</p>
+<p>他發燒時，她仍把帳單放在他床邊：「先把這個付了，免得我明天不能出門。」
+這一幕清楚呈現她對他的需要沒有相同的關心。</p>
+<p>晚上，他終於坐下，想起自己曾以為通關後可以一起好好吃飯。
+手機亮起：「你以前追我的時候，不是甚麼都肯做嗎？」</p>
+<p>畫面角落，通關獎章變成「今日表現：尚待努力」。
+片尾最後一聲，是他第二天的上班鬧鐘。</p>
+<h5 id="archive-heading-11">結局二：〈今天，我自己回家〉</h5>
+<p>主角把證書放回桌上，也把一路保護的飾物還給她。</p>
+<blockquote>
+<p>主角：「我願意和人一起扛生活。但我不想用一輩子，換你每天再考一次。」</p>
+</blockquote>
+<p>她問他，難道不珍惜自己剛剛付出的努力。他看著滿身傷痕，回答：</p>
+<blockquote>
+<p>主角：「就是因為珍惜，我才不想繼續這樣用掉自己。」</p>
+</blockquote>
+<p>他走出宴會廳。前面攔路的人這次沒有再擋他——考驗已經完成，他有能力離開。</p>
+<p>故事留一段他恢復生活的時間：養傷、見朋友、重新做自己喜歡的事。
+之後，他偶然再遇見先前幫他處理傷口的女子。兩人慢慢認識，才開始交往。
+她辛苦時，他也會照顧她；他忙得走不開，她會說：「那我去找你，我們一起吃點東西。」</p>
+<p>最後一幕，她問：「今天想去哪裡？」主角沒有再回答「妳說甚麼我都可以」。
+他提出自己想去的地方。她想了想，笑著答應，也補上一個自己的主意。
+兩人一起出門，過著能商量、能休息、也能互相照顧的日子。</p>
+<p><strong>這一案的重點：</strong> 保留原版最有辨識度的假救援，讓揭曉真相成為男孩開始作決定的時刻。</p>
+<p><a id="story-two"></a></p>
+<h4 id="archive-heading-12">故事二：《熱血物語：滿分男友》</h4>
+<p><strong>一句話：</strong> 男孩為了取得女友家族的「滿分認證」，打穿一座以條件衡量愛情的城市；
+拿到滿分後，他才發現自己的成績已被轉成下一個年度的最低服務標準。</p>
+<p><strong>調性：</strong> 都市荒誕喜劇，以廣告、排名、親友比較與不斷更新的要求製造諷刺。</p>
+<h5 id="archive-heading-13">開場：只差一點點</h5>
+<p>女友告訴主角，兩人已經交往很久，家人卻仍不放心。
+她請他參加一套名為「真愛認證」的評核，承諾拿到滿分，就能安心談結婚。</p>
+<p>畫面列出外貌、財力、地位、能力與人格。每一項旁邊，都有一句包裝得很動聽的理由：
+「給她安全感」「讓家人放心」「證明你是認真的」。</p>
+<p>主角問她對現在的自己滿不滿意。</p>
+<blockquote>
+<p>女友：「滿意呀。只是還可以更好。」</p>
+</blockquote>
+<p>他把這句話理解成鼓勵，踏上認證之路。</p>
+<h5 id="archive-heading-14">中段：條件開始互相打架</h5>
+<p>各個評核被包裝成格鬥擂台與城市挑戰，考官由女友、家人及他們聘請的人擔任。</p>
+<ul>
+<li><strong>財力場：</strong> 主角需要擊退代表支出的敵人、守住收入；女友同時要求一份超出預算的禮物。</li>
+<li><strong>陪伴場：</strong> 他要準時赴約，家族卻把另一項必須完成的工作排在赴約之前，壓縮到幾乎趕不上。</li>
+<li><strong>地位場：</strong> 親戚拿他與不同「成功人士」比較，忽略每個人擁有的資源與生活背景。</li>
+<li><strong>好脾氣場：</strong> 對方可以嘲諷、失約和臨時改規則，主角只要提出異議，就被指為不夠體貼。</li>
+</ul>
+<p>玩家要逐漸看見，這些要求經常把不同方向的責任全推到同一個人身上。
+劇情會讓主角指出矛盾，而不是要求他從頭到尾都看不出來。</p>
+<p>途中，他認識一位同樣被評核折騰的成年男子。
+對方說自己曾經接近滿分，後來失業，所有既有付出便被當成不算數。
+他不勸主角仇視誰，只問：「你有沒有看過她的那張表？她需要為你做到甚麼？」</p>
+<p>主角回去找女友商量。她承認沒有相對的評核，因為她認為「有人願意跟你結婚」
+本身就已經是她的付出。她仍堅持讓他考完。</p>
+<h5 id="archive-heading-15">最終戰：滿分真的可以拿到</h5>
+<p>主角面對由各項標準組成的最終考官，完成所有公開項目，取得真正的滿分。
+遊戲不靠暗改數字來否定玩家的勝利。</p>
+<p>認證平台播放熱鬧廣告，家族也表示他已經合格。
+他終於以為，接下來可以放下評分，過普通日子。</p>
+<h5 id="archive-heading-16">驚喜反轉：滿分自動續期</h5>
+<p>畫面從「戀愛認證」切換成「婚後服務」。剛才的滿分變成新合約的起始值：</p>
+<p><strong>今日最高表現，將成為明日最低標準。</strong></p>
+<p>主角更發現，家族付費購買了整套測試服務。公司出售的是「讓伴侶持續努力」的方案，
+可以代辦假危機、比較對象與不定期忠誠考核。
+女友與家族清楚知道自己買的是甚麼，也一直主動設定要求；平台只是幫他們執行。</p>
+<p>她準備替他開啟婚後方案，費用轉由他支付。</p>
+<blockquote>
+<p>女友：「不繼續證明的話，我怎麼知道你結婚後還愛不愛我？」</p>
+</blockquote>
+<p>此時開放兩個選項。玩家已經得到滿分，不需要再打另一輪才有資格拒絕。</p>
+<h5 id="archive-heading-17">結局一：〈滿分，已成基本要求〉</h5>
+<p>主角與她結婚。片尾以一連串生活畫面，呈現「婚後服務」：
+妻子從商場和朋友聚會傳來照片，系統同步把消費與新願望加入他的工作清單。
+他多做一份兼職，她便把額外收入算成下月原本就該有的預算。</p>
+<p>他要負擔所有帳單、家務與照顧責任。當他請她分擔一晚，她回答：
+「你不是都會做嗎？我今天約了朋友。」</p>
+<p>某天他完成全部事項，螢幕短暫出現「滿分」。午夜一到，成績清零，
+新增一行：「紀念日驚喜：不得重複去年規格。」</p>
+<p>最後，主角在睡夢中聽到提示音，立刻坐起來說：「我馬上處理。」
+房間沒有人叫他。他已經習慣隨時待命。</p>
+<h5 id="archive-heading-18">結局二：〈離線之後〉</h5>
+<p>主角拒絕續期，結束關係。女友把他的認證撤下，說他浪費了所有努力。
+但他保留已完成挑戰的紀錄，沒有讓一個平台抹掉自己的能力。</p>
+<blockquote>
+<p>主角：「我證明過我做得到。現在，我要決定自己願不願意做。」</p>
+</blockquote>
+<p>他離開評分圈子，與朋友恢復聯絡，重新參加自己喜歡的活動。
+之後，他在一個共同興趣的聚會認識新的對象。兩人先一起做事、聊天，
+看見彼此的優點與不足，再慢慢建立感情。</p>
+<p>一次，他因為生病取消約會，舊習慣讓他急著列出補償方案。
+她直接問他有沒有吃東西，幫忙帶餐，也讓他安心休息。
+另一次，她遇到工作難題，他同樣留下來聽她說，陪她想辦法。</p>
+<p>尾聲是兩人一起安排普通的假期，輪流提出想法，也一起承擔費用與家務。
+手機沒有認證通知。只有一張兩人都不太上鏡，卻笑得很開心的合照。</p>
+<p><strong>這一案的重點：</strong> 把「永遠不夠」變成看得見的機制，也描寫親友比較與商業服務如何放大這套觀念。</p>
+<p><a id="story-three"></a></p>
+<h4 id="archive-heading-19">故事三：《熱血物語：最後一個考官》</h4>
+<p><strong>一句話：</strong> 男孩通過女友家族的婚前試煉，擊敗最後一名阻止他赴婚禮的蒙面人；
+面具掉下，他看見的是婚後多年、已經耗盡自己的另一個自己。</p>
+<p><strong>調性：</strong> 帶奇幻色彩的黑色童話。前半熱血，最後用強烈的視覺反轉，讓玩家重新理解一路的勝利。</p>
+<h5 id="archive-heading-20">開場：幸福只差最後一關</h5>
+<p>女友家族擁有一座專門舉行婚前試煉的古宅。
+他們相信，準丈夫應該證明自己有能力承擔未來。女友支持這個傳統，
+並把婚禮想成自己理想生活的起點。</p>
+<p>主角帶著兩人的合照入門，也帶著自己原本的人生計畫：想做的工作、喜歡的事、
+想與伴侶共同建立的家。他以為這些願望可以一起完成。</p>
+<p>家族讓他戴上一隻象徵承諾的手環。每通過一場考驗，就會加上一枚金色環扣。
+起初像勳章，越往後卻越沉。</p>
+<h5 id="archive-heading-21">中段：他以為自己越來越強</h5>
+<p>古宅的房間，把各種婚戀要求化成可以戰鬥的幻象：</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">房間</th>
+<th scope="col">考驗的說法</th>
+<th scope="col">實際索取的東西</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>金屋廳</td>
+<td>愛她，就應該給她最好的生活</td>
+<td>所有未來收入與財務決定權</td>
+</tr>
+<tr>
+<td>無眠廊</td>
+<td>真正可靠的人不會說累</td>
+<td>休息、健康與自己的時間</td>
+</tr>
+<tr>
+<td>靜聲室</td>
+<td>好脾氣的男人應該包容一切</td>
+<td>表達不同意見、拒絕與求助的權利</td>
+</tr>
+<tr>
+<td>百願庭</td>
+<td>每個願望都完成，才算用心</td>
+<td>他自己的興趣、朋友，以及原本的人生計畫</td>
+</tr>
+</tbody>
+</table></div>
+<p>他擊敗每個考官，獲得更華麗的裝備，卻也發現角色的動作越來越沉重。
+外表愈像完美新郎，身上屬於他自己的東西就愈少。
+這些表現是故事構想，尚未指定要實作哪些數值或系統。</p>
+<p>古宅中偶爾出現一名蒙面人，試圖攔住他。
+對方用主角熟悉的動作，避開致命位置，只反覆說：「先停下來。」</p>
+<p>女友從高處的房間告訴他，那是最後的阻礙，越過去就能來到她身邊。</p>
+<h5 id="archive-heading-22">最終戰：打倒阻止幸福的人</h5>
+<p>主角與蒙面人交手。對方的招式與主角相似，卻帶著疲憊與受傷後留下的習慣。
+戰鬥過程中，他看到對方也戴著同一種手環，只是已經變成很厚的鐵圈。</p>
+<p>玩家成功擊敗最後考官，婚禮大門打開，全部考驗正式完成。</p>
+<p>蒙面人扶著牆站起，面具落下。那張臉老了很多，卻是主角自己的臉。
+胸前放著同一張合照，照片中的笑容與眼前的他形成反差。</p>
+<h5 id="archive-heading-23">驚喜反轉：他擋住的，是自己走過的路</h5>
+<p>蒙面人是古宅根據婚姻承諾投射出的「可能的未來」，不是已經注定發生的時間旅行。
+家族把他當成最後一項壓力測試，認為連這種未來也敢接受，才叫真正負責任。</p>
+<p>他身後的幻象，展示了他如何變成這樣：白天賺錢、晚上兼職，回家還要處理家務與所有照顧責任；
+妻子則繼續購物、旅行、與朋友取樂，每次只問他的收入能不能再增加。
+他累倒時，得到的回應仍是：「你以前答應過我的。」</p>
+<p>原來，最後考官想攔下的，是自己曾經走進去的那扇門。</p>
+<blockquote>
+<p>未來的主角：「我也以為，只要過了最後一關，就能休息。」</p>
+</blockquote>
+<p>主角轉向女友，問她是否願意一起修改那些承諾，讓兩人共同承擔生活。
+她看著幻象，仍回答：「大家的丈夫都做得到。你為甚麼要現在退縮？」</p>
+<p>玩家已成功通關。此時選擇走進婚禮，或帶著自己的名字與願望離開。</p>
+<h5 id="archive-heading-24">結局一：〈我答應過〉</h5>
+<p>主角走進婚禮，說出「我願意」。金色環扣合攏，變成剛才見過的鐵圈。</p>
+<p>多年生活以幾個短畫面呈現：妻子在百貨公司選購新品，他接到她要加預算的電話；
+她與朋友出遊，他趕完工作，再回家收拾、處理家庭事務。
+她沒有參與分擔，反而把他的疲勞視為沒有以前那麼愛她。</p>
+<p>他對鏡整理衣服。鏡裡的自己，逐漸變成最終戰那張疲憊的臉。
+他摸到衣袋中的合照，想起入門時，自己原本也有很多想做的事。</p>
+<p>最後的畫面回到古宅。那名蒙面人站到門前，望向另一段可能的開始。
+他的手抬起，仍然只來得及說：「先停下來。」</p>
+<p>故事用同一個構圖首尾呼應；這是結局影像，不要求製作另一輪完整關卡。</p>
+<h5 id="archive-heading-25">結局二：〈把手伸給自己〉</h5>
+<p>主角沒有立刻走向另一個女孩。他先走回被自己擊倒的蒙面人身旁，把他扶起。</p>
+<blockquote>
+<p>主角：「辛苦了。這次，我們換一條路。」</p>
+</blockquote>
+<p>他取下手環，結束這段關係，帶著自己的合照與未完成的人生計畫離開。
+那個可能的未來慢慢淡去，留下手環落地的聲音。</p>
+<p>之後的生活有一段平靜的重建。他重新安排工作、見朋友、恢復興趣，也學會直接說出自己的界限。
+後來，他在參與自己喜歡的活動時，遇上一個有自己目標，也願意聽他說話的人。
+兩人不必用假危機來確認感情；有難處便說，也一起想如何處理。</p>
+<p>最後，他們在普通的家裡做飯。她忙碌時，他接手；他疲累時，她讓他先休息。
+兩人把未來計畫並排放在桌上，一起商量。</p>
+<p>鏡頭短暫照向窗上的倒影。這次，他看到的是自己的笑容。</p>
+<p><strong>這一案的重點：</strong> 最後的敵人是「主角可能變成的人」。玩家打贏之後，才得到真正重要的選擇。</p>
+<p><a id="comparison"></a></p>
+<h4 id="archive-heading-26">三案比較與建議</h4>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">方向</th>
+<th scope="col">故事推動力</th>
+<th scope="col">通關後的驚喜</th>
+<th scope="col">最突出的特色</th>
+<th scope="col">需要注意的地方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一：合格女婿</td>
+<td>以為在救人，實際遭到家族考核</td>
+<td>合格證書背面是終身試用條款</td>
+<td>最貼近原版假救援與見家長，適合家庭黑色喜劇</td>
+<td>真相揭曉前要有逐步累積的疑點，不能只靠主角一直看不懂</td>
+</tr>
+<tr>
+<td>二：滿分男友</td>
+<td>主動追求滿分與認可</td>
+<td>滿分成為下一期最低標準，還要付費續期</td>
+<td>對比較文化、加碼條件與商業化評核的諷刺最直接</td>
+<td>廣告與評分畫面要服務故事，避免蓋過格鬥與人物</td>
+</tr>
+<tr>
+<td>三：最後一個考官</td>
+<td>闖過古宅、走向婚禮</td>
+<td>最後考官是被耗盡的未來自己</td>
+<td>視覺與情感反轉最強，也能讓結局首尾呼應</td>
+<td>需要先接受奇幻或寓言調性，並提早埋下相同動作、手環與照片的線索</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>我的建議：</strong> 如果你想延續原版的辨識度，先選故事一作為主線方向。
+如果你最重視最後一刻讓玩家震住，故事三更值得優先發展。
+故事二適合你希望整個遊戲都持續諷刺條件審核，而不只在結尾揭曉時才表達主題。</p>
+<p>先選一案，再把人物、情感節奏與關鍵場景寫成新版分鏡。
+暫時不把三案全部混在一起，讓每個方向都能被清楚比較。</p>
+<h5 id="archive-heading-27">寫成正式分鏡時要守住的重點</h5>
+<ol>
+<li>女友需要有具體台詞與行動，表明她確實認同這套不對等規則，不能最後把全部責任推給父母。</li>
+<li>家族中也可以有男性推行考核，例如父親以「我當年也是這樣」要求下一代照做，呈現觀念如何延續。</li>
+<li>購物、聚會或收入高低本身不構成反派特徵；戲劇衝突要來自拒絕分擔、缺乏關心與反覆加碼。</li>
+<li>主角的轉變要由劇情累積出來。他可以生氣、難過，也可以明確拒絕，不必突然發表長篇說教。</li>
+<li>分手後的新對象有自己的生活與選擇。兩人的關係透過時間與互相照顧建立，不作為過關後領取的獎品。</li>
+<li>兩條結局都放在成功通關之後，不把「選擇離開」鎖在另一套秘密人格考試後面。</li>
+</ol>
+<h4 id="archive-heading-28">本輪文件用途</h4>
+<p>你最新說明的創作主題，是本輪討論的依據。這三個故事仍是候選提案，尚未選定其中一案。
+Claude 的遊戲開發繼續使用 CCGS；現階段只討論故事，未更動引擎、美術、生產需求或驗收狀態。</p>
+<p>原有 <code>idea/storyboard/</code> 與現行簡報、計畫維持原樣。確定方向後，再一致地更新正式文件。
+下方保留前版中英文草稿，供我們比較；前版「家庭和解」的方向已不作為本輪提案的依據。</p>
+<hr/>
+<p><a id="previous-proposal"></a></p>
+<h4 id="archive-heading-29">前版提案存留：家庭迎客與和解方向</h4>
+<p>以下是第一輪中英文原稿，保留供比較；閱讀本輪新提案請由本文件頂部開始。</p>
+<h3 id="archive-heading-30">Codex 故事提案：熱血物語：先吃飯，再比武</h3>
+<p><a href="#traditional-chinese">繁體中文版</a> · <a href="#english-original">English original / 英文原稿</a></p>
+<p><a id="traditional-chinese"></a></p>
+<h4 id="archive-heading-31">繁體中文版</h4>
+<p><strong>作者：</strong> Codex</p>
+<p><strong>日期：</strong> 2026-10-29</p>
+<p><strong>狀態：</strong> 第一版討論草稿；所有新故事設定均為提案，待你審閱。</p>
+<p>這份草稿回應你希望重新思考分鏡故事的要求，從原本的核心構想出發。
+它參考了<a href="../idea/storyboard/README.md">舊版分鏡</a>，尤其是家庭喜劇、誇張武打、
+第一次見家長吃飯，以及兩代人之間的連結。角色姓名、人物關係、地點與事件都可以重新設計。</p>
+<p>你在訊息中同時使用了 <code>disscuss/</code> 和 <code>discuss/</code>。這份文件沿用根目錄中既有的
+<code>discuss/</code> 資料夾，作為你、Claude 與 Codex 的共同討論空間。大家可以在這裡放提案、
+意見回饋與外部提供的指示，並註明作者和狀態。文件存進這個資料夾，不代表內容已成為
+獲你批准的專案決定。</p>
+<p>Claude 的遊戲開發流程仍使用 CCGS。這份文件用來討論故事，不取代現有開發計畫。
+目前的遊戲簡報仍描述一場安排好的救援；以下提案刻意提出另一種故事前提，供我們討論。
+舊版分鏡與現行專案文件均未重寫。</p>
+<h5 id="archive-heading-32">1. 我會保留甚麼，又會重新思考甚麼</h5>
+<p>舊構想最有特色的地方，是動作英雄的世界與普通家庭聚會撞在一起。
+看起來很可怕的對手，開口卻問你吃飯了沒有；一場架打完，有人替你整理衣領；
+一路闖關的終點，原來是一張飯桌。這些畫面讓遊戲有自己的個性。</p>
+<p>以下是我對舊草稿的看法，並不代表我認定這些就是你不滿意的部分：</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">舊版做法</th>
+<th scope="col">我的顧慮</th>
+<th scope="col">建議調整</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主角始終不能懷疑救援是安排好的</td>
+<td>觀眾可能很早就看懂笑點，主角卻一直不明白；這種遲鈍容易蓋過他原本的個性</td>
+<td>讓他理解處境，因自己的情感弱點而犯錯</td>
+</tr>
+<tr>
+<td>幾乎所有人一起瞞著他</td>
+<td>結局要求玩家把欺騙當成關愛，卻很少讓主角表達感受</td>
+<td>讓挑戰事先公開、自願參與，也讓他能提出改變</td>
+</tr>
+<tr>
+<td>小雨主要在等待救援與揭曉</td>
+<td>我們看到很多別人對這段關係的要求，卻較少看到兩人自己想要甚麼</td>
+<td>給她自己的目標、與主角的分歧，以及推動故事的關鍵行動</td>
+</tr>
+<tr>
+<td>隱藏的道德評分決定認可與結局</td>
+<td>一個普通的戰鬥或拾取動作，可能產生玩家無法合理預料的含義</td>
+<td>清楚交代目標，透過人物反應與場景呈現後果</td>
+</tr>
+<tr>
+<td>五個內容豐富的關卡、大量頭目、多種結局，另加歷史番外</td>
+<td>還沒用一個小場景驗證核心關係，就已經訂下大量製作內容</td>
+<td>先寫好一個連貫的晚上，再驗證一場有代表性的遭遇</td>
+</tr>
+</tbody>
+</table></div>
+<h5 id="archive-heading-33">2. 三個可以探索的方向</h5>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">方向</th>
+<th scope="col">主要吸引力</th>
+<th scope="col">主要難點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. 保留假救援，但在故事中段揭穿</td>
+<td>保留原本的開場鉤子，後半段可以描寫主角知道真相後的反應</td>
+<td>欺騙需要帶來後果，也需要修補關係，才能讓感情可信</td>
+</tr>
+<tr>
+<td>B. 事先公開的家庭挑戰——本稿建議探索的方向</td>
+<td>兩位主角都有主動權，也保留喜劇武打與赴宴的終點</td>
+<td>少了假綁架的驚喜，需要更有力的人物衝突</td>
+</tr>
+<tr>
+<td>C. 安排好的挑戰，途中遇上真正的麻煩</td>
+<td>能清楚地從競爭轉向合作</td>
+<td>容易變成較普通的救援故事，也可能增加角色、危險程度與製作規模</td>
+</tr>
+</tbody>
+</table></div>
+<p>以下內容展開方向 B。如果你認為「原來整場救援都是安排好的」是必須保留的核心，
+方向 A 仍然成立；這份草稿選擇 B，不代表這個問題已經定案。</p>
+<h5 id="archive-heading-34">3. 用一段話說明新故事</h5>
+<p>一名年輕人陪女友第一次到她的武術家庭吃飯。他知道這家人有一套古怪的迎客挑戰，
+於是興致勃勃地答應：只要打贏她爸爸，應該就能證明自己配得上這個家。
+女友的目的卻很不同。她想介紹自己喜歡的人，並不想替他報名參加一場「爭取交往資格」的比賽。
+原本簡單的迎客儀式，逐漸變成一連串荒唐的家庭競賽；主角也開始覺得，接受女友幫忙
+會讓自己顯得不夠厲害。直到一張舊家庭照片揭開父親傳奇中的漏洞：當年的他，
+也從來不是獨力闖過所有難關。最後，這對情侶重新訂下終場挑戰——
+把這一家固執的人，一起帶到飯桌前。</p>
+<p><strong>暫定名稱：</strong> 熱血物語：先吃飯，再比武</p>
+<p><strong>核心問題：</strong> 主角能不能站在女友身旁，而不再把愛情當成需要向別人爭取的獎品？</p>
+<p><strong>玩家體驗：</strong> 走進一個令人緊張的家庭，享受他們荒唐的武打習俗，
+再慢慢自在到敢於說出自己的想法。</p>
+<h5 id="archive-heading-35">4. 人物之間的情感衝突</h5>
+<p>主角有能力，也很真誠。他的弱點，是會用過度自信來掩飾緊張。
+每當覺得自己格格不入，他就主動攬下現場最困難的事，也不願承認自己需要幫忙。</p>
+<p>小雨知道他這一點，也喜歡他的堅定。可是，當他把父親的挑戰看得比她真正說的話還重要，
+她就會感到挫折。她希望兩人以情侶的身分一起進門，他卻總是搶著擋到她前面。</p>
+<p>她的父親是個自豪、好勝的主人。他真心認為，這樣迎客是熱情的表現：
+他把自己當年加入這個家庭的經驗，拿出來與客人分享。
+他的錯誤，是把一段對自己很重要的經歷，變成所有人都應該遵守的規矩。</p>
+<p>三個人都有需要改變的地方。主角要學會接受幫助；小雨要把自己的不同意見說清楚，
+不能只期待主角領會暗示；父親則要容許這場家庭聚會，有些事情不由他作主。</p>
+<p>這段感情本來就是兩人的選擇。輸掉一場比試，不代表父親有權結束他們的關係。
+故事真正的懸念，是這次初次見面能否建立真誠的連結，還是大家整晚都只在彼此面前演出。</p>
+<h5 id="archive-heading-36">5. 精簡的核心角色</h5>
+<p>以下是故事角色定位，並非已批准的角色 ID 或製作需求。
+「小雨」暫時沿用舊名，不預設保留她以前的外貌或身世。</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">角色</th>
+<th scope="col">今晚想要甚麼</th>
+<th scope="col">喜劇表現</th>
+<th scope="col">改變或貢獻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主角</td>
+<td>留下好印象，隱藏自己的緊張</td>
+<td>起初承諾得過分正式，後來越累越靠臨場發揮</td>
+<td>學會問小雨想要甚麼，並接受她幫忙</td>
+</tr>
+<tr>
+<td>小雨</td>
+<td>以平等的身分介紹伴侶，和他好好吃一頓飯</td>
+<td>冷面吐槽，親暱但直接</td>
+<td>不再替分歧打圓場，主動提出最後的挑戰</td>
+</tr>
+<tr>
+<td>她的父親</td>
+<td>給客人難忘的歡迎，也維護自己引以為傲的家族故事</td>
+<td>連奉茶都說得像下戰書</td>
+<td>承認當年得到的幫助，參與情侶提出的新版本</td>
+</tr>
+<tr>
+<td>她的母親</td>
+<td>讓大家吃飽，同時容許自己看一點熱鬧</td>
+<td>在別人最想耍帥或發表宣言時，插入實際的生活問題</td>
+<td>揭露家庭照片被省略的部分，也承認自己放任傳奇越講越大</td>
+</tr>
+<tr>
+<td>一位姑姑或叔叔</td>
+<td>主持一項迎客活動，享受聚會</td>
+<td>把一件普通家務看得無比嚴肅</td>
+<td>第一個把主角當成一個人來認識，而不只當成參賽者</td>
+</tr>
+</tbody>
+</table></div>
+<p>主角的父母、表親、豪宅、整座校園的角色，以及可操作的歷史人物，
+都可以留待之後重新考慮。這份草稿的核心故事，暫時不需要他們也能成立。</p>
+<h5 id="archive-heading-37">6. 故事大綱：一個晚上</h5>
+<p>以下是故事段落，不代表已決定製作四個遊戲關卡。</p>
+<h6 id="archive-heading-38">開場——邀請</h6>
+<p>在家門外，小雨替主角整理衣領。他事先練習了一套正式得過頭的問候語，
+還沒說完，她已經笑了出來。</p>
+<p>她解釋家裡的迎客習慣：這家人喜歡友善切磋，參與者都知道規則，他也可以拒絕。
+父親一定會把事情講得比實際嚴肅得多。她只有一個要求：兩人一起進門。</p>
+<blockquote>
+<p>小雨：「今天是來吃飯的。你不用把自己打成第一名。」</p>
+<p>主角：「放心，我很會跟長輩相處。」</p>
+</blockquote>
+<p>門打開了。父親伸手想握手，主角卻以為第一道考驗已經開始，立即擺出誇張的架勢。</p>
+<p>父親驚喜地望向小雨：「你怎麼知道我們有這個規矩？」</p>
+<p>這一幕說明，就算沒有人暗中策劃陰謀，這兩個男人也有本事把今晚越搞越複雜。</p>
+<h6 id="archive-heading-39">第一段——非常認真的迎客儀式</h6>
+<p>第一項活動在準備晚飯的庭院展開。家人還在佈置，一位姑姑或叔叔便宣布進行簡單的友誼賽。
+玩家開始操作前，會先知道這場比試的目標。</p>
+<p>笑點來自正式武術儀式與實際家務之間的反差：挑戰者先抱拳行禮，
+接著請人把晾著的衣服移開；母親則因為大家快碰到待客用的好碗碟，叫停比賽。</p>
+<p>主角贏下一輪交手，立刻看向父親，想確認自己有沒有得到認可。
+他差一點沒注意到，小雨正把水遞給他。</p>
+<p>比試過後，那位親戚請他幫忙搬點東西。離開圍觀的人群，兩人反而聊得自然起來。
+這是他今晚第一次真正與這家人建立連結，而且發生在他不再刻意表現之後。</p>
+<p><strong>這段的作用：</strong> 建立戰鬥的樂趣、家庭的溫度，以及「讓人留下好印象」與「互相認識」之間的差別。</p>
+<h6 id="archive-heading-40">第二段——他開始玩錯了遊戲</h6>
+<p>父親再加一道挑戰。小雨還沒說完「先休息一下」，主角已經答應。
+他確實玩得開心，卻也越來越相信：只要得到她的幫助，自己的表現就會打折扣。</p>
+<p>在一項雙人迎客活動中，她看出了一條路線，或一個他錯過的時機。
+他堅持獨自處理，結果把原本簡單的任務弄得更困難。
+這場戲以尷尬的沉默收尾，沒有浪漫的英雄救美。</p>
+<blockquote>
+<p>小雨：「你今天一直問我爸，你這樣行不行。」</p>
+<p>小雨：「你有沒有問過我，我想怎樣？」</p>
+</blockquote>
+<p>他終於坦白：他怕她爸爸看不起自己，久而久之，她也會覺得帶他出來很丟臉。
+她告訴他，今天帶他來，就是因為她希望他在這裡。兩人終於有了今晚第一次真正的對話。</p>
+<p><strong>這段的作用：</strong> 改變主角眼前的目標。他仍想把這次拜訪做好，
+但現在有理由重新思考，自己一直以來採取的方法。</p>
+<h6 id="archive-heading-41">第三段——照片還有另一半</h6>
+<p>較早的時候，主角看過一張裝框的照片：年輕的父親意氣風發地端著一道宴客菜。
+父親說，那就是自己證明實力的晚上。今晚的迎客挑戰，也模仿了那段故事裡的細節。</p>
+<p>小雨與主角在找晚飯要用的東西時，發現了未經裁切的原照片。
+母親就在年輕父親身旁，托著菜盤的另一邊；其他親戚則幫忙開門、清出通道。
+傳說中的「一人闖關」，原來是全家一起完成的事。</p>
+<p>母親簡短說明當年的情況：他也是個緊張的客人，是她走出去接他。
+親戚們給他們安排一些小差事，只是想讓他有事可做，不必一直尷尬地站在門口。
+多年來反覆講述，一次好意的招待，慢慢變成了闖關傳奇。
+母親一直覺得拿這件事逗他很有趣，卻也放任這種誇大成為傳統，沒有認真糾正。</p>
+<blockquote>
+<p>母親：「你那天連路都不認得，還是我去接你的。」</p>
+<p>父親：「我後來不是也走到了？」</p>
+<p>母親：「對。我們一起走到的。」</p>
+</blockquote>
+<p>父親有點難堪，起初還想辯解。但他最後得承認：自己省略掉的部分，
+恰好也是那個晚上最值得記住的部分。</p>
+<p><strong>這段的作用：</strong> 讓玩家重新理解已經見過的東西。
+揭曉真相是為了改變最後一道挑戰的意義，而不是臨時補上一大段秘密家族史。</p>
+<h6 id="archive-heading-42">第四段——最後一關，由兩人出題</h6>
+<p>父親還想再比最後一場。小雨提出另一種迎客壓軸：
+今晚一直出題的人，現在都要一起參與，把最後幾道菜送上飯桌，由這對情侶帶頭。
+父親可以加入這場表演賽，也可以先入座。他終究喜歡較量，於是答應參加。</p>
+<p>最後的遭遇仍然保留動作遊戲的刺激。父親是最強的切磋對手，
+之前熟悉的家庭活動，則以更誇張的形式，在準備晚飯的過程中再次出現。
+活動目標與各人的角色會事先說明；不會突襲毫不知情的人，
+熱食與沒有參加的親人也會留在切磋區域之外。</p>
+<p>這次，小雨提醒時機或打開路線時，主角會聽。她的參與本來就是兩人共同商量好的計畫。
+父親最後也從阻擋他們前進，轉為幫忙完成這次歡迎。
+這份改變應該透過看得見的動作表現，例如替他們扶住自己先前一直守著的門。</p>
+<p>具體的戰鬥目標，仍需要之後再設計。目前提出的故事收束是：
+玩家一路學到的戰鬥技巧仍然有用，而主角也能坦然接受協助，一起完成這個晚上。
+這個收束本身同樣只是提案。</p>
+<p><strong>這段的作用：</strong> 透過行動表現人物的轉變。
+如果終場對決完全照舊，只在打完後加一大段說教，並不足以達到這個效果。</p>
+<h6 id="archive-heading-43">結尾——一個普通的問題</h6>
+<p>主角坐下，準備聽取判決。父親卻只是遞給他一個碗。</p>
+<blockquote>
+<p>父親：「飯要多少？」</p>
+<p>主角：「……這個也有標準答案嗎？」</p>
+<p>父親：「有。自己吃得完就好。」</p>
+</blockquote>
+<p>大家開始聊天。小雨悄悄問主角：那道他整晚一直稱讚的菜，他到底是不是真的喜歡？
+他終於給出一個誠實、卻有點不太好意思說出口的答案。她笑了，和他交換碟子。</p>
+<p>最後的全家照裡，有人還在調椅子、有人伸手夾菜，也沒辦法讓所有人同時看鏡頭。
+他在這張照片裡，卻已經很自在。</p>
+<p>可以考慮的最後一個笑點：有人提議下星期日再戰。主角這次先問小雨。
+她回答：「先吃飯。」</p>
+<h5 id="archive-heading-44">7. 做成遊戲後，可能是甚麼感覺</h5>
+<p>暫時的玩法構想，是以家庭遭遇為主的動作格鬥遊戲。
+鏡頭、畫面尺寸、操作方式、戰鬥系統與美術風格，都仍未決定。</p>
+<ul>
+<li><strong>重複遊玩循環：</strong> 認識一位親戚、理解公開說明的活動目標、切磋或完成任務，
+然後透過一段短互動，影響下一場戲。</li>
+<li><strong>眼前目標：</strong> 每場遭遇都清楚交代完成條件。正常打贏就是有效的成功；
+接受幫助也不代表玩家的戰鬥能力比較差。</li>
+<li><strong>失敗：</strong> 活動失敗或被擊倒後，可以從附近重新嘗試。
+故事不會暗中把一次戰鬥失誤，換算成「不值得擁有這段感情」。</li>
+<li><strong>後果：</strong> 小行動可以改變後面的台詞，或換來一次實際的幫忙。
+如果加入這些選擇，就要讓玩家看得懂它們的含義，並控制數量。</li>
+<li><strong>小雨的參與：</strong> 故事需要她作出貢獻，但不必因此製作第二個可玩角色、
+完整的戰鬥同伴 AI，或多人合作模式。第一個原型可以用一小段戲，
+加上一個事先編排的協助動作，呈現她的角色。</li>
+<li><strong>結局：</strong> 先做好一個完整結局，最多加上幾個呼應先前行動的小變化。
+額外路線應該建立在有意義的選擇上，才值得投入製作。</li>
+</ul>
+<p>戰鬥本身仍要有吸引力：交手要過癮、對手動作要容易判讀，也要留下發揮技巧的空間。
+家庭感情應該讓這些戰鬥更有意義，而不是把遊戲變成一場暗中檢查玩家有沒有避戰的測驗。</p>
+<h5 id="archive-heading-45">8. 最值得先驗證的小場景</h5>
+<p>可以把第一段的庭院迎客，當成首個可玩片段的候選。
+這是交給 Claude 與你透過 CCGS 評估的提案。</p>
+<p>它需要一位可操作的主角、一位切磋親戚、一個小場景，以及涉及小雨的簡短對話。
+先使用佔位素材。展示挑戰說明，讓玩家完成一場比試，
+再以一段私下互動收尾，讓剛才的對手回到主人的身分。</p>
+<p>第一個場景應該回答三個問題：</p>
+<ol>
+<li>不靠故事支撐，這場戰鬥本身好不好玩？</li>
+<li>不需要長篇解釋，這位親戚是否已經有趣、討人喜歡？</li>
+<li>這對情侶看起來，是否像兩個本來就互相了解、互相關心的人？</li>
+</ol>
+<p>回答這些問題之前，不需要先做完整個晚上、舊照片揭曉，或最後的表演賽。
+如果場景玩起來只是普通戰鬥，之後再接上一段毫不相干的對話，
+就應該先修改，再繼續增加內容。</p>
+<h5 id="archive-heading-46">9. 這份提案仍需要挑戰的弱點</h5>
+<p><strong>開場少了救援的緊迫感。</strong> 尷尬的初次見面與第一場切磋，必須盡快抓住玩家。
+如果你想要的遊戲，不能只靠溫暖又搞笑的邀請來開場，方向 A 可能更適合作為基礎。</p>
+<p><strong>父親可能變成反覆擋路的人。</strong> 要及早讓玩家看見他的幽默、好客，以及對好身手的欣賞。
+即使玩家不同意他的做法，也應該願意認識這個人。</p>
+<p><strong>小雨可能變成專門說明主題的人。</strong> 她也需要玩笑、自己的喜好與犯錯的時刻。
+她的台詞應該像在和伴侶說話，而不是向觀眾解釋故事想傳達的道理。</p>
+<p><strong>最後的表演賽，是目前最未成形的部分。</strong> 它需要一個好玩、清楚，而且能承托故事的戰鬥目標。
+這份草稿只先說明它在故事裡的用途，並未聲稱這場遭遇已經設計完成或經過驗證。</p>
+<p><strong>舊照片的揭曉，可能顯得太方便。</strong> 裁切過的照片、父親反覆講述的往事，
+以及母親擅長處理實際問題的表現，都應該提早出現。
+真相需要鋪陳，不能等到最後才臨時編一個解釋。</p>
+<h5 id="archive-heading-47">10. 下一輪討論要決定的事</h5>
+<ol>
+<li><strong>核心前提：</strong> 保留假救援，還是探索事先公開的迎客挑戰？</li>
+<li><strong>故事調性：</strong> 誇張荒唐的家庭喜劇，還是較貼近生活的感情喜劇，再配上誇張武打？
+這份草稿偏向前者，中間留一些真誠、安靜的時刻。</li>
+<li><strong>情侶關係：</strong> 這種分歧是否有吸引力？還是讓兩人從一開始就完全同心，
+一起面對另一種衝突？</li>
+<li><strong>家庭特色：</strong> 武術家庭、龐大的古怪家族，還是另一種設定？
+這份草稿暫時提出武術家庭。</li>
+<li><strong>舊版最想保留的部分：</strong> 哪些角色、場景或笑點，是重寫後仍然必須存在的？</li>
+</ol>
+<h5 id="archive-heading-48">11. 討論後的交接建議</h5>
+<p>由你決定要保留、刪除或結合哪些內容。Claude 與 Codex 可以在 <code>discuss/</code> 中，
+各自建立註明作者的回應文件，引用這份草稿的章節提出意見。
+外部回饋或指示，也應標明來源與適用範圍；你的決定優先於這些意見。</p>
+<p>故事方向獲你批准後，再同步修訂現行遊戲簡報與計畫，接著撰寫新版分鏡。
+編輯或搬動 <code>idea/storyboard/</code> 之前，先商定如何存檔保留已恢復的原稿與來源紀錄。</p>
+<p>Claude 繼續透過 CCGS 進行遊戲開發。Codex 可以透過既有的美術交接流程，
+發展視覺提案與準備獲批准的美術需求。這份草稿，或任何針對它的審閱，
+都不代表故事、功能或素材已經獲得正式認可。</p>
+<hr/>
+<p><a id="english-original"></a></p>
+<h3 id="archive-heading-49">Codex Story Proposal: 熱血物語：先吃飯，再比武</h3>
+<p><strong>Author:</strong> Codex</p>
+<p><strong>Date:</strong> 2026-10-29</p>
+<p><strong>Status:</strong> First discussion draft; all new story choices are proposals for user review.</p>
+<p>This draft follows the request to rethink the storyboard from its underlying
+idea. It draws on the <a href="../idea/storyboard/README.md">historical storyboard</a>,
+especially its family comedy, exaggerated martial arts, first family dinner,
+and connection between generations. Names, relationships, locations, and events
+can all change.</p>
+<p>The user referred to both <code>disscuss/</code> and <code>discuss/</code>. This file uses the existing
+root <code>discuss/</code> directory as the shared discussion space for the user, Claude,
+and Codex. Contributors can place proposals, feedback, and outside instructions
+here, with their author and status identified. A proposal or outside instruction
+does not become an approved project decision merely by being saved here.</p>
+<p>CCGS remains Claude's game development workflow. This is a story discussion,
+not a replacement development plan. The current brief still describes a staged
+rescue; the alternative below deliberately changes that premise for discussion.
+The historical storyboard and active project documents have not been rewritten.</p>
+<h4 id="archive-heading-50">1. What I would keep, and what I would rethink</h4>
+<p>The strongest part of the old idea is the collision between an action hero's
+world and an ordinary family visit. A terrifying opponent asks whether you have
+eaten. A fight ends with someone straightening your collar. The final destination
+is a dinner table. Those images give the game a personality of its own.</p>
+<p>My concerns below are interpretations of the old draft, not assumptions about
+which parts the user disliked:</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Old approach</th>
+<th scope="col">Concern</th>
+<th scope="col">Proposed change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The hero must never suspect the staged rescue</td>
+<td>The audience can understand the joke long before he does; his lack of recognition can overwhelm his personality</td>
+<td>Let him understand the situation and make mistakes for emotional reasons</td>
+</tr>
+<tr>
+<td>Almost everyone conspires to deceive him</td>
+<td>The ending asks the player to accept the deception as affection, with little room for his reaction</td>
+<td>Make the challenge known and voluntary; give him a voice in changing it</td>
+</tr>
+<tr>
+<td>小雨 largely waits for the rescue and reveal</td>
+<td>We learn what others demand of the relationship more than what the couple wants</td>
+<td>Give her a goal, a disagreement with the hero, and a decisive action</td>
+</tr>
+<tr>
+<td>Hidden moral scoring controls approval and endings</td>
+<td>An ordinary combat or pickup action can mean something the player could not reasonably predict</td>
+<td>Make objectives clear and show consequences through people and scenes</td>
+</tr>
+<tr>
+<td>Five elaborate stages, many bosses, several endings, and a historical bonus</td>
+<td>Much of the production is specified before the central relationship has been tested in a small scene</td>
+<td>Develop one coherent evening and prove one representative encounter first</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="archive-heading-51">2. Three possible directions</h4>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Direction</th>
+<th scope="col">Main appeal</th>
+<th scope="col">Main difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. Keep the fake rescue, reveal it midway</td>
+<td>Preserves the original hook; the second half can explore the hero's response</td>
+<td>The deception needs consequences and repair for the romance to remain convincing</td>
+</tr>
+<tr>
+<td>B. An openly announced family challenge — recommended for this draft</td>
+<td>Gives both leads agency; preserves comic fights and the dinner destination</td>
+<td>Needs strong character conflict because the fake-kidnapping surprise is gone</td>
+</tr>
+<tr>
+<td>C. A staged challenge interrupted by a real problem</td>
+<td>Creates a clear turn from rivalry to cooperation</td>
+<td>Can become a conventional rescue story and increase the cast, danger, and scope</td>
+</tr>
+</tbody>
+</table></div>
+<p>The rest of this document develops B. If the fake-rescue reveal is essential to
+the user, A is a valid alternative; choosing B here does not settle that question.</p>
+<h4 id="archive-heading-52">3. The new idea in one paragraph</h4>
+<p>A young man accompanies his girlfriend to his first dinner with her martial arts
+family. He knows their eccentric welcome involves friendly challenges, and he
+eagerly accepts: surely beating her father will prove he belongs. His girlfriend
+has a different purpose. She wants to introduce the person she loves, not enter
+him in a competition for permission to date her. As a supposedly simple welcome
+expands into an absurd procession of family contests, he starts treating her
+help as a threat to his credibility. An old family photograph exposes the flaw
+in the father's own legend: he never earned his place alone either. The couple
+then turns the last showdown into a challenge of their own—getting this entire
+stubborn family to the dinner table together.</p>
+<p><strong>Working title:</strong> 熱血物語：先吃飯，再比武</p>
+<p><strong>Central question:</strong> Can he stand beside her without treating love as something
+he has to win from somebody else?</p>
+<p><strong>Player experience:</strong> Enter an intimidating household, enjoy its ridiculous
+combat customs, and gradually become comfortable enough to answer back.</p>
+<h4 id="archive-heading-53">4. The emotional conflict</h4>
+<p>The hero is capable and sincere. His weakness is that he turns nervousness into
+overconfidence. When he feels out of place, he volunteers for the hardest thing
+in the room rather than admitting he needs help.</p>
+<p>小雨 knows this about him and likes his determination. She is frustrated when he
+listens more closely to her father's challenge than to what she actually says.
+She wants them to arrive as a couple, yet he keeps stepping in front of her.</p>
+<p>Her father is a proud, competitive host. He sincerely believes his welcome is
+generous: he is sharing the tradition through which he remembers joining the
+family. His mistake is confusing an experience that mattered to him with a rule
+everyone else should follow.</p>
+<p>All three have something to change. The hero must accept help. 小雨 must state
+her disagreement instead of assuming he understands her hints. Her father must
+make room for a family occasion he does not control.</p>
+<p>The relationship is already the couple's choice. A lost bout does not give the
+father authority to end it. The stakes are whether this first introduction
+becomes an honest connection or an evening spent performing for one another.</p>
+<h4 id="archive-heading-54">5. A small central cast</h4>
+<p>These are narrative roles, not approved character IDs or production requests.
+小雨 is a temporary carryover name; no previous appearance or biography is assumed.</p>
+<div aria-label="可左右捲動的比較表格" class="table-wrap" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Character</th>
+<th scope="col">What they want tonight</th>
+<th scope="col">Comic voice</th>
+<th scope="col">Change or contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The hero</td>
+<td>Make a good impression and hide how nervous he is</td>
+<td>Overly formal promises followed by increasingly tired improvisation</td>
+<td>Learns to ask 小雨 what she wants and accept her help</td>
+</tr>
+<tr>
+<td>小雨</td>
+<td>Introduce her partner as an equal and enjoy dinner with him</td>
+<td>Dry observations; affectionate but direct</td>
+<td>Stops smoothing over the disagreement and proposes the final challenge</td>
+</tr>
+<tr>
+<td>Her father</td>
+<td>Give the guest a memorable welcome and preserve his proud family story</td>
+<td>Speaks about serving tea as if declaring a duel</td>
+<td>Acknowledges the help in his own past and joins the couple's new version</td>
+</tr>
+<tr>
+<td>Her mother</td>
+<td>Get everyone fed, while allowing herself some amusement</td>
+<td>Practical comments at the worst possible moment for a dramatic speech</td>
+<td>Reveals the missing part of the family photograph and admits she let the legend grow</td>
+</tr>
+<tr>
+<td>One aunt or uncle</td>
+<td>Run a particular welcome exercise and enjoy the occasion</td>
+<td>Takes one ordinary household task far too seriously</td>
+<td>Becomes the first relative to treat the hero as a person rather than a contestant</td>
+</tr>
+</tbody>
+</table></div>
+<p>The hero's parents, cousins, wealthy estate, school population, and historical
+playable cast are available ideas to reconsider later. This draft does not need
+them to tell its central story.</p>
+<h4 id="archive-heading-55">6. Story outline: one evening</h4>
+<p>These are movements in the story, not a commitment to four game levels.</p>
+<h5 id="archive-heading-56">Opening — The invitation</h5>
+<p>Outside the family home, 小雨 adjusts the hero's collar. He has rehearsed a
+greeting so formal that she starts laughing before he finishes it.</p>
+<p>She explains the welcome: her family likes friendly sparring, everyone taking
+part knows the rules, and he can decline. Her father will make it sound much more
+serious than it is. Her request is simple: go in together.</p>
+<blockquote>
+<p>小雨：「今天是來吃飯的。你不用把自己打成第一名。」</p>
+<p>主角：「放心，我很會跟長輩相處。」</p>
+</blockquote>
+<p>The door opens. Her father offers his hand. The hero mistakes an ordinary
+handshake for the first test and adopts an elaborate stance.</p>
+<p>The father looks at 小雨, delighted: 「你怎麼知道我們有這個規矩？」</p>
+<p>This establishes that both men can make the evening worse without anyone
+planning a secret conspiracy.</p>
+<h5 id="archive-heading-57">Movement 1 — A very serious welcome</h5>
+<p>The first exercise takes place around a courtyard being prepared for dinner.
+An aunt or uncle announces a simple friendly bout while family members finish
+setting up. Its objective is stated before play begins.</p>
+<p>The comedy comes from the contrast between formal martial ceremony and practical
+household work: the challenger bows, then asks someone to move the laundry;
+the mother calls a pause because the good serving dishes are in the way.</p>
+<p>The hero wins an exchange and immediately looks toward the father for approval.
+He almost misses 小雨 offering him water.</p>
+<p>Afterward, the relative asks him to help carry something. Away from the audience,
+their conversation becomes easy. This is his first genuine connection tonight,
+and it happens after the performance has stopped.</p>
+<p><strong>Story purpose:</strong> Establish the pleasure of the fights, the household's warmth,
+and the difference between impressing someone and getting to know them.</p>
+<h5 id="archive-heading-58">Movement 2 — He starts playing the wrong game</h5>
+<p>The father adds another challenge. The hero accepts before 小雨 can finish saying
+they should take a break. He is enjoying himself, but increasingly convinced
+that any help from her will make his success look less impressive.</p>
+<p>During a paired welcome exercise, she spots a route or timing he has missed.
+He insists on handling it alone and makes their task needlessly difficult.
+The scene ends in an awkward pause rather than a romantic rescue.</p>
+<blockquote>
+<p>小雨：「你今天一直問我爸，你這樣行不行。」</p>
+<p>小雨：「你有沒有問過我，我想怎樣？」</p>
+</blockquote>
+<p>He answers honestly: he is afraid that if her father does not respect him, she
+will eventually be embarrassed by him. She tells him she brought him because
+she wanted him there. They have their first real conversation of the evening.</p>
+<p><strong>Story purpose:</strong> Change the hero's immediate goal. He still wants to finish
+the visit well, but now has a reason to reconsider how he is doing it.</p>
+<h5 id="archive-heading-59">Movement 3 — The photograph has another half</h5>
+<p>Earlier, the hero saw a framed photograph of the young father, triumphantly
+holding a banquet dish. The father described it as the night he proved himself.
+His welcome challenges imitate details from that story.</p>
+<p>While finding something for dinner, 小雨 and the hero discover the uncropped
+photograph. Her mother is beside the young father, supporting the other side of
+the dish. Other relatives are opening doors and clearing a route. His famous
+solo achievement was a family effort.</p>
+<p>The mother explains briefly: he was a nervous guest, and she went out to meet
+him. Their relatives gave them little jobs so he would have something to do
+besides stand in the doorway. Over years of retelling, a kind welcome became a
+legend about passing trials. She enjoyed teasing him about it, but let the
+exaggeration become a tradition without correcting it.</p>
+<blockquote>
+<p>母親：「你那天連路都不認得，還是我去接你的。」</p>
+<p>父親：「我後來不是也走到了？」</p>
+<p>母親：「對。我們一起走到的。」</p>
+</blockquote>
+<p>The father is embarrassed and initially defensive. He has to admit that the
+part he left out is also the part that made that night worth remembering.</p>
+<p><strong>Story purpose:</strong> Reinterpret something the player has already seen. The reveal
+changes what the final challenge means, rather than adding a long secret history.</p>
+<h5 id="archive-heading-60">Movement 4 — The couple sets the last challenge</h5>
+<p>The father still wants a last bout. 小雨 proposes a different welcome finale:
+everyone who has been issuing challenges must now take part in bringing the
+last dishes to the table. The couple will lead it. Her father can join the
+exhibition or take his seat; he accepts because he still enjoys a contest.</p>
+<p>The final encounter keeps the action game's excitement. The father provides
+the strongest sparring opposition, while familiar household routines return in
+an exaggerated exhibition around the dinner preparations. The objective and
+the roles are announced beforehand. Nobody unsuspecting is attacked, and hot
+food or uninvolved relatives are kept outside the sparring area.</p>
+<p>The hero now listens when 小雨 calls a timing or opens a route. Her contribution
+is part of the plan they agreed on. The father eventually moves from blocking
+their progress to helping finish the welcome. That change should have a visible
+action, such as holding open the doorway he previously guarded.</p>
+<p>The precise combat objective needs a later design pass. The intended story
+payoff is fixed only as a proposal: the player's learned fighting skills remain
+useful, and the hero completes the occasion with help he now accepts openly.</p>
+<p><strong>Story purpose:</strong> Let the climax demonstrate the change through action. A long
+speech after an otherwise unchanged final duel would not be enough.</p>
+<h5 id="archive-heading-61">Ending — An ordinary question</h5>
+<p>The hero sits down, ready for a verdict. The father passes him a bowl.</p>
+<blockquote>
+<p>父親：「飯要多少？」</p>
+<p>主角：「……這個也有標準答案嗎？」</p>
+<p>父親：「有。自己吃得完就好。」</p>
+</blockquote>
+<p>Conversation starts around them. 小雨 quietly asks the hero whether he actually
+likes the dish he has been praising all evening. He finally gives an honest,
+slightly inconvenient answer. She laughs and swaps plates with him.</p>
+<p>The family photograph at the end includes people adjusting chairs, reaching for
+food, and failing to look at the camera together. He is comfortable in it.</p>
+<p>A possible final joke: someone proposes a rematch next Sunday. The hero asks
+小雨 first. She answers, 「先吃飯。」</p>
+<h4 id="archive-heading-62">7. How this could feel as a game</h4>
+<p>The gameplay hypothesis is an action brawler with family encounters. Camera,
+dimensions, controls, combat systems, and art style remain undecided.</p>
+<ul>
+<li><strong>Repeatable loop:</strong> Meet a relative, understand the announced exercise, fight
+or complete it, then share a short interaction that changes the next scene.</li>
+<li><strong>Immediate goals:</strong> Each encounter communicates what completes it. Ordinary
+combat success is valid; accepting help does not make the player a worse fighter.</li>
+<li><strong>Failure:</strong> A failed exercise or knockout leads to a nearby retry. The story
+does not silently convert combat failure into being unworthy of the relationship.</li>
+<li><strong>Consequences:</strong> Small actions can change a later line or practical favor.
+If these choices are added, show their meaning clearly and keep their number small.</li>
+<li><strong>小雨's participation:</strong> The story requires her to contribute. It does not
+require a second playable character, a full combat companion AI, or cooperative
+multiplayer. The first prototype can demonstrate her role with a short scene
+and one scripted contribution.</li>
+<li><strong>Endings:</strong> Begin with one complete ending and perhaps a few callbacks.
+Additional routes should earn their production cost through a meaningful choice.</li>
+</ul>
+<p>Combat still needs its own appeal: satisfying exchanges, readable opponents,
+and room for skill. Family affection should add meaning to those fights rather
+than replace them with a hidden test of whether the player avoids fighting.</p>
+<h4 id="archive-heading-63">8. The smallest scene worth proving</h4>
+<p>Use the courtyard welcome from Movement 1 as a candidate for the first slice.
+This is a proposal for Claude and the user to assess through CCGS.</p>
+<p>It needs one playable hero, one sparring relative, one small location, and brief
+dialogue involving 小雨. Start with placeholders. Show the challenge being
+explained, let the player complete a bout, and end with a short personal exchange
+that turns the opponent into a host.</p>
+<p>The first scene should answer three questions:</p>
+<ol>
+<li>Is the fight enjoyable before the story carries it?</li>
+<li>Is the relative funny and likable without a long explanation?</li>
+<li>Does the couple feel like two people who already know and care about each other?</li>
+</ol>
+<p>There is no need to build the entire evening, the photograph reveal, or the final
+exhibition to answer those questions. If the scene feels like generic combat
+followed by unrelated dialogue, revise it before producing more content.</p>
+<h4 id="archive-heading-64">9. Weak points to challenge in this proposal</h4>
+<p><strong>The opening loses the urgency of a rescue.</strong> The awkward introduction and first
+bout must engage the player quickly. If a warm comic invitation feels too gentle
+for the desired game, direction A may be a better foundation.</p>
+<p><strong>The father could become a repeated obstruction.</strong> Give him genuine humor,
+hospitality, and respect for good fighting early. He should be someone the
+player wants to know, even while disagreeing with him.</p>
+<p><strong>小雨 could become a spokesperson for the theme.</strong> She needs playful moments,
+preferences, and mistakes of her own. Her dialogue should sound like someone
+talking to her partner, not explaining the intended lesson to the audience.</p>
+<p><strong>The final exhibition is the least resolved section.</strong> It needs an enjoyable,
+readable combat objective that supports its story. This draft establishes its
+purpose; it does not claim the encounter has been designed or proven.</p>
+<p><strong>The photograph reveal could feel too convenient.</strong> Its cropped version, the
+father's repeated account, and evidence of the mother's practical competence
+should appear earlier. The reveal needs setup, not a newly invented explanation
+at the last moment.</p>
+<h4 id="archive-heading-65">10. Decisions for our next discussion</h4>
+<ol>
+<li><strong>Core premise:</strong> Keep the fake rescue, or explore this openly announced welcome?</li>
+<li><strong>Tone:</strong> Broad, absurd family comedy, or a more grounded relationship comedy
+with exaggerated fights? This draft leans toward the former with sincere pauses.</li>
+<li><strong>The couple:</strong> Does this disagreement feel appealing, or should they begin
+fully united and face a different conflict together?</li>
+<li><strong>Family identity:</strong> A martial arts household, a larger eccentric extended
+family, or another setting? This draft proposes a martial arts household.</li>
+<li><strong>Old favorites:</strong> Which characters, scenes, or jokes must survive the rewrite?</li>
+</ol>
+<h4 id="archive-heading-66">11. Suggested handoff after discussion</h4>
+<p>The user chooses what to keep, reject, or combine. Claude and Codex can respond
+in separate attributed files under <code>discuss/</code>, referring to this draft's sections.
+Outside feedback and instructions should identify their source and intended scope.
+User decisions take priority over those contributions.</p>
+<p>Once a direction is approved, reconcile the active brief and plan with it, then
+draft the replacement storyboard. Agree on how to archive the recovered originals
+before editing or moving <code>idea/storyboard/</code>, preserving their provenance.</p>
+<p>Claude continues game development through CCGS. Codex can develop visual proposals
+and prepare approved art requests through the existing art handoff. Neither this
+draft nor a review of it marks a story, feature, or asset as accepted.</p>
+</div>
+        </details>
+      </main>
+    </div>
+    <footer class="footer"><span>Passionate Story · 故事討論草稿 · Codex</span><a href="#top">返回頁首 ↑</a></footer>
+  </div>
+  <script>
+    (() => {
+      'use strict';
+      const root = document.documentElement;
+      const smaller = document.getElementById('font-smaller');
+      const larger = document.getElementById('font-larger');
+      const fontOutput = document.getElementById('font-size');
+      const themeButton = document.getElementById('theme-toggle');
+      const load = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
+      const save = (key, value) => { try { localStorage.setItem(key, String(value)); } catch { /* Reading also works without saved preferences. */ } };
+      let fontSize = Number(load('codex-story-font')) || 18;
+      const setFont = (value) => {
+        fontSize = Math.max(16, Math.min(24, value));
+        root.style.setProperty('--reader-font', `${fontSize}px`);
+        fontOutput.textContent = fontSize;
+        smaller.disabled = fontSize <= 16;
+        larger.disabled = fontSize >= 24;
+        save('codex-story-font', fontSize);
+      };
+      const setTheme = (theme) => {
+        const dark = theme === 'dark';
+        root.dataset.theme = dark ? 'dark' : 'light';
+        themeButton.setAttribute('aria-pressed', String(dark));
+        themeButton.textContent = dark ? '日間' : '夜間';
+        save('codex-story-theme', dark ? 'dark' : 'light');
+      };
+      setFont(fontSize);
+      setTheme(load('codex-story-theme') || 'light');
+      smaller.addEventListener('click', () => setFont(fontSize - 1));
+      larger.addEventListener('click', () => setFont(fontSize + 1));
+      themeButton.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+      document.getElementById('print-document').addEventListener('click', () => window.print());
+      document.querySelector('.reader-tools').hidden = false;
+
+      const openTarget = (hash) => {
+        if (!hash || hash === '#') return;
+        let id;
+        try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+        const target = document.getElementById(id);
+        if (!target) return;
+        if (target.matches('details')) target.open = true;
+        let ancestor = target.parentElement;
+        while (ancestor) {
+          if (ancestor.matches('details')) ancestor.open = true;
+          ancestor = ancestor.parentElement;
+        }
+      };
+      document.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href^="#"]');
+        if (link) openTarget(link.getAttribute('href'));
+      });
+      window.addEventListener('hashchange', () => openTarget(location.hash));
+      openTarget(location.hash);
+
+      if ('IntersectionObserver' in window) {
+        const links = [...document.querySelectorAll('.toc a')];
+        const observer = new IntersectionObserver((entries) => {
+          const visible = entries.filter((entry) => entry.isIntersecting);
+          if (!visible.length) return;
+          const id = visible[0].target.id;
+          links.forEach((link) => {
+            if (link.getAttribute('href') === `#${id}`) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
+        }, { rootMargin: '-10% 0px -65% 0px', threshold: 0 });
+        links.forEach((link) => {
+          const target = document.getElementById(link.getAttribute('href').slice(1));
+          if (target) observer.observe(target);
+        });
+      }
+
+      let printState = [];
+      window.addEventListener('beforeprint', () => {
+        printState = [...document.querySelectorAll('details.disclosure')].map((item) => [item, item.open]);
+        printState.forEach(([item]) => { item.open = true; });
+      });
+      window.addEventListener('afterprint', () => {
+        printState.forEach(([item, open]) => { item.open = open; });
+        printState = [];
+      });
+    })();
+  </script>
+</body>
+</html>
