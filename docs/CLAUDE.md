@@ -1,6 +1,7 @@
 # Project Documentation
 
-Keep the project small: `plan.md` tracks development, and `art/` coordinates art.
+Keep the project small: `progress.md` tracks status, `plan.md` holds the next
+handoff, `art/` coordinates art, and `archive/` holds the historical storyboard.
 Consult `AGENTS.md` for role boundaries and authority.
 
 Record actual Godot setup and executable commands when the project exists.

@@ -1,6 +1,6 @@
 # Contributing to Passionate Story V2
 
-Read `AGENTS.md` and `docs/plan.md` first. Work on the smallest task that advances
+Read `AGENTS.md`, `docs/progress.md` and `docs/plan.md` first. Work on the smallest task that advances
 the first playable encounter; propose scope changes before implementing them.
 
 ## Ownership

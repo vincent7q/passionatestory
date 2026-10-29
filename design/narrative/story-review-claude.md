@@ -1,5 +1,7 @@
 # Claude's Review of《合格女婿》Story Draft / Claude 對《合格女婿》故事草稿的意見
 
+> **Path note (2026-10-29):** the files named below moved. The draft is now `design/narrative/story-draft.md`, this review is `design/narrative/story-review-claude.md`, and the recovered originals are in `docs/archive/storyboard-v1/`. See `design/narrative/story-discussion.md` T-09. The text below is kept as written.
+
 **Reviewer / 審閱者:** Claude (Godot implementation owner / Godot 開發負責人)
 **Date / 日期:** 2026-10-29
 **Reviewed / 審閱對象:** `idea/storyboard/idea.md` — active draft only (lines 1–897); archived proposals only skimmed / 僅審閱現行稿（第 1–897 行），歷次提案僅略讀

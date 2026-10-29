@@ -4,7 +4,7 @@
 
 Passionate Story V2 restarts the game from its story idea, using Godot. No game project, production art, or executable game tests exist yet. Old architecture, balance values, resolution, art style, and task completion are not V2 decisions.
 
-Read `design/game-brief.md`, `docs/plan.md`, and `docs/art/README.md` before working. `idea/storyboard/` preserves historical source material; its original FINAL labels and technical instructions do not approve V2 requirements. Follow current user decisions and active project documents over historical references or generic skill examples.
+Read `design/game-brief.md`, `docs/progress.md`, `docs/plan.md`, and `docs/art/README.md` before working. The active story draft is in `design/narrative/`. `docs/archive/` preserves historical source material; its original FINAL labels and technical instructions do not approve V2 requirements. Follow current user decisions and active project documents over historical references or generic skill examples.
 
 ## Responsibilities & Structure
 
@@ -12,7 +12,7 @@ Read `design/game-brief.md`, `docs/plan.md`, and `docs/art/README.md` before wor
 - **Codex:** visual proposals, image generation, art preparation, and `docs/art/asset-manifest.json`. Use the selected asset-production skill; do not start another development workflow.
 - **User:** story, creative direction, scope, and final approval.
 
-`.claude/` holds CCGS tooling; `.agents/skills/` holds selected art tooling. `design/` contains the brief, `docs/plan.md` tracks development, `docs/art/` coordinates art, and `production/` holds workflow artifacts. Claude establishes runtime directories during engine setup.
+`.claude/` holds CCGS tooling; `.agents/skills/` holds selected art tooling. `design/` contains the brief and `design/narrative/` the story draft, `docs/progress.md` tracks status, `docs/plan.md` holds the next handoff, `docs/art/` coordinates art, and `production/` holds workflow artifacts. CCGS folders (`src/`, `assets/`, `tests/`, `tools/`, `prototypes/`, `production/epics/`, `production/qa/`) exist as empty placeholders; `/setup-engine` may revise the code root.
 
 ## Development & Verification
 

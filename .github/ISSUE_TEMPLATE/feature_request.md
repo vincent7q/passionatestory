@@ -10,5 +10,5 @@ Describe the player benefit and smallest useful version.
 
 ## Scope & Handoff
 
-Explain how it relates to `docs/plan.md`. Identify development and art needs,
+Explain how it relates to `docs/progress.md`. Identify development and art needs,
 open questions, and the evidence that would demonstrate completion.

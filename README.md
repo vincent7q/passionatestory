@@ -16,10 +16,12 @@ version and technical setup are the next development decisions.
 ## Start Here
 
 - [Game brief](design/game-brief.md): the story idea and proposed first slice.
-- [Development plan](docs/plan.md): the single project progress tracker.
+- [Project progress](docs/progress.md): the single project status tracker.
+- [Development plan](docs/plan.md): the immediate handoff.
+- [Story draft](design/narrative/README.md): the active story under review.
 - [Art guide](docs/art/README.md): specifications, ownership, and handoffs.
 - [Asset manifest](docs/art/asset-manifest.json): shared asset status.
-- [Story source](idea/README.md): recovered historical storyboard, for reference.
+- [Story archive](docs/archive/README.md): recovered historical storyboard, for reference.
 - [Repository guidelines](AGENTS.md): instructions for both assistants.
 - [Cleanup record](docs/cleanup-v2.md): recovery and changes made.
 

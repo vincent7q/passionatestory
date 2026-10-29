@@ -2,12 +2,12 @@
 
 **Participants / 參與者:** Vincent (decision maker / 決策者) · Claude · Codex
 **Opened / 開啟日期:** 2026-10-29
-**Material under discussion / 討論對象:** `idea/storyboard/idea.md` (active draft / 現行稿)
-and Claude's comments in `idea/storyboard/claude-review.md` (with Vincent's inline answers / 含 Vincent 的行內回覆)
+**Material under discussion / 討論對象:** `design/narrative/story-draft.md` (active draft / 現行稿)
+and Claude's comments in `design/narrative/story-review-claude.md` (with Vincent's inline answers / 含 Vincent 的行內回覆)
 
 ## How to use this file / 使用方式
 
-1. **No change to the storyboard** (`idea/storyboard/idea.md`), `design/game-brief.md`
+1. **No change to the storyboard** (`design/narrative/story-draft.md`), `design/game-brief.md`
    or `docs/plan.md` until a topic is marked **Decided** and Vincent has confirmed it.
    / 在議題標為 **Decided** 且 Vincent 確認之前，**不修改**分鏡稿、企劃簡述或計畫。
 2. Write only under your own name; do not edit anyone else's text.
@@ -25,14 +25,14 @@ and Claude's comments in `idea/storyboard/claude-review.md` (with Vincent's inli
 | ID | Topic / 議題 | Status / 狀態 |
 |---|---|---|
 | T-01 | Tone / 基調 | Decided |
-| T-02 | When 阿安 learns it is a test / 阿安何時得知這是考核 | **Open — needs all three** |
-| T-03 | Stage 4–5 beat structure / 第四、五關的節奏 | **Leaning — needs Codex** |
+| T-02 | When 阿安 learns it is a test / 阿安何時得知這是考核 | Decided |
+| T-03 | Stage 4–5 beat structure / 第四、五關的節奏 | Decided |
 | T-04 | Woman-led household / 由女性主導的家庭 | Decided |
-| T-05 | 二姑 and 舅舅 not in the final fight / 二姑、舅舅不參戰 | Decided (one note) |
-| T-06 | Final fight: phase 1 length, checkpoint / 最終戰第一階段長度與檢查點 | Leaning |
-| T-07 | Limiting simultaneous attackers / 限制同時進攻人數 | Leaning |
+| T-05 | 二姑 and 舅舅 not in the final fight / 二姑、舅舅不參戰 | Decided |
+| T-06 | Final fight: phase 1 length, checkpoint / 最終戰第一階段長度與檢查點 | Decided (two details open) |
+| T-07 | Limiting simultaneous attackers / 限制同時進攻人數 | Parked until Slice B (principle agreed) |
 | T-08 | First prototype slices / 首批原型切片 | Decided |
-| T-09 | File paths and authority / 檔案路徑與依據 | Open (needs Vincent's instruction) |
+| T-09 | File paths and authority / 檔案路徑與依據 | Decided — applied 2026-10-29 |
 
 ---
 
@@ -50,13 +50,13 @@ and Claude's comments in `idea/storyboard/claude-review.md` (with Vincent's inli
   讓帳單、評核與「為你好」自己產生諷刺；阿安的害怕、疲累與失望則有真實後果。
   武打可以誇張，但建國縮肩、阿安需要一口水等時刻應留給人物，不加嘲笑他們的笑點。
   沈雅芳最有力的地方，是她真心認為這些要求理所當然；不必每場都靠更大聲、更惡毒來升級。
-- **Change list:** `design/game-brief.md` wording only — _pending Vincent's go-ahead_.
+- **Change list:** `design/game-brief.md` tone line, using Codex's wording — Vincent: go-ahead (2026-10-29, via chat: "follow codex wording"). **Applied by Claude 2026-10-29.**
 
 ---
 
 ## T-02 When does 阿安 learn it is a test, not a rescue? / 阿安何時得知這是考核，而不是救人？
 
-**Status / 狀態:** Open
+**Status / 狀態:** Decided
 
 ### Vincent's proposal / Vincent 的提案
 
@@ -102,7 +102,7 @@ and Codex's comments.
 7. **Fits the brief:** "The player may notice clues before the hero does." The stage 1–2 tells
    serve exactly that.
 
-**If adopted, these sections of `idea/storyboard/idea.md` would need edits (Claude's list):**
+**If adopted, these sections of `design/narrative/story-draft.md` would need edits (Claude's list):**
 overview paragraph (lines 24–28); S1-03 and S1-04; S2-04; S3-01, S3-03, S3-04; S4-04 (小雨's
 video call); V-01; the foreshadowing-table rows for 「不要傷到他」 and the roster check; and the
 bullet 「主角會知道女友安全」 (around line 869). **S1-02 (the first prototype slice) is not
@@ -140,7 +140,7 @@ satirical stages 1–3 and the darker 4–5 — keep the absurd comedy in 4–5 
    「最終戰沒有救人賭注」的疑慮。
 7. **符合企劃簡述：**「玩家可能比主角更早察覺線索」。第一、二關的破綻正是為此服務。
 
-**若採用，`idea/storyboard/idea.md` 需修改的段落（Claude 整理）：** 故事總覽（第 24–28 行）；
+**若採用，`design/narrative/story-draft.md` 需修改的段落（Claude 整理）：** 故事總覽（第 24–28 行）；
 S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-01；伏筆表中
 「不要傷到他」與核對名單兩列；以及「主角會知道女友安全」一條（約第 869 行）。
 **S1-02（第一個原型切片）不受影響。**
@@ -190,13 +190,14 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
   **建議修訂範圍（尚未套用）：** 除 Claude 所列段落，再加 S2-01、S2-03，以及 V-01 的
   「第一次得知」措辭；以場景代號對照，避免草稿增刪後行號失效。S1-02 的頭目戰本身可保留。
 - **Decision / 決議:** I agreed with Codex point. thanks claude suggestion too. 
-- **Change list:** _(after decision / 定案後填寫)_
+- **Change list:** Codex's revision scope above (Claude's list plus S2-01, S2-03 and V-01's wording); refer by scene code. Applied by **Codex** (Vincent, 2026-10-29: Codex will optimise the story after the decisions).
+- **Codex — applied (2026-10-29):** Fifth draft and HTML updated: overview, S1-03–04, S2-01, S2-03–04, S3-01, S3-03–04, S4-03–04, V-01 and review notes. S3-01 confirms safety and testing; S4-03 proves active escalation; V-01 confronts participation before the staged rescue. V-04 retains the service-business reveal. S1-02 is unchanged. Awaiting Vincent's review of the revised draft.
 
 ---
 
 ## T-03 Stage 4–5 beat structure / 第四、五關的節奏
 
-**Status / 狀態:** Leaning (depends on T-02)
+**Status / 狀態:** Decided
 
 - **Vincent:** If 阿安 knows from stage 3, the demands in stages 4–5 make more sense, and he
   has no need to answer so many times. 4–5: unreasonable demands; 阿安 becomes more and more
@@ -240,8 +241,9 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
   阿安的話少，應表現在他不再急著交出對方滿意的答案；保留他核對紀錄、收回承諾、
   喝水及等父親重新站好的主動行為。打鬥仍有突破攔阻的場景理由，不必把每一場都寫成憤怒宣洩。
   以上可用既有動作與短對白呈現，先不新增家務小遊戲或隱藏情緒數值。
-- **Decision / 決議:** _(pending / 待定)_
-- **Change list:** _(after decision / 定案後填寫)_
+- **Decision / 決議:** Vincent (2026-10-29, via chat): "yes, take codex's framing." Stage 4 = he stops pleasing them; stage 5 = he sees the cost of continuing. / 採用 Codex 的框架。
+- **Change list:** stage 4 (雅婷, 婉晴, 可欣 beats, S4-04) and stage 5 (建國, S5-04) per Codex's points above. Applied by **Codex**.
+- **Codex — applied (2026-10-29):** S4-01–04 now use shorter replies and actions, ending the sisters' tests with the finished cup of water. S5-02–04 preserve the question about complicity, give 建國 a direct answer, and show the chair being pushed back under the table. No new minigame or hidden score was added. HTML regenerated; awaiting draft review.
 
 ---
 
@@ -260,13 +262,14 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
   明確落地，並由她決定帳目、叫人上場、拒絕認輸的行動持續證明。這句話指向林家具體的權力關係；
   不需要旁白把它擴成所有家庭的規則。家豪的攔路、舅舅的收費、建國明知仍執行，以及小雨主動加碼，
   都各自保留責任，人物也就不會只剩「聽母親命令」一種性格。
-- **Change list:** a line in S6-01/S6-02 — _pending Vincent's go-ahead_.
+- **Change list:** S6-02 「這個家，我說了算」, using Codex's wording — Vincent: go-ahead (2026-10-29, via chat). Applied by **Codex**.
+- **Codex — applied (2026-10-29):** S6-02 now states 「這個家，我說了算」 explicitly. The other family members' participation and responsibility remain visible. HTML regenerated; awaiting draft review.
 
 ---
 
 ## T-05 二姑 and 舅舅 not in the final fight / 二姑、舅舅不參加最終戰
 
-**Status / 狀態:** Decided (one note open)
+**Status / 狀態:** Decided
 
 - **Vincent:** They are relatives only and may not obey 沈雅芳 100%. She is the decision maker
   in *her family*: all her children and her husband must obey her without question or doubt.
@@ -286,13 +289,14 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
   我偏向在 S6-03A 給二姑與舅舅一個留在場外看帳或接待的短動作，不另加叫陣與拒絕的對話，
   避免分散「她輸不起，所以叫全家上」的焦點。舅舅對收費向她交代，可以是生意上的關係，
   無須因此推論她也能命令他參戰；不必為此改動既定的五人名單或時間表。
-- **Change list:** optional line in S6-03A; check S3-03 wording — Vincent: ok. proceed with Codex points.
+- **Change list:** optional line in S6-03A; check S3-03 wording — Vincent: ok. proceed with Codex points. Applied by **Codex**.
+- **Codex — applied (2026-10-29):** S3-03 frames the uncle's refund dispute as accounting and income; S6-03A shows 二姑 handling reception and 舅舅 checking receipts outside combat. The five reinforcements and their fixed timing are unchanged. HTML regenerated; awaiting draft review.
 
 ---
 
 ## T-06 Final fight: phase 1 length and checkpoint / 最終戰：第一階段長度與檢查點
 
-**Status / 狀態:** Leaning
+**Status / 狀態:** Decided (two details open)
 
 - **Vincent:** Keep phase 1, but reduce its health to shorten it, and let the player feel that the
   first boss is very easy to overcome. / 保留第一階段，但降低血量以縮短時間，並讓玩家覺得第一個
@@ -313,12 +317,15 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
   B 的玩家狀態與場地重置方式要由原型另定，這裡不先假定回血量或難度數值。
 - **Decision / 決議:** i decided to use original decided to have 2 blood level for final boss. 保留第一階段，但降低血量以縮短時間，並讓玩家覺得第一個
   頭目很容易擊敗。 if player failed and loss all lifes (i suppose 3 lifes per game), it is gameover. need to start from stage 1. 
+  Vincent (2026-10-29, via chat): lives do **not** refill between stages; health (blood) recovers in each stage.
+- **Claude (2026-10-29):** recorded in `design/game-brief.md` (Player goal & fail state). Two details stay open and do not block Slice A: (1) after losing one life, does the player respawn on the spot with enemies keeping their damage, or restart the encounter? (2) any continues or extra-life pickups? Also to confirm: does "health recovers in each stage" mean full health at the start of each stage, or recovery items within a stage? / 已記入企劃簡述。待決（不阻礙切片 A）：失去一命後原地復活或重打該戰；有無接關或加命；「每關回血」是指每關開始回滿，還是關內有回血道具？
+- **Change list:** `design/game-brief.md` fail-state line — **applied by Claude 2026-10-29**. No story-draft change needed.
 
 ---
 
 ## T-07 Limiting simultaneous attackers / 限制同時進攻人數
 
-**Status / 狀態:** Leaning
+**Status / 狀態:** Parked until Slice B (principle agreed)
 
 - **Vincent:** Let 1–3 enemies actively attack at a time; the others circle and wait — but if the
   player moves toward the others, those will attack too. The nearby 1–3 enemies attack the player.
@@ -341,6 +348,11 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
 
   Vincent: 沈雅芳也計入總數
 
+  Vincent (2026-10-29, via chat): "yes, waiting enemy will take action when you approach them. or, do you have other idea? or, this rule can be discussed in later stage?"
+
+- **Claude (2026-10-29):** proposal — the common beat-'em-up "attack token" pattern. There are N tokens (N = 2 or 3; 沈雅芳 needs one too). An enemy may only start an attack while holding a token, and keeps it until the attack finishes. Waiting enemies circle at mid range. When the player approaches a waiting enemy, it **reacts at once without a token** — steps back, raises its guard, or feints/taunts — and it moves to the front of the queue, so it takes the next free token. The approach still gets a visible response, but the number of damaging attacks never exceeds N. Recommend parking the details until Slice B: Slice A is one-on-one and does not need the rule, while Slice B is the first fight that can test it with placeholders. / 提案：採用清版動作常見的「進攻名額」做法。只有拿到名額的敵人能出招（N = 2 或 3，沈雅芳也要名額）；其餘在中距離繞圈。玩家靠近等候者時，對方會立即反應（後退、架勢、假動作或挑釁），但不造成傷害，並排到下一個名額。這樣靠近仍有回應，同時出手的人數不超過 N。細節建議留到切片 B 再定案。
+- **Change list:** none to the story draft. Implemented and tuned in Slice B (Claude).
+
 ---
 
 ## T-08 First prototype slices / 首批原型切片
@@ -361,7 +373,7 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
 
 ## T-09 File paths and authority / 檔案路徑與依據
 
-**Status / 狀態:** Open — **needs Vincent's instruction** / 需要 Vincent 指示
+**Status / 狀態:** Decided — applied 2026-10-29 / 已定案並套用
 
 - **Done:** `archieve` was renamed to `archive` (by Vincent).
 - **Still stale (checked 2026-10-29):**
@@ -383,13 +395,22 @@ S1-03、S1-04；S2-04；S3-01、S3-03、S3-04；S4-04（小雨的視訊）；V-0
   另需一起修正現行稿「歷史 `idea/storyboard/` 保持原樣」的過時說法。
   本討論檔的狀態、Vincent 的決議與實際套用結果繼續分開記錄，發表意見不等於批准故事或開始製作。
 
+  Vincent: OK. Approved.
+
+- **Claude — applied (2026-10-29):** at Vincent's request to fit the CCGS folder layout, the active story files went to `design/narrative/` (CCGS's narrative folder) rather than `design/story-draft.md`: `story-draft.md`, `story-draft.html`, `story-discussion.md` (this file), `story-review-claude.md`. The nine recovered originals, `README.md` and `storyboard-source.json` went to `docs/archive/`, outside `design/narrative/`, so CCGS narrative tools never read the old FINAL storyboard as canon. All nine SHA-256 checksums were verified before the move; only the `path` fields changed. Brief, plan and instruction files now point to the new paths. The draft's stale "保持原樣" line and broken links were fixed; no story content changed. / 已套用：依 CCGS 結構，現行故事檔移至 `design/narrative/`；九份原稿與來源紀錄移至 `docs/archive/`，校驗碼已核對無誤，只更新 `path`。故事內容未修改。
+
 ---
 
 ## Decision log / 決議紀錄
 
 | ID | Decision / 決議 | By / 決定者 | Date / 日期 | Applied to storyboard? / 已套用？ |
 |---|---|---|---|---|
-| T-01 | Tone = satirical realism / 基調為諷刺寫實劇 | Vincent | 2026-10-29 | No |
-| T-04 | Household is led by 沈雅芳 / 家由沈雅芳主導 | Vincent | 2026-10-29 | No |
-| T-05 | 二姑、舅舅 are relatives only; reinforcements = her household / 二姑、舅舅僅為親戚，援軍為其家人 | Vincent | 2026-10-29 | No |
+| T-01 | Tone = satirical realism; Codex's wording / 基調為諷刺寫實劇，採 Codex 措辭 | Vincent | 2026-10-29 | Brief: yes |
+| T-02 | Confirm at S3-01 (Codex's version) / 第三關開頭確認（採 Codex 版本） | Vincent | 2026-10-29 | Yes — fifth draft + HTML (Codex); awaiting review |
+| T-03 | Codex's framing: stage 4 stops pleasing, stage 5 sees the cost / 採 Codex 框架 | Vincent | 2026-10-29 | Yes — fifth draft + HTML (Codex); awaiting review |
+| T-04 | Household is led by 沈雅芳; S6-02 line in Codex's wording / 家由沈雅芳主導 | Vincent | 2026-10-29 | Yes — fifth draft + HTML (Codex); awaiting review |
+| T-05 | 二姑、舅舅 are relatives only; reinforcements = her household / 二姑、舅舅僅為親戚，援軍為其家人 | Vincent | 2026-10-29 | Yes — fifth draft + HTML (Codex); awaiting review |
+| T-06 | Two health bars, easy phase 1; 3 lives per run, no refill; health recovers each stage; game over → stage 1 / 兩條血、第一階段易打；每局 3 命不補、每關回血；失敗從第一關重來 | Vincent | 2026-10-29 | Brief: yes |
+| T-07 | Nearby 1–3 attackers, 沈雅芳 counts; details parked to Slice B / 附近 1–3 人進攻，沈雅芳計入；細節留待切片 B | Vincent | 2026-10-29 | n/a |
 | T-08 | Slices A (S1-02) then B (S6 timeline) / 先 S1-02，再做第六關時程 | Vincent | 2026-10-29 | n/a |
+| T-09 | Story files to `design/narrative/`; historical set to `docs/archive/` / 故事檔移至 design/narrative，歷史原稿移至 docs/archive | Vincent | 2026-10-29 | Yes (paths only) |

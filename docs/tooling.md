@@ -45,6 +45,6 @@ this cleanup.
 
 ## Shared Project State
 
-Use `design/game-brief.md`, `docs/plan.md`, `docs/art/README.md`, and
+Use `design/game-brief.md`, `design/narrative/`, `docs/progress.md`, `docs/plan.md`, `docs/art/README.md`, and
 `docs/art/asset-manifest.json`. Project-specific decisions and the user's
 instructions take priority over generic examples in either toolkit.

@@ -3,6 +3,7 @@
 @AGENTS.md
 @design/game-brief.md
 @docs/plan.md
+@docs/progress.md
 
 ## Development Ownership
 
@@ -36,7 +37,7 @@ placeholders before requesting a batch of production art.
 
 ## Working Rules
 
-Keep `docs/plan.md` current. CCGS may create implementation stories under
+Keep `docs/progress.md` (status) and `docs/plan.md` (handoff) current. CCGS may create implementation stories under
 `production/` when needed; they must point to this plan and shared art manifest.
 Do not regenerate the storyboard or derive a full five-stage backlog during
 setup. Do not reinstate the old web game, backend, scoring formulas, or art assets.
