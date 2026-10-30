@@ -272,7 +272,7 @@ a dialogue line at 120 characters and ask for localization-ready text.
 5. Codex: the empty `docs/concept_images/style_1` and `style_2` folders: move to `art/source/concepts/` or delete?
 6. Timing: art requests start after Slice A is playable with placeholders (project rule). Agreed?
 
-- **Vincent:**
+- **Vincent:** (2026-10-31) Q1: the wanted game style is 熱血物語 (Kunio-kun SP) grid pixel art, per `art/source/reference/characters/SP/style1.png` and `style2.png`. All 21 photos, plus 10 original story-role characters for review, go to Codex as front/side sheets with eight poses: [`codex-sp-character-sheets.md`](codex-sp-character-sheets.md). The visual target is approved after the pilot sheets.
 - **Claude:**
 - **Codex:**
 - **Decision:**
