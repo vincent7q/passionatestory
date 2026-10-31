@@ -1,0 +1,291 @@
+﻿{
+  "tool": "built-in image_gen.imagegen",
+  "output_directory": "images/converted/full_body",
+  "style_references": [
+    "images/converted/felix.png",
+    "images/converted/vincent.png"
+  ],
+  "common_prompt": "Use case: style-transfer.\nAsset type: individual full-body 2D cartoon character PNG for a side-scrolling game.\nInput images: Image 1 is the photo identity and clothing reference/edit target. Images 2 and 3 are CARTOON STYLE REFERENCES ONLY; never copy their identities or their portrait crop.\nPrimary request: redraw the person in Image 1 as one recognizable full-body cartoon character in exactly the friendly visual language of the cartoon references: thick clean near-black outlines, rounded simplified shapes, solid black oval eyes with simple curved upper eyelids, small simplified nose, expressive curved mouth, warm peach skin, restrained soft shading, flat readable clothing colors. Smooth 2D illustration, not pixel art, not anime, not 3D.\nComposition: square 1024x1024 canvas, one character standing centered, entire hair, hands and both shoes visible, generous clear margin at least 7% on all sides, soles near the bottom margin. Approximately 3.5 heads tall, compact game-character proportions. Front-facing neutral idle stance with a subtle three-quarter body turn, face clearly visible, arms relaxed slightly away from torso, both hands visible, feet planted slightly apart. Preserve the person's apparent age, facial shape, hairstyle, distinctive glasses and expression; do not give everyone the style reference's face.\nBackground: genuinely transparent alpha, including between limbs. No floor, ground shadow, glow, vignette, gradient, checkerboard, border, labels, text, watermarks, extra people or props. Clothing and skin fully opaque. Produce one finished character only, not a portrait, sheet, collage or multiple views.\nClothing: retain the visible clothing colors and neckline from the source; where the headshot does not show the lower body, extend it into the simple casual outfit specified below. Avoid tiny decorative detail and logos.",
+  "characters": [
+    {
+      "id": "aa13",
+      "source": "images/converted/aa13.png",
+      "output": "images/converted/full_body/aa13.png",
+      "subject_prompt": "A boy with short straight black hair, small eyes, soft round face and gentle closed-mouth smile. Pale off-white crew-neck T-shirt, navy casual shorts and simple white sneakers. Keep him visibly a child, with child proportions.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/aa13.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png"
+      ]
+    },
+    {
+      "id": "aa15",
+      "source": "images/converted/aa15.png",
+      "output": "images/converted/full_body/aa15.png",
+      "subject_prompt": "A teenage boy with short black hair with a slightly jagged forward fringe, thick straight eyebrows, narrow smiling eyes, slim oval face and a small closed smile. Blue crew-neck T-shirt with dark neckline, charcoal trousers and white sneakers. No bag or straps.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/aa15.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "aa16",
+      "source": "images/converted/aa16.png",
+      "output": "images/converted/full_body/aa16.png",
+      "subject_prompt": "A teenage boy with dense medium-length black hair with long parted fringe falling toward his eyebrows, softly angular face and distinctive tightly pressed slightly wry lips. Black short-sleeve collared shirt open at the neck, dark gray trousers and black-and-white sneakers.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/aa16.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "edward",
+      "source": "images/converted/edward.png",
+      "output": "images/converted/full_body/edward.png",
+      "subject_prompt": "An adult man with short black tousled hair and thin irregular fringe, slim oval face and a broad toothy friendly smile. Light turquoise crew-neck T-shirt, dark navy casual trousers and white sneakers.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/edward.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "ernest",
+      "source": "images/converted/ernest.png",
+      "output": "images/converted/full_body/ernest.png",
+      "subject_prompt": "An adult man with short black side-swept hair, rectangular thin dark glasses, rounded oval face and a mild reserved closed-mouth smile. Dark navy collared short-sleeve shirt, charcoal trousers and black casual shoes.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/ernest.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "fung18",
+      "source": "images/converted/fung18.png",
+      "output": "images/converted/full_body/fung18.png",
+      "subject_prompt": "An older teenage boy with short black hair cropped on the sides and choppy upright fringe, strong eyebrows, long slim face and a broad toothy smile. Dark charcoal crew-neck T-shirt, blue jeans and white sneakers.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/fung18.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "girl1",
+      "source": "images/converted/girl1.png",
+      "output": "images/converted/full_body/girl1.png",
+      "subject_prompt": "One young adult woman from the multiview reference, not four people. Preserve her dark center-parted hair in TWO long braids tied with red bands, gentle smile, cream sleeveless calf-length floral sundress with shoulder ties and simple pink floral accents, and brown flat sandals. Keep the dress modest and adult, with readable simplified floral marks. Hands relaxed at sides.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/girl1.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "girl2",
+      "source": "images/converted/girl2.png",
+      "output": "images/converted/full_body/girl2.png",
+      "subject_prompt": "A young adult woman with dark center-parted hair loosely swept and tied back, fine cheek-framing strands, pearl stud earrings, oval face and a composed closed-mouth expression. White collared long-sleeve blouse, high-waisted dark navy trousers and plain brown flat shoes.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/girl2.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "girl3",
+      "source": "images/converted/girl3.png",
+      "output": "images/converted/full_body/girl3.png",
+      "subject_prompt": "A young adult woman with dark center-parted hair gathered neatly back, a few cheek-framing wisps, pearl stud earrings, a rounded oval face and a small soft closed-mouth smile. White collared long-sleeve blouse, dark navy A-line knee-length skirt and plain black flats. Preserve her own face from this reference, distinguish from girl2.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/girl3.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "ken1",
+      "source": "images/converted/ken1.png",
+      "output": "images/converted/full_body/ken1.png",
+      "subject_prompt": "An adult man with a tall dark side-swept quiff, rectangular substantial black glasses, long narrow face and friendly slightly open smile. Light gray hooded sweatshirt with plain drawstrings, dark blue jeans and white sneakers. No bag.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/ken1.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "kid",
+      "source": "images/converted/kid.png",
+      "output": "images/converted/full_body/kid.png",
+      "subject_prompt": "An adult man, despite the filename kid, with short neatly swept back black hair, high forehead, broad angular face and a reserved closed-mouth expression. Off-white crew-neck T-shirt, charcoal casual trousers and plain dark sneakers. Do NOT turn him into a child.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/kid.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "leong16",
+      "source": "images/converted/leong16.png",
+      "output": "images/converted/full_body/leong16.png",
+      "subject_prompt": "A teenage boy with short black forward-spiked hair, thin rectangular dark glasses, slim face and a mild closed-mouth smile. Red crew-neck T-shirt, dark blue jeans and white sneakers.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/leong16.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "leong18",
+      "source": "images/converted/leong18.png",
+      "output": "images/converted/full_body/leong18.png",
+      "subject_prompt": "An older teenage boy with medium short black hair and uneven pointed fringe, large rounded black glasses, slim long face and an exuberant open toothy grin. Pale gray crew-neck T-shirt, dark blue jeans and white sneakers. Preserve his glasses and cheerful expression.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/leong18.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "maggie",
+      "source": "images/converted/maggie.png",
+      "output": "images/converted/full_body/maggie.png",
+      "subject_prompt": "An adult woman with shoulder-length straight dark side-parted bob, rounded face and warm slightly open smile. Pink long-sleeve sweater, dark navy trousers and simple cream flat shoes.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/maggie.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "qq",
+      "source": "images/converted/qq.png",
+      "output": "images/converted/full_body/qq.png",
+      "subject_prompt": "An adult woman with long straight dark brown hair and dense blunt bangs across her eyebrows, bright eyes and a broad friendly toothy smile. Dusty rose cardigan over a black high-neck top, dark blue jeans and plain black flats.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/qq.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "rong",
+      "source": "images/converted/rong.png",
+      "output": "images/converted/full_body/rong.png",
+      "subject_prompt": "A middle-aged woman with dark hair swept back into a LOW ponytail, broad rounded face, pearl stud earrings and a gentle slightly open smile. Purple-and-white horizontally striped short-sleeve crew-neck shirt, dark navy trousers and plain dark flat shoes. Retain her mature appearance and fuller build.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/rong.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "sei",
+      "source": "images/converted/sei.png",
+      "output": "images/converted/full_body/sei.png",
+      "subject_prompt": "An adult man with very short neat black hair, dark thin rectangular glasses, broad rounded face and calm reserved closed-mouth expression. Pale lavender short-sleeve collared button-up shirt, charcoal trousers and plain black shoes. Retain his broad stocky build.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/sei.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "so",
+      "source": "images/converted/so.png",
+      "output": "images/converted/full_body/so.png",
+      "subject_prompt": "An adult man with spiky upright black hair, narrow rectangular brown-tinted sunglasses, long slim face and an open toothy smile. Dark charcoal sleeveless casual athletic top, charcoal trousers and dark sneakers. Keep the tinted sunglasses rather than ordinary clear eyeglasses.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/so.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "unknown1",
+      "source": "images/converted/unknown1.png",
+      "output": "images/converted/full_body/unknown1.png",
+      "subject_prompt": "An adult woman with dark hair pulled into a high ponytail, high forehead, lively curved eyes and a big toothy smile. Black zip-up athletic jacket with modest pink side trim matching the reference, black athletic trousers and white sneakers. Arms down in neutral idle stance; omit backpack straps and omit all logos and text.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/unknown1.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "unknown2",
+      "source": "images/converted/unknown2.png",
+      "output": "images/converted/full_body/unknown2.png",
+      "subject_prompt": "A young adult woman with medium-long dark brown hair, fine wispy bangs and a small messy half-up tuft at the back, oval face and a gentle slightly parted-lips expression. Plain cream short-sleeve top with a modest round neckline, muted brown casual trousers and cream sneakers. Do not make an exaggerated anime face; use the same oval-eye cartoon style.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/unknown2.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    },
+    {
+      "id": "vincent2",
+      "source": "images/converted/vincent2.png",
+      "output": "images/converted/full_body/vincent2.png",
+      "subject_prompt": "An adult man with short dark side-parted hair and a slightly high hairline, thin rectangular glasses, rounded oval face and gentle closed-mouth smile. Light gray short-sleeve collared shirt, navy trousers and dark casual shoes. Use the second cartoon style reference especially for face simplification, but preserve the source photo's own hairstyle and shirt.",
+      "status": "generated",
+      "input_images": [
+        "images/converted/vincent2.png",
+        "images/converted/felix.png",
+        "images/converted/vincent.png",
+        "images/converted/full_body/aa13.png"
+      ]
+    }
+  ],
+  "continuity_reference": "images/converted/full_body/aa13.png",
+  "continuity_prompt": "\nImage 4 is the first completed full-body cartoon of a DIFFERENT person: use ONLY as reference for consistent head-to-body proportions, outline weight, rendering finish and neutral standing composition. Preserve Image 1's individual face and clothing; never copy Image 4's child identity or shorts unless specified. Keep the entire body comfortably within the canvas, with clear transparent padding.",
+  "generation_date": "2026-10-25",
+  "actual_dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "prompt_assembly": "common_prompt + '\\nSubject and outfit: ' + character.subject_prompt + (character.id === 'aa13' ? '' : continuity_prompt)"
+}

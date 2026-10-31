@@ -57,4 +57,7 @@ docs/consistency-failures.md
 
 # Personal character references (real-person photos; reference only, kept local)
 #/art/source/reference/characters/**
-#!/art/source/reference/characters/.gitkeep
+!/art/source/reference/characters/.gitkeep
+
+# Local SP character-sheet study (generated references and preserved drafts)
+/art/source/reference/characters/SP/

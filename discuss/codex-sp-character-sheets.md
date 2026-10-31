@@ -3,8 +3,18 @@
 **For:** Codex (art production) · **Requested by:** Vincent · **Written by:** Claude · **Date:** 2026-10-31
 **Skill:** `.agents/skills/create-game-assets/SKILL.md` (plus the workspace `imagegen` skill for generation calls)
 **Output folder:** `art/source/reference/characters/SP/`
-**Status:** Ready for Codex. This file is the whole handoff. Do Part A and Part B together:
-start with the shared pilot (§7, Phase 1) and wait for Vincent's approval before the full batch.
+**Status:** Phase 1 pilot ready for Vincent's review: `vincent2`, `girl1`, `aa13`
+(child; replaces the suggested adult photo `kid`), and `misc-depot-guard`.
+Open [the local preview](../art/source/reference/characters/SP/preview.html).
+Native-grid checks pass; visual review points are recorded in the local README
+and validation. **2026-10-31:** Vincent reviewed the preview and asked for an
+action-pose style test on `vincent2` and an S1-02 background test first:
+[`codex-sp-action-test.md`](codex-sp-action-test.md). The remaining 27 sheets
+await Vincent's approval of the pilot **and** that test (§7).
+The complete 14-pose action test, two props, depot background and game-scale mocks
+are now ready in the same local preview; technical checks pass. Full Phase 2 has
+not started. 動作及背景測試已完成，待你審閱；尚未開始其餘27張。
+This file remains the handoff for Parts A and B together.
 
 | Part | What | Count |
 |---|---|---|
@@ -82,7 +92,7 @@ Most are small headshots (about 90–600 px); `girl1` (1536×1024) shows a dress
 
 ## 4. Part B: original story-role characters (10, proposals for review)
 
-The named family cast (陳以安, 林小雨, the eight family bosses, 許知夏) will be chosen from the Part A sheets
+The named family cast (陳以曦, 林小雨, the eight family bosses, 許知夏) will be chosen from the Part A sheets
 later, so **do not design the named cast here**. Part B fills the **unnamed roles the storyboard needs** around them:
 enemies the player fights, recurring helpers and background people. Design each one from the brief below and the scene it
 comes from in `design/narrative/story-draft.md`. No photo is used.
@@ -102,14 +112,14 @@ Story constraints that apply to every Part B design:
 | # | File slug | Role (Chinese) | Story scenes | Game use | Design brief |
 |---|---|---|---|---|---|
 | 1 | `misc-van-crew` | 黑衣接人組員 | P-02, S1-01, E3-03 | Enemy (prologue, stage 1); returns in ending 3 | Dark suit or dark work jacket, earpiece, neat short hair, sunglasses pushed up. Looks like event security playing "kidnapper": stiff and professional, a little theatrical |
-| 2 | `misc-depot-guard` | 物流站制服保全 | S1-01, S1-02 | Basic enemy, stage 1 (家豪's team) | Security uniform and cap, reflective vest, clipboard or name list in a pocket. Sturdy, slightly bored; the "Is this part done yet?" guard |
+| 2 | `misc-depot-guard` | 物流站制服保全 | S1-01, S1-02 | Basic enemy, stage 1 (以亮's team) | Security uniform and cap, reflective vest, clipboard or name list in a pocket. Sturdy, slightly bored; the "Is this part done yet?" guard |
 | 3 | `misc-porter` | 搬運人員 | S1-01, S3-02 | Heavy enemy, stages 1 and 3 | Big, broad warehouse worker: work gloves, apron or overalls, towel on the neck, safety boots. Wider silhouette than the guard; pushes trolleys and crates |
 | 4 | `misc-receptionist` | 林家活動接待人員 | S2-01, S2-03, S2-04, S4 | Recurring non-combat NPC who hands out the next address | Event staff blazer, lanyard badge, tablet or clipboard, tidy bun or short hair. Polite fixed smile; the face of the 「合格顧問」 operation |
 | 5 | `misc-stylist-staff` | 形象考場活動人員 | S2-02, S2-03 | Enemy, stage 2 (二姑's team) | Fashion assistant in black, measuring tape round the neck, a tall height ruler or garment-rack prop. Fussy, judging posture |
 | 6 | `misc-depot-worker` | 工場工人 | S3-02 | Friendly NPC who helps fix the machine; never an enemy | Ordinary mechanic in a worn work shirt, cap, tool belt. Warm and tired, shows that normal hard-working people are not the opponents |
 | 7 | `misc-banquet-staff` | 會所宴會服務人員 | S4-01…S4-03, S6 | Enemy and set-dressing, stages 4 and 6 | Waiter or waitress in a vest and bow tie, holding a tray or folding chair. Busy, fast, rushed by the sisters' orders |
 | 8 | `misc-guest` | 林家賓客／親戚 | S5-04, S6-01…S6-03 | Background crowd, non-combat; watches the finale | Middle-aged relative in party clothes (qipao-style dress or a jacket with a loud tie), holding a phone to film or a glass. Gossiping, judging look |
-| 9 | `misc-colleague` | 主角同事 | P-01 | Prologue NPC at the repair workshop | 阿安's workmate: work overalls tied at the waist, T-shirt, grease mark on a cheek, easy grin. Friendly and teasing |
+| 9 | `misc-colleague` | 主角同事 | P-01 | Prologue NPC at the repair workshop | 阿曦's workmate: work overalls tied at the waist, T-shirt, grease mark on a cheek, easy grin. Friendly and teasing |
 | 10 | `misc-next-candidate` | 下一位候選人 | E3-03 | Ending 3 NPC: the next young man to be tested | Nervous young man in a brand-new shirt that is a bit stiff, gift box in hand, work marks on the cuffs. Deliberately echoes the protagonist's prologue look without copying him |
 
 ## 5. Sheet specification (Parts A and B)
@@ -204,6 +214,10 @@ enemy (`misc-depot-guard`). Produce their full sheets, `palette.json`, `validati
 `preview.html`. **Stop and show Vincent.** He approves or gives changes on proportions, face, outline, palette
 and the eight emotions. Repeat until approved.
 
+**Phase 1b: Action-pose and background style test (added 2026-10-31).** Before Phase 2, test the pilot style in fighting
+poses at game scale on `vincent2`, against an original S1-02 depot-gate background, as specified in [`codex-sp-action-test.md`](codex-sp-action-test.md).
+Stop and show Vincent again. Phase 2 starts only after he approves both the pilot and this test.
+
 **Phase 2: Remaining 27 (18 Part A + 9 Part B).** Use the approved pilot sheets as the locked style reference
 (alongside `style1.png`) in every generation. Work in batches of about 5–6, mixing Part A and Part B, and check
 each batch against the pilot contact sheet for drift in head size, outline colour, skin ramp and baseline before
@@ -237,11 +251,11 @@ Visual checks (by eye on the contact sheet, note any exceptions in `validation.j
 
 ## 9. Open points (do not block this task)
 
-- **Real-person likeness (Q-11 question 3):** the Part A characters are stylised designs, not portraits; whether
-  people shown agree before any public release is still Vincent's decision.
-- **Cast mapping (Q-11 question 2):** which Part A sheet becomes 陳以安, 林小雨, 沈雅芳 and the others is decided
+- **Real-person likeness (Q-11 question 3):** resolved 2026-10-31. The people in the photos are Vincent's family
+  and friends and have agreed; the characters stay stylised designs, not portraits.
+- **Cast mapping (Q-11 question 2):** which Part A sheet becomes 陳以曦, 林小雨, 沈馨芳 and the others is decided
   after this set exists.
 - **Part B roles:** proposals only. Vincent decides which roles to keep, rename or drop; the story draft is not changed by this task.
-- **Runtime frame (Q-05):** final resolution, sprite height, attack poses and animation frame counts
-  are decided with Claude during engine setup and Slice A. These sheets set the style and character
+- **Runtime frame (Q-05):** the base resolution is now decided: 640×360 (2026-10-31). Final sprite height,
+  attack poses and animation frame counts are decided with Claude during engine setup and Slice A. These sheets set the style and character
   designs, which the runtime assets will follow.

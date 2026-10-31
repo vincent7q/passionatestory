@@ -2,7 +2,7 @@
 
 **Story / 故事：** 《合格女婿》  
 **Created / 建立日期：** 2026-10-29  
-**Source / 來源：** [Current story draft / 現行故事稿](../design/narrative/story-draft.md#characters)  
+**Source / 來源：** [Current story draft / 現行故事稿](../../design/narrative/story-draft.md#characters)  
 **Status / 狀態：** Awaiting your input / 等待填寫。
 
 ## How to fill this in / 填寫方式
@@ -19,16 +19,16 @@ The role keys identify rows in this form. You can rename characters without chan
 
 | Role key / 角色代號 | Role / 身分 | Current full name / 原全名 | Current short name / 原簡稱或稱呼 | New full name / 新全名（請填） | New short name / 新簡稱或暱稱（請填） |
 |---|---|---|---|---|---|
-| protagonist | Player character / 玩家主角 | 陳以安 | 阿安、以安 |  |  |
+| protagonist | Player character / 玩家主角 | 陳以曦 | 阿曦、以曦 |  |  |
 | girlfriend | Girlfriend; co-designer of the tests / 女友、考核共同策劃者 | 林小雨 | 小雨 |  |  |
-| older_brother | Girlfriend's older brother; stage 1 boss / 女友的哥哥、第一關頭目 | 林家豪 | 家豪、哥哥 |  |  |
-| paternal_aunt | Girlfriend's paternal aunt; stage 2 boss / 女友的二姑、第二關頭目 | 林秀蘭 | 秀蘭、二姑 |  |  |
-| maternal_uncle | Girlfriend's maternal uncle; stage 3 boss / 女友的舅舅、第三關頭目 | 沈世榮 | 舅舅 |  |  |
+| older_brother | Girlfriend's older brother; stage 1 boss / 女友的哥哥、第一關頭目 | 林以亮 | 以亮、哥哥 |  |  |
+| paternal_aunt | Girlfriend's paternal aunt; stage 2 boss / 女友的二姑、第二關頭目 | 林貴蘭 | 貴蘭、二姑 |  |  |
+| maternal_uncle | Girlfriend's maternal uncle; stage 3 boss / 女友的舅舅、第三關頭目 | 沈世健 | 舅舅 |  |  |
 | eldest_sister | Girlfriend's eldest sister; stage 4, comparison test / 女友的大姊、第四關比較考驗 | 林雅婷 | 雅婷、大姊 |  |  |
 | second_sister | Girlfriend's second sister; stage 4, availability test / 女友的二姊、第四關隨叫隨到考驗 | 林婉晴 | 婉晴、二姊 |  |  |
 | third_sister | Girlfriend's third sister; stage 4, chores and care test / 女友的三姊、第四關家務與照顧考驗 | 林可欣 | 可欣、三姊 |  |  |
-| father | Girlfriend's father; stage 5 boss / 女友的父親、第五關頭目 | 林建國 | 建國、父親、爸爸 |  |  |
-| mother | Girlfriend's mother; stage 6 final boss / 女友的母親、第六關最終頭目 | 沈雅芳 | 雅芳、母親、媽媽 |  |  |
+| father | Girlfriend's father; stage 5 boss / 女友的父親、第五關頭目 | 林建輝 | 建輝、父親、爸爸 |  |  |
+| mother | Girlfriend's mother; stage 6 final boss / 女友的母親、第六關最終頭目 | 沈馨芳 | 馨芳、母親、媽媽 |  |  |
 | repair_shop_owner | Repair-shop co-owner; later partner in ending 2 / 修理店共同經營者、第二結局後續伴侶 | 許知夏 | 知夏 |  |  |
 
 ## Family surnames / 家族姓氏（選填）

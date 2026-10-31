@@ -1,0 +1,391 @@
+{
+  "count": 21,
+  "files": [
+    {
+      "file": "aa13.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        370,
+        38,
+        862,
+        1233
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "f775ffb9c3915f5cda9c18a912452592f2517a876dcad9ebd414cdcc4aa34370"
+    },
+    {
+      "file": "aa15.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        383,
+        30,
+        869,
+        1237
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "44f3e51c902aa29ea383dfa34a949d25ef0419061ac89c168fed048637f9e3ea"
+    },
+    {
+      "file": "aa16.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        389,
+        34,
+        885,
+        1226
+      ],
+      "outer_edge_alpha_max": 1,
+      "sha256": "0e05a7bb9370052bbc4ed44d170d1ebdb37dea69435c03474b443ba3ce25bbf0"
+    },
+    {
+      "file": "edward.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        368,
+        18,
+        868,
+        1247
+      ],
+      "outer_edge_alpha_max": 1,
+      "sha256": "ab77fbce8571bec9121d7261b3df328f5a410786cc9f8778f33aee5200f2ac0c"
+    },
+    {
+      "file": "ernest.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        375,
+        38,
+        883,
+        1232
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "77da3fab4a356a74b0b6166f3079da3ceb83ad916424e386c36ac857f7c8773d"
+    },
+    {
+      "file": "fung18.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        384,
+        24,
+        876,
+        1237
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "8035c69e4f61bfd6e5d756ceb544c2fe9f87f1e28970493befe9eed04d2f4add"
+    },
+    {
+      "file": "girl1.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        379,
+        22,
+        871,
+        1241
+      ],
+      "outer_edge_alpha_max": 1,
+      "sha256": "9de95b06bdb89a7893a6cb0e2c6814c3622a994c8bbe5b511f037fdc9131ad80"
+    },
+    {
+      "file": "girl2.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        384,
+        27,
+        874,
+        1233
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "808a8b4a8cbe3e66bbb13001c2f2fbd3b13607d1607e39e6859c63a3b11c390f"
+    },
+    {
+      "file": "girl3.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        381,
+        38,
+        857,
+        1229
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "23db9ed4705e020fb6234b658620a7b61ec9778fb0e9ca4ba72961bffbeaa76d"
+    },
+    {
+      "file": "ken1.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        391,
+        31,
+        898,
+        1238
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "66ab02c69554b06f22de3fc12fa6c392a3dc475d760110785e19c98ed135f79b"
+    },
+    {
+      "file": "kid.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        370,
+        41,
+        866,
+        1235
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "26396aeaab9874b68f1746d21e30ac0447899bf78decd1ebb837136b54e87d7b"
+    },
+    {
+      "file": "leong16.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        369,
+        33,
+        884,
+        1233
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "dafec80d2d408340ad9b2c9ecc4599747b43225213e7c61bb6dc0f800b7f110b"
+    },
+    {
+      "file": "leong18.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        385,
+        31,
+        880,
+        1237
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "c8f1773135a1c2de8ad9ca52311430d024b31bf845402d8cab7422e93d07c62e"
+    },
+    {
+      "file": "maggie.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        384,
+        44,
+        859,
+        1228
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "5da84858183d4ff7b48282cce19a943ec68bf42cc4a9883ba126727a4a1312c1"
+    },
+    {
+      "file": "qq.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        358,
+        33,
+        890,
+        1229
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "b174dec34b11a6eff3e859520fcab006488697c8050f26eeabdf8d4bef3aeff2"
+    },
+    {
+      "file": "rong.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        346,
+        24,
+        912,
+        1233
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "4f94d9bff23c0538d4367bf9b369fe52b875f64ba03ae53d51d041e5d9eba90d"
+    },
+    {
+      "file": "sei.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        326,
+        39,
+        920,
+        1236
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "9f7ecf94c6da291f72a2d2d0a08c5a2cf1c84e7c7d4384dc5e8caabae9752cc9"
+    },
+    {
+      "file": "so.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        382,
+        24,
+        896,
+        1239
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "69ea1ec276ca058c0bd693e13fdffd12c9fe00d54fccb73e90816a390382d357"
+    },
+    {
+      "file": "unknown1.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        380,
+        43,
+        856,
+        1229
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "5971adf59c47363a127585769d6bf21d98fe8481c45ce1518655df9aef49c46a"
+    },
+    {
+      "file": "unknown2.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        398,
+        40,
+        876,
+        1229
+      ],
+      "outer_edge_alpha_max": 0,
+      "sha256": "abcd7e9aabe0f9753bbc49161d720c08dfcb5daeb46af8a7c2b8880273eaf2f2"
+    },
+    {
+      "file": "vincent2.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bounds_alpha_128": [
+        362,
+        34,
+        885,
+        1224
+      ],
+      "outer_edge_alpha_max": 1,
+      "sha256": "e3816c638524f3100791ca853036b163a68bf5cfbcf056f64a208a107a4a8cad"
+    }
+  ],
+  "checks": [
+    "All 21 expected outputs exist",
+    "All sources resolve",
+    "All PNGs decode as square RGBA images",
+    "Every image contains fully transparent and fully opaque pixels",
+    "Visible character pixels at alpha >= 128 do not touch canvas edges",
+    "No duplicate output images"
+  ]
+}

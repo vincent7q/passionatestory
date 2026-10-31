@@ -2,8 +2,8 @@
 
 **Status:** the user selected **《合格女婿》** on 2026-10-29 and requested a full
 story draft with six stages and three endings. The latest user revision sets
-stage 4 to three sisters (three bosses), stage 5 to father 林建國, and stage 6
-to mother 沈雅芳 as the true final boss: eight family bosses across six stages.
+stage 4 to three sisters (three bosses), stage 5 to father 林建輝, and stage 6
+to mother 沈馨芳 as the true final boss: eight family bosses across six stages.
 The full draft is awaiting review in `design/narrative/story-draft.html` (editable
 source: `design/narrative/story-draft.md`; discussion:
 `design/narrative/story-discussion.md`). The sisters are provisionally written as 小雨's three
@@ -21,10 +21,10 @@ himself. The selected story begins with a staged rescue.
 
 **Tone (decided 2026-10-29):** satirical realism (諷刺寫實劇). Absurd demands
 are spoken in an everyday voice, so the invoices, evaluations and 「為你好」
-carry the satire themselves; 阿安's fear, fatigue and disappointment have real
-consequences. Fights may be exaggerated, but moments such as 建國's hunched
-shoulders or 阿安 needing a sip of water belong to the characters and are not
-played for laughs. 沈雅芳 is strongest when she sincerely believes her demands
+carry the satire themselves; 阿曦's fear, fatigue and disappointment have real
+consequences. Fights may be exaggerated, but moments such as 建輝's hunched
+shoulders or 阿曦 needing a sip of water belong to the characters and are not
+played for laughs. 沈馨芳 is strongest when she sincerely believes her demands
 are reasonable, not when each scene is louder or crueller.
 
 **Story structure:** Six family-member tests followed by three player-selectable
@@ -34,17 +34,17 @@ love. The draft's third ending proposes joining the family's testing business;
 its content remains open for review. The former parents' rematch is not a
 requirement of this selected direction.
 
-**Confirmed parental characterization:** 沈雅芳 is greedy, domineering, and
+**Confirmed parental characterization:** 沈馨芳 is greedy, domineering, and
 habitually berates and humiliates her husband in front of others. She controls
-the testing system and its business. 林建國 has long lived under her pressure
-and understands the miserable future 陳以安 may face if he marries 林小雨.
+the testing system and its business. 林建輝 has long lived under her pressure
+and understands the miserable future 陳以曦 may face if he marries 林小雨.
 Stage 5 explores his sympathy, fear, and continued complicity; stage 6 confronts
 the mother. Concrete scenes and outcomes remain draft material for user review.
 
-**Confirmed final fight:** 沈雅芳 has two health bars. When the first reaches
+**Confirmed final fight:** 沈馨芳 has two health bars. When the first reaches
 zero (t=0), she refuses defeat and withdraws to the table to eat and recover.
 Reinforcements enter one at a time: 林雅婷 at 10s, 林婉晴 at 20s, 林可欣 at
-30s, 林建國 at 40s, and 林家豪 at 50s. They have reduced reinforcement health.
+30s, 林建輝 at 40s, and 林以亮 at 50s. They have reduced reinforcement health.
 At 60s she returns with her second bar alongside any survivors, creating up to
 six opponents against one. Timings use active combat time and pause together.
 Early defeats do not accelerate the next arrival or her return. The summon
@@ -74,7 +74,7 @@ whole campaign. Review the story before moving to the next development stage.
 backend, character roster, full scoring system, content editors, and bulk art.
 
 **Build order (decided 2026-10-29):**
-1. Slice A: S1-02, the 林家豪 boss fight, with placeholders. Proves movement,
+1. Slice A: S1-02, the 林以亮 boss fight, with placeholders. Proves movement,
    combat feel, the stamp-and-dialogue beat and the Godot setup.
 2. Slice B: the S6 final-fight timeline, with colour-swapped placeholders. Proves
    the fixed reinforcement timing, survivors stacking up, and the limit on
