@@ -56,5 +56,5 @@ docs/consistency-failures.md
 /qa-sandbox/
 
 # Personal character references (real-person photos; reference only, kept local)
-/art/source/reference/characters/**
-!/art/source/reference/characters/.gitkeep
+#/art/source/reference/characters/**
+#!/art/source/reference/characters/.gitkeep
